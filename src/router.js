@@ -25,7 +25,7 @@ export default new Router({
                 import ("./components/AddEvent")
         },
         {
-            path: "/home",
+            path: "/",
             name: "home",
             component: () =>
                 import ("./components/Home")

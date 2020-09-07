@@ -41,6 +41,11 @@
 
 <script>
 import EventDataService from "../services/EventDataService";
+import Vue from 'vue'
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
+Vue.config.productionTip = false;
+Vue.use(Antd);
 export default {
   name: "event",
   data() {
@@ -86,11 +91,11 @@ export default {
     this.getEvent(this.$route.params.id);
     if(this.$cookies.get('user')==null)
     {
-        alert("Sign in to access this page")
-        this.$router.push('home')
+        this.$message.error("Sign in to access this page")
+        this.$router.push('/')
     }
     if(this.$cookies.get('user').admin==false){
-       alert("Admin permission denied...")
+       this.$message.error("Admin permission denied...")
        this.$router.push('/events')
     }
   }

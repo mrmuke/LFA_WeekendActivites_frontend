@@ -3,13 +3,21 @@
   <div class="event-list-container">
   <div>
     <h1 style="color:white">Requested Events</h1>
-    <div>
-        <input type="text" style="width:100%" class="form-control" placeholder="Search by name"
+    
+    <div style="display:flex;justify-content:center">
+        <input type="text" style="width:75%" class="form-control" placeholder="Search by name"
           v-model="name"/>
-      
+      <div style="color:white;" class="ml-3">
+      Sort by <select v-model="orderBy" >
+                <option  value="1">Popularity</option>
+                <option value="2">Date</option>
+                <option value="3">Name</option>
+              </select>
+      </div>
     </div>
-
+    
       <ul style="display:flex;flex-wrap:wrap" class="event-list-ul">
+        
         <li class="event-list-item"
           v-for="(event, index) in filteredEvents"
           :key="index"
@@ -61,7 +69,10 @@ import UserDataService from "../services/UserDataService";
 import Vue from 'vue'
 import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
-
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
+Vue.config.productionTip = false;
+Vue.use(Antd);
 export default {
   name: "event-list",
   data() {
@@ -71,17 +82,43 @@ export default {
       currentUser:this.$cookies.get('user'),
       currentIndex: -1,
       name: "",
-      index:-1
+      index:-1,
+      orderBy:"1"
 
 
     };
   },
   computed: {
       filteredEvents() {
-
-        return this.events.filter(event => {
+        if(this.orderBy==="1")
+        {
+          return this.events.filter(event => {
           return event.name.toLowerCase().includes(this.name.toLowerCase())
+        }).sort(function(a,b){
+          return b.upVotes-a.upVotes
         })
+        }
+        else if(this.orderBy==="2")
+        {
+          return this.events.filter(event => {
+          return event.name.toLowerCase().includes(this.name.toLowerCase())
+        }).sort(function(a,b) {
+  a = a.timeSlot.split('-').join('');
+  b = b.timeSlot.split('-').join('');
+  return a > b ? 1 : a < b ? -1 : 0;
+  // return a.localeCompare(b);         // <-- alternative 
+});
+        }
+        else{
+          return this.events.filter(event => {
+          return event.name.toLowerCase().includes(this.name.toLowerCase())
+        }).sort(function(a, b){
+    if(a.name < b.name) { return -1; }
+    if(a.name > b.name) { return 1; }
+    return 0;
+})
+        }
+        
        },
       
 
@@ -148,8 +185,8 @@ export default {
   mounted() {
     if(this.$cookies.get('user')==null)
     {
-       alert("Sign in to access this page")
-       this.$router.push('home')
+       this.$message.error("Sign in to access this page")
+       this.$router.push('/')
     }
     this.getCurrentUser()
     this.retrieveEvents();
@@ -172,6 +209,9 @@ export default {
   justify-content: center;
   background:url(/img/background-wave.png)
 
+}
+select{
+  color: black;
 }
 .event-list-container{
   width: 900px;

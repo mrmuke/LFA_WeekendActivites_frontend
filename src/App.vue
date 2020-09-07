@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <b-navbar toggleable="lg" type="dark" variant="dark">
-        <b-navbar-brand href="/home"><img class = "image" src="../public/img/logo.svg"></b-navbar-brand>
+        <b-navbar-brand href="/"><img class = "image" src="../public/img/logo.svg"></b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -35,6 +35,8 @@ import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
 import BootstrapVue from 'bootstrap-vue'
 Vue.use(BootstrapVue)
+
+
 export default{
     data(){
         return {
@@ -60,8 +62,7 @@ export default{
 
 .nav-item{
 
-    font-family: 'Clarkson',Helvetica,sans-serif;
-    text-transform:uppercase;
+
 
 
 }

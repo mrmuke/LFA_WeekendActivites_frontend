@@ -53,7 +53,12 @@
 
 import EventDataService from "../services/EventDataService";
 import Datepicker from 'vuejs-datepicker';
+import Vue from 'vue'
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
+Vue.config.productionTip = false;
 
+Vue.use(Antd);
 export default {
   name: "add-event",
   components:{
@@ -84,7 +89,7 @@ export default {
     saveEvent() {
       if(this.events.filter(i=>i.name===this.event.name).length>0)
       {
-        alert("An event by this name already exists...")
+        this.$message.error("An event by this name already exists...");
         return;
       }
 
@@ -98,7 +103,7 @@ export default {
 
       if(this.event.name.length==0||this.event.timeSlot==null||this.event.description.length==0)
       {
-        alert("Please fill in all required fields...")
+        this.$message.error("Please fill in all required fields...")
       }
 
       else{
@@ -135,8 +140,8 @@ export default {
   mounted(){
     if(this.$cookies.get('user')==null)
     {
-        alert("Sign in to access this page")
-        this.$router.push('home')
+        this.$message.error("Sign in to access this page")
+        this.$router.push('/')
     }
     this.getEvents()
   console.log(new Date())

@@ -104,6 +104,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
+Vue.config.productionTip = false;
+Vue.use(Antd);
 import ScheduleDataService from "../services/ScheduleDataService";
 export default {
     data(){
@@ -145,7 +150,8 @@ export default {
                 } */
                 if(this.schedule.date.length==0/*  || this.schedule.date.match() */)
                 {
-                    alert("Enter a valid date...")
+                    this.$message.error("Enter a valid date...")
+                    return;
                 }
                 var data ={
                     date:this.schedule.date,
@@ -169,8 +175,8 @@ export default {
     mounted(){
         if(this.$cookies.get('user') ==null ||this.$cookies.get('user').admin==false)
         {
-           alert("Sign in as an admin to access this page...")
-           this.$router.push('home')
+           this.$message.error("Sign in as an admin to access this page...")
+           this.$router.push('/')
         }
 
     }

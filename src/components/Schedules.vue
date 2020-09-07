@@ -42,6 +42,11 @@
 </template>
 <script>
 import ScheduleDataService from '../services/ScheduleDataService';
+import Vue from 'vue'
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
+Vue.config.productionTip = false;
+Vue.use(Antd);
 export default{
     data(){
         return{
@@ -90,8 +95,8 @@ export default{
         this.retrieveSchedules()
         if(this.$cookies.get('user') ==null ||this.$cookies.get('user').admin==false)
         {
-           alert("Sign in as an admin to access this page...")
-           this.$router.push('home')
+           this.$message.error("Sign in as an admin to access this page...")
+           this.$router.push('/')
         }
     }
 }
