@@ -36,7 +36,6 @@
         <modal name="tutorial-modal">
            <b-carousel
       id="carousel-1"
-      v-model="slide"
       :interval="4000"
       controls
       indicators
@@ -44,8 +43,7 @@
       img-width="1024"
       img-height="480"
       style="text-shadow: 1px 1px 2px #333;"
-      @sliding-start="onSlideStart"
-      @sliding-end="onSlideEnd"
+      
     >
       <!-- Text slides with image -->
       <b-carousel-slide
@@ -115,6 +113,7 @@ export default {
     },
      methods:{
         onSignIn(user){
+            console.log(user)
             const profile = user.getBasicProfile()
             this.emailAddress =profile.getEmail()
             console.log(this.emailAddress)
@@ -162,7 +161,7 @@ export default {
         {
             this.signedIn=true
         }
-        if(this.$cookies.get('user').admin==true)
+        if(this.$cookies.get('user')&&this.$cookies.get('user').admin)
             {
                 this.admin=true;
             }

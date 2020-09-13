@@ -2,7 +2,7 @@
 <div class="event-body">
 <div style="max-width:900px;margin:auto;">
   <div v-if="currentEvent" class="edit-form" style="padding:10px;">
-    <h1>Event</h1>
+    <h1 style="color:white">Event</h1>
     <form>
       <div class="form-group" style="max-width:300px">
         <label for="name">Name</label>

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <b-navbar toggleable="lg" type="dark" variant="dark">
+    <b-navbar toggleable="lg" type="dark" variant="dark" style="background-color:#f37121 !important; border-bottom:17px solid #020403">
         <b-navbar-brand href="/"><img class = "image" src="../public/img/logo.svg"></b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -60,10 +60,14 @@ export default{
     }
 }
 
-.nav-item{
+.nav-link{
+  color:white !important;
+  text-transform:uppercase
 
 
-
+}
+.nav-link:hover{
+  color:yellow !important
 
 }
 </style>
