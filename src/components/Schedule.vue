@@ -211,7 +211,7 @@ export default{
             
         },
         getFullName(user){
-            return user.userName +" "+ user.emailAddress.substring(user.emailAddress.indexOf(".")+1,user.emailAddress.indexOf("@"));
+            return user.userName 
         },
         sendEmail(event){
             for(var i =0;i<event.usersSignedUp.length;i++){

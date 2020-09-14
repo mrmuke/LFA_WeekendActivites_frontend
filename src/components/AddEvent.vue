@@ -340,7 +340,8 @@ button {
    ========================================================================== */
 .page-wrapper {
   min-height: 100vh;
-  background:url(/img/background-wave.png)
+  background:url(/img/background-wave.png);
+  background-size:cover
 }
 
 body {

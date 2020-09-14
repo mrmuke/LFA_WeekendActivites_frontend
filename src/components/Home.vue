@@ -97,13 +97,10 @@ export default {
     data(){
         return {
             emailAddress:"",
-            userName:"",
             signedIn:false,
             googleSignInParams: {
                     client_id: '978419002714-0ngcjc58363k85n3a6fpmrdl0tome13b.apps.googleusercontent.com'
             },
-            user:"",
-            currentUser:null,
             admin:false,
         };
     },
@@ -142,7 +139,6 @@ export default {
             };
             UserDataService.create(data)
                     .then(response => {
-                      this.currentUser = response.data;
                       this.$cookies.set('user',response.data);
                       if(response.status==201){
                           this.$modal.show('tutorial-modal')
