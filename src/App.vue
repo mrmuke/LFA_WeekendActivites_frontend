@@ -5,16 +5,17 @@
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-        <b-collapse id="nav-collapse" is-nav>
-          <b-navbar-nav>
+        <b-collapse id="nav-collapse" is-nav >
+          <b-navbar-nav> 
             <b-nav-item href="/add">Request Event</b-nav-item>
             <b-nav-item href="/events">Events</b-nav-item>
 
             <b-nav-item :href="'/schedule/'">View Schedule</b-nav-item>
-            <b-nav-item v-if="admin" href="/schedules">All Schedules</b-nav-item>
+            <b-nav-item v-if="user && user.admin" href="/schedules">All Schedules</b-nav-item>
+            <b-nav-item style="position:absolute;right:1%" v-if="user"><img v-bind:src=user.picture style="border-radius:50%;width:15%;margin-right:10px;">{{user.userName}}</b-nav-item>
           </b-navbar-nav>
 
-          <b-navbar-nav class="ml-auto">
+          <b-navbar-nav class="ml-auto" >
 
           </b-navbar-nav>
         </b-collapse>
@@ -40,7 +41,7 @@ Vue.use(BootstrapVue)
 export default{
     data(){
         return {
-            admin: this.$cookies.get('user').admin
+            user:this.$cookies.get('user')
         }
     },
     computed:{
@@ -49,7 +50,7 @@ export default{
 
     },
     created() {
-        eventBus.$on('adminSet', (data) => this.admin = data);
+        eventBus.$on('userSet', (data) => this.user = data);
     }
 }
 </script>

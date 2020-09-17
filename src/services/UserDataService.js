@@ -1,8 +1,15 @@
+import axios from "axios";
 import http from "../http-common";
 
 class UserDataService {
     create(data) {
-        return http.post("/users", data);
+        return axios.create({
+            baseURL: "http://localhost:8080/api",
+            headers: {
+              "Content-type": "application/json",
+              "id_token":data
+            }
+          }).post("/users")
      }
      get(id) {
          return http.get(`/users/${id}`);

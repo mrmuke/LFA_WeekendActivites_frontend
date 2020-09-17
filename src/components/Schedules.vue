@@ -93,7 +93,7 @@ export default{
     },
     mounted(){
         this.retrieveSchedules()
-        if(this.$cookies.get('user') ==null ||this.$cookies.get('user').admin==false)
+        if(!(this.$cookies.get('user') &&this.$cookies.get('user').admin))
         {
            this.$message.error("Sign in as an admin to access this page...")
            this.$router.push('/')

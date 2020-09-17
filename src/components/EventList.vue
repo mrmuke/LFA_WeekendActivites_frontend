@@ -139,7 +139,6 @@ export default {
          UserDataService.get(this.currentUserId)
                  .then(response => {
                    this.currentUser = response.data;
-                  console.log(response.data)
                    this.$cookies.set('user', this.currentUser)
                  })
                  .catch(e => {

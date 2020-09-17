@@ -153,8 +153,8 @@
         
 
     </div></div>
-</div></div><modal name="event-details" v-if="currentEvent">
-    <div style="width:100%;height:100%;padding:15px; display:flex;justify-content:space-between ">
+</div></div><modal name="event-details">
+    <div style="width:100%;height:100%;padding:15px; display:flex;justify-content:space-between " v-if="currentEvent">
         <div>
     <u><strong>Users Signed Up:</strong></u>
     <p v-for="(user, index) in currentEvent.usersSignedUp" :key="index">
@@ -182,6 +182,7 @@ import VModal from 'vue-js-modal'
 Vue.use(VModal)
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+
 Vue.config.productionTip = false;
 Vue.use(Antd);
 export default{
@@ -198,6 +199,8 @@ export default{
     methods:{
         bumpToEnd(index){
             this.currentEvent.usersSignedUp.push( this.currentEvent.usersSignedUp.splice(index, 1)[0]);
+            ScheduleDataService.update(this.currentSchedule.id, this.currentSchedule)
+
         },
         showModal(event){
             this.currentEvent=event
@@ -214,10 +217,15 @@ export default{
             return user.userName 
         },
         sendEmail(event){
+
             for(var i =0;i<event.usersSignedUp.length;i++){
-                EmailDataService.sendEmail(event.usersSignedUp[i].emailAddress, event.name, event.timeSlot)
+                EmailDataService.sendEmail(event,event.usersSignedUp[i].id)
+                    .then(result=>{
+                        console.log(result)
+                        this.$message.success("Emails Successfully Sent!")
+                    })
             } 
-            this.$message.success("Emails Successfully Sent!")
+            
 
 
         },

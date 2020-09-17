@@ -17,7 +17,7 @@
                        @success="onSignIn"
                        v-else
                        class="computer-signin">
-                       Sign in with LFA Email Account
+                       Sign in with LFA Email
                      </g-signin-button>
 
                 </div>
@@ -48,10 +48,11 @@
       <!-- Text slides with image -->
       <b-carousel-slide
       style="font-weight:bold"
-        caption="Request Events"
-        text="Request the events that you want to go to."
         img-src="/img/tutorial-request.png"
-      ></b-carousel-slide>
+      >
+      <h2>Request Events</h2>
+        <p>Request the events that you want to go to</p>
+    </b-carousel-slide>
 
       <!-- Slides with custom text -->
       <b-carousel-slide img-src="/img/tutorial-upvote.png">
@@ -93,60 +94,46 @@ import VueCookies from 'vue-cookies'
 Vue.use(VueCookies)
 import VModal from 'vue-js-modal'
 Vue.use(VModal)
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
+Vue.config.productionTip = false;
+Vue.use(Antd)
 export default {
     data(){
         return {
-            emailAddress:"",
             signedIn:false,
             googleSignInParams: {
                     client_id: '978419002714-0ngcjc58363k85n3a6fpmrdl0tome13b.apps.googleusercontent.com'
             },
-            admin:false,
+            admin:this.$cookies.get('user')&&this.$cookies.get('user').admin
         };
-    },
-    computed:{
-    },
-    components: {
     },
      methods:{
         onSignIn(user){
-            console.log(user)
-            const profile = user.getBasicProfile()
-            this.emailAddress =profile.getEmail()
-            console.log(this.emailAddress)
-            if(this.emailAddress.indexOf("@students.lfanet.org")>-1){
-                this.signedIn = true
-                this.admin=false
-                eventBus.$emit('adminSet', false);
-                this.createUser()
+                
+                this.createUser(user.wc.id_token)
 
-            }
-            else if(this.emailAddress.indexOf("@gmail.com")>-1){
-                this.signedIn = true
-                this.admin = true
-                eventBus.$emit('adminSet', true);
-                this.createUser()
-            }
-            else{
-                this.$message.error("Please sign in with an LFA Email Account")
-                this.signedIn=false
-            }
+
         },
-        createUser(){
-            var data = {
-                emailAddress:this.emailAddress,
-                admin:this.admin
-            };
-            UserDataService.create(data)
+        createUser(idToken){
+            UserDataService.create(idToken)
                     .then(response => {
                       this.$cookies.set('user',response.data);
+                      eventBus.$emit('userSet', response.data);
+                      this.admin=response.data.admin
+                      this.signedIn = true
                       if(response.status==201){
                           this.$modal.show('tutorial-modal')
                       }
 
                     })
-                    .catch(e => {
-                      console.log(e);
+                    .catch(() => {
+
+                      this.$message.error("Please sign in with an LFA Email Account")
+                      this.signedIn=false
+                      this.$cookies.remove('user');
+                      eventBus.$emit('userSet', null);
+
                     });
 
         },
@@ -157,10 +144,6 @@ export default {
         {
             this.signedIn=true
         }
-        if(this.$cookies.get('user')&&this.$cookies.get('user').admin)
-            {
-                this.admin=true;
-            }
 
       }
 }
@@ -191,5 +174,8 @@ export default {
 
 .carousel div img{
     height:100%;
+}
+h2{
+    color:white
 }
 </style>

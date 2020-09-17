@@ -87,17 +87,13 @@ export default {
     }
   },
   mounted() {
-    this.message = '';
-    this.getEvent(this.$route.params.id);
-    if(this.$cookies.get('user')==null)
-    {
-        this.$message.error("Sign in to access this page")
-        this.$router.push('/')
-    }
-    if(this.$cookies.get('user').admin==false){
+    
+
+    if(!this.$cookies.get('user')||this.$cookies.get('user').admin==false){
        this.$message.error("Admin permission denied...")
        this.$router.push('/events')
     }
+    this.getEvent(this.$route.params.id);
   }
 };
 </script>
