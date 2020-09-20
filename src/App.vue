@@ -12,15 +12,17 @@
 
             <b-nav-item :href="'/schedule/'">View Schedule</b-nav-item>
             <b-nav-item v-if="user && user.admin" href="/schedules">All Schedules</b-nav-item>
-            <b-nav-item style="position:absolute;right:1%" v-if="user"><img v-bind:src=user.picture style="border-radius:50%;width:15%;margin-right:10px;">{{user.userName}}</b-nav-item>
+            
           </b-navbar-nav>
 
           <b-navbar-nav class="ml-auto" >
+            <b-nav-item v-if="user" v-on:click="logOut"><img v-bind:src=user.picture style="border-radius:50%;width:25px;margin-right:10px;">{{user.userName}} - Logout
+            </b-nav-item>
 
           </b-navbar-nav>
         </b-collapse>
     </b-navbar>
-
+  
     <div>
         <router-view />
     </div>
@@ -32,8 +34,6 @@
 <script>
 import { eventBus } from './main.js';
 import Vue from 'vue'
-import VueCookies from 'vue-cookies'
-Vue.use(VueCookies)
 import BootstrapVue from 'bootstrap-vue'
 Vue.use(BootstrapVue)
 
@@ -41,17 +41,20 @@ Vue.use(BootstrapVue)
 export default{
     data(){
         return {
-            user:this.$cookies.get('user')
+            user:JSON.parse(localStorage.getItem('user'))
         }
     },
-    computed:{
-    },
     methods:{
-
+      logOut(){
+        localStorage.setItem("user",null)
+        localStorage.setItem("token",null)
+        window.location.reload()
+      }
     },
     created() {
         eventBus.$on('userSet', (data) => this.user = data);
-    }
+    },
+    
 }
 </script>
 <style>
@@ -59,12 +62,14 @@ export default{
     .image{
         width:200px;
     }
+    
 }
-
 
 .nav-link:hover{
   color:yellow !important
 
 }
+
+
 </style>
 

@@ -1,9 +1,8 @@
 <template>
 <div class="event-body">
-<div style="max-width:900px;margin:auto;">
+<div style="max-width:900px;margin:auto;background:white;border-radius:10px;display:flex;justify-content:center;text-align:center;">
   <div v-if="currentEvent" class="edit-form" style="padding:10px;">
-    <h1 style="color:white">Event</h1>
-    <form>
+    <h1>{{currentEvent.name}}</h1>
       <div class="form-group" style="max-width:300px">
         <label for="name">Name</label>
         <input type="text" class="form-control" id="name"
@@ -16,13 +15,12 @@
           v-model="currentEvent.timeSlot"
         />
       </div>
+    
       <div v-if="currentEvent.requested!=null">
            <label><strong>Requested By:</strong></label> {{ currentEvent.requested.emailAddress }}
       </div>
 
-
-
-    </form>
+    
     <button class="badge badge-danger mr-2" style="border:none"
       @click="deleteEvent"
     >
@@ -78,7 +76,8 @@ export default {
     deleteEvent() {
       EventDataService.delete(this.currentEvent.id)
         .then(() => {
-          this.$router.push({ name: "events" });
+          this.$message.error("Event deleted")
+          window.location.href="/events"
         })
         .catch(e => {
           console.log(e);
@@ -89,19 +88,23 @@ export default {
   mounted() {
     
 
-    if(!this.$cookies.get('user')||this.$cookies.get('user').admin==false){
+    if(!JSON.parse(localStorage.getItem("user"))||JSON.parse(localStorage.getItem("user")).admin==false){
        this.$message.error("Admin permission denied...")
-       this.$router.push('/events')
+       window.location.href="/"
     }
-    this.getEvent(this.$route.params.id);
+    else{this.getEvent(this.$route.params.id);}
+    
   }
 };
 </script>
 <style>
 .event-body{
   background:url(/img/background-wave.png);
+  background-size:cover;
   height:100vh;
-  color:white;
   width:100%;
+}
+.badge{
+  padding:10px;
 }
 </style>

@@ -24,6 +24,19 @@ export default new Router({
             component: () =>
                 import ("./components/AddEvent")
         },
+       
+        {
+            path: "/schedule/",
+            name:"current-schedule",
+            component: () =>
+                import ("./components/Schedule")
+        },
+        {
+            path: "/schedule/:id",
+            name:"individual-schedule",
+            component: () =>
+                import ("./components/Schedule")
+        },
         {
             path: "/",
             name: "home",
@@ -45,15 +58,6 @@ export default new Router({
                 import ("./components/CreateSchedule"),
 
         },
-        {
-            path: "/schedule/:id",
-            component: () =>
-                import ("./components/Schedule")
-        },
-        {
-            path: "/schedule/",
-            component: () =>
-                import ("./components/Schedule")
-        },
+        
     ]
 });

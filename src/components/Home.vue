@@ -90,8 +90,6 @@ import Vue from 'vue'
 import GSignInButton from 'vue-google-signin-button'
 Vue.use(GSignInButton)
 import UserDataService from "../services/UserDataService";
-import VueCookies from 'vue-cookies'
-Vue.use(VueCookies)
 import VModal from 'vue-js-modal'
 Vue.use(VModal)
 import Antd from 'ant-design-vue';
@@ -105,7 +103,9 @@ export default {
             googleSignInParams: {
                     client_id: '978419002714-0ngcjc58363k85n3a6fpmrdl0tome13b.apps.googleusercontent.com'
             },
-            admin:this.$cookies.get('user')&&this.$cookies.get('user').admin
+            currentUser:JSON.parse(localStorage.getItem("user")),
+            admin:JSON.parse(localStorage.getItem("user"))&&JSON.parse(localStorage.getItem("user")).admin,
+            
         };
     },
      methods:{
@@ -116,11 +116,14 @@ export default {
 
         },
         createUser(idToken){
+          this.$message.info("Logging in...")
             UserDataService.create(idToken)
                     .then(response => {
-                      this.$cookies.set('user',response.data);
-                      eventBus.$emit('userSet', response.data);
-                      this.admin=response.data.admin
+                        this.$message.success("Logged In!")
+                        localStorage.setItem("user", JSON.stringify(response.data.user))
+                      localStorage.setItem("token", response.data.token)
+                      eventBus.$emit('userSet', response.data.user);
+                      this.admin=response.data.user.admin
                       this.signedIn = true
                       if(response.status==201){
                           this.$modal.show('tutorial-modal')
@@ -131,7 +134,8 @@ export default {
 
                       this.$message.error("Please sign in with an LFA Email Account")
                       this.signedIn=false
-                      this.$cookies.remove('user');
+                      localStorage.setItem("user",null)
+                      localStorage.setItem("token",null)
                       eventBus.$emit('userSet', null);
 
                     });
@@ -140,7 +144,7 @@ export default {
 
       },
       mounted() {
-        if(this.$cookies.get('user')!=null)
+        if(this.currentUser!=null)
         {
             this.signedIn=true
         }

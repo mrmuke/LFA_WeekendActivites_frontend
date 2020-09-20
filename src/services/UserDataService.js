@@ -9,7 +9,7 @@ class UserDataService {
               "Content-type": "application/json",
               "id_token":data
             }
-          }).post("/users")
+          }).post("/users/auth")
      }
      get(id) {
          return http.get(`/users/${id}`);

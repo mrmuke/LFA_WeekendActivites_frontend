@@ -3,7 +3,7 @@
    
     <div class="schedule-list">
          <h1 class="text-center" style="color:white"> Welcome, Admin </h1>
-        <div style="background:white;border:2px solid #eee; padding:20px;box-shadow: 0 0 0 1px #d9d9d9, 0 1px 8px 0 rgba(0,0,0,0.25)">
+        <div style="background:white;border:2px solid #eee; padding:20px;box-shadow: 0 0 0 1px #d9d9d9, 0 1px 8px 0 rgba(0,0,0,0.25);border-radius:5px">
             
             <div class="input-group mb-3">
                <input type="text" class="form-control" placeholder="Search by date"
@@ -82,7 +82,7 @@ export default{
                 ScheduleDataService.delete(id)
                         .then(() => {
                             this.schedules=this.schedules.filter(schedule=>schedule.id!=id)
-
+                            this.$message.success("Schedule deleted")
                         })
                         .catch(e => {
                           console.log(e);
@@ -92,12 +92,16 @@ export default{
 
     },
     mounted(){
-        this.retrieveSchedules()
-        if(!(this.$cookies.get('user') &&this.$cookies.get('user').admin))
+        if(!(JSON.parse(localStorage.getItem("user"))&&JSON.parse(localStorage.getItem("user")).admin))
         {
            this.$message.error("Sign in as an admin to access this page...")
            this.$router.push('/')
         }
+        else{
+            this.retrieveSchedules()
+        }
+        
+        
     }
 }
 </script>
@@ -116,6 +120,7 @@ export default{
   display:flex;
   justify-content: center;
   background:url(/img/background-wave.png);
+  background-size:cover
 
 
 } 

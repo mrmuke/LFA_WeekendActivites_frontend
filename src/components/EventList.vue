@@ -22,10 +22,12 @@
           v-for="(event, index) in filteredEvents"
           :key="index"
         >
+
         <div  class="flex shadow-sm border justify-content-center text-center align-items-center h-screen m-1 rounded p-3" style="background:white;">
+
       <div class="rounded overflow-hidden">
           <div class=" p-l-6 pt-4 p-r-6">
-            <div style="font-weight:700; font-size:1.25rem" class="mb-2">{{ event.name }}</div>
+            <div style="font-weight:700; font-size:1.25rem" class="mb-2">{{ event.name }}<i class="fa fa-trophy ml-2" v-if="index==0" style="color:gold"></i></div>
             <div class="mb-2">{{event.timeSlot}}</div>
           
             <p style="color:#4a5568; font-size:1rem">
@@ -67,8 +69,6 @@
 import EventDataService from "../services/EventDataService";
 import UserDataService from "../services/UserDataService";
 import Vue from 'vue'
-import VueCookies from 'vue-cookies'
-Vue.use(VueCookies)
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 Vue.config.productionTip = false;
@@ -78,12 +78,11 @@ export default {
   data() {
     return {
       events: [],
-      currentUserId:null,
-      currentUser:this.$cookies.get('user'),
+      currentUser:JSON.parse(localStorage.getItem("user")),
       currentIndex: -1,
       name: "",
       index:-1,
-      orderBy:"1"
+      orderBy:"1",
 
 
     };
@@ -133,13 +132,10 @@ export default {
           return false;
        },
     getCurrentUser(){
-         this.currentUser=this.$cookies.get('user')
-         this.currentUserId=this.$cookies.get('user').id
-
-         UserDataService.get(this.currentUserId)
+         UserDataService.get(this.currentUser.id)
                  .then(response => {
                    this.currentUser = response.data;
-                   this.$cookies.set('user', this.currentUser)
+                  localStorage.setItem("user", JSON.stringify(this.currentUser))
                  })
                  .catch(e => {
                    console.log(e);
@@ -147,9 +143,11 @@ export default {
 
     },
     retrieveEvents() {
+
       EventDataService.getAll()
         .then(response => {
           this.events = response.data;
+
         })
 
 
@@ -158,6 +156,7 @@ export default {
         });
     },
     upvote(event){
+      this.$message.success("Upvoted " + event.name)
         event.upVotes++;
         EventDataService.update(event.id, event)
         this.currentUser.upvotes.push(event);
@@ -168,6 +167,7 @@ export default {
 
     },
     down(event){
+      this.$message.error("Downvoted " + event.name)
         event.upVotes--;
         EventDataService.update(event.id, event)
         this.currentUser.upvotes=this.currentUser.upvotes.filter(i=>i.id!=event.id)
@@ -182,13 +182,16 @@ export default {
   },
 
   mounted() {
-    if(this.$cookies.get('user')==null)
+    if(this.currentUser==null)
     {
        this.$message.error("Sign in to access this page")
        this.$router.push('/')
     }
-    this.getCurrentUser()
+    else{ 
+      this.getCurrentUser()
     this.retrieveEvents();
+    }
+    
     
 
 
@@ -200,13 +203,15 @@ export default {
 </script>
 
 <style>
+
 .event-list-body {
   background: #343a40;
   min-height:100vh;
   text-align: center;
   display:flex;
   justify-content: center;
-  background:url(/img/background-wave.png)
+  background:url(/img/background-wave.png);
+  background-size:cover
 
 }
 select{

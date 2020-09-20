@@ -162,7 +162,7 @@ export default {
                 ScheduleDataService.create(data)
                     .then(() => {
                        this.submitted=true;
-
+                      
                     })
                     .catch(e => {
                       console.log(e);
@@ -173,7 +173,7 @@ export default {
     },
 
     mounted(){
-        if(this.$cookies.get('user') ==null ||this.$cookies.get('user').admin==false)
+        if(JSON.parse(localStorage.getItem("user"))==null ||JSON.parse(localStorage.getItem("user")).admin==false)
         {
            this.$message.error("Sign in as an admin to access this page...")
            this.$router.push('/')
@@ -371,7 +371,8 @@ button {
 .page-wrapper {
   min-height: 100vh;
   height:auto;
-  background:url(/img/background-wave.png)
+  background:url(/img/background-wave.png);
+  background-size:cover
 }
 
 body {

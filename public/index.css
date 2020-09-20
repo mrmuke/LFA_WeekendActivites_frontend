@@ -26,6 +26,7 @@ body {
     position: absolute;
 }
 
+
 .title {
     text-align: left;
     width: 50%;
@@ -179,7 +180,7 @@ li.highlight {
 }
 
 .default:hover {
-    opacity: 0.8;
+    color:yellow
 }
 
 .wrap {
@@ -271,6 +272,3 @@ li.highlight {
     width: 1020px
 }
 
-.default {
-    margin-top: 2px;
-}

@@ -97,7 +97,7 @@ export default {
         name: this.event.name,
         timeSlot: this.event.timeSlot,
         upVotes:this.event.upVotes,
-        requested:this.$cookies.get('user'),
+        requested:JSON.parse(localStorage.getItem('user')),
         description:this.event.description
       };
 
@@ -138,13 +138,15 @@ export default {
 
 
   mounted(){
-    if(this.$cookies.get('user')==null)
+    if(JSON.parse(localStorage.getItem("user"))==null)
     {
         this.$message.error("Sign in to access this page")
         this.$router.push('/')
     }
-    this.getEvents()
-  console.log(new Date())
+    else{
+      this.getEvents()
+    }
+
 
   }
 };
@@ -420,45 +422,8 @@ h6 {
 /* ==========================================================================
    #SPACING
    ========================================================================== */
-.p-t-100 {
-  padding-top: 100px;
-}
 
-.p-t-130 {
-  padding-top: 130px;
-}
 
-.p-t-180 {
-  padding-top: 180px;
-}
-
-.p-t-45 {
-  padding-top: 45px;
-}
-
-.p-t-20 {
-  padding-top: 20px;
-}
-
-.p-t-15 {
-  padding-top: 15px;
-}
-
-.p-t-10 {
-  padding-top: 10px;
-}
-
-.p-t-30 {
-  padding-top: 30px;
-}
-
-.p-b-100 {
-  padding-bottom: 100px;
-}
-
-.p-b-50 {
-  padding-bottom: 50px;
-}
 
 .m-r-45 {
   margin-right: 45px;
