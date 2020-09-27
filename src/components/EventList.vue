@@ -2,10 +2,11 @@
 <div class = "event-list-body">
   <div class="event-list-container">
   <div>
-    <h1 style="color:white">Requested Events</h1>
+    <h1 style="color:white"><span class="orange-underline">Requested Events</span></h1>
     
-    <div style="display:flex;justify-content:center">
-        <input type="text" style="width:75%" class="form-control" placeholder="Search by name"
+    <div style="display:flex;justify-content:center;align-items:center;">
+      <i class="fa fa-search" style="background:#efefef; border-top-left-radius:10px; border-bottom-left-radius:10px;display:flex; align-items:center;width:5%;height:35px; justify-content:center;"></i>
+        <input type="text" style="width:75%;height:35px;border-top-left-radius:0px; border-bottom-left-radius:0px;" class="form-control" placeholder="Search by name"
           v-model="name"/>
       <div style="color:white;" class="ml-3">
       Sort by <select v-model="orderBy" >
@@ -31,7 +32,7 @@
             <div class="mb-2">{{event.timeSlot}}</div>
           
             <p style="color:#4a5568; font-size:1rem">
-              {{event.description}}
+              {{event.description.substr(0,25)}}<button class=" ml-2" style="border:0px;border-radius:50%;" v-on:click="showModal(event)"><i class="fa fa-ellipsis-h"></i></button>
             </p>
           </div>
       
@@ -62,6 +63,16 @@
       </ul>
 
   </div></div>
+  <modal name="event-details">
+    <div style="width:100%;height:100%;padding:15px;  " v-if="currentEvent">
+    <u><strong>Event Name:</strong></u><p>{{currentEvent.name}}</p>
+    <u><strong>Event Description:</strong></u><p>{{currentEvent.description}}</p>
+    <u><strong>Event Date:</strong></u><p>{{currentEvent.timeSlot}}</p>
+    </div>
+    <!-- <p v-for="(user, index) in currentEvent.usersSignedUp" :key="index">
+        {{user.userName}}
+    </p> -->
+    </modal>
 </div>
 </template>
 
@@ -69,6 +80,8 @@
 import EventDataService from "../services/EventDataService";
 import UserDataService from "../services/UserDataService";
 import Vue from 'vue'
+import VModal from 'vue-js-modal'
+Vue.use(VModal)
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 Vue.config.productionTip = false;
@@ -83,6 +96,7 @@ export default {
       name: "",
       index:-1,
       orderBy:"1",
+      currentEvent:null
 
 
     };
@@ -125,6 +139,10 @@ export default {
 
   },
   methods: {
+    showModal(event){
+      this.currentEvent=event
+      this.$modal.show('event-details')
+    },
      upVoteExists(id){
          if(this.currentUser.upvotes.some(e=>e.id===id)){
            return true
@@ -204,6 +222,12 @@ export default {
 
 <style>
 
+.orange-underline {
+  background-image: linear-gradient(to right, #f37121 0%, #f37121 100%);
+    background-repeat: repeat-x;
+    background-position: 0 78%;
+    background-size: 100% 8px;
+}
 .event-list-body {
   background: #343a40;
   min-height:100vh;
@@ -223,6 +247,7 @@ select{
 }
 .event-list-item{
   width:33%;
+
   list-style-type: none; /* Remove bullets */
   padding: 0; /* Remove padding */
   margin: 0; /* Remove margins */
@@ -232,6 +257,12 @@ select{
   .event-list-item{
     width:50%;
   }
+
+    .vm--modal{
+        width:100% !important;
+        left:0px !important;
+    }
+
 }
 .event-list-ul{
   padding: 0; /* Remove padding */

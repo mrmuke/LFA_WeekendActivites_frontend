@@ -3,30 +3,31 @@
 <div class = "schedule-body" v-if="currentSchedule">
     <div class="schedule-info">
     <div style="text-align:center">
-            <h1 style="color:white"><u>{{currentSchedule.date}}</u></h1>
+            <h1 style="color:white"><span class="orange-underline">{{currentSchedule.date}}</span></h1>
     </div>
     <div class = "schedule-container">
 
     <div class="schedule-day">
-     <h2 style="text-align:center; text-decoration:underline;">Friday </h2>
+     <h2 style="padding: 20px 40px;text-align: center;background: #3a3737;color: #fff"><span>Friday</span></h2>
+
         <ul>
-          <li v-for="(event, index) in currentSchedule.friday" :key="index" style="display:flex; background:#eee;padding:10px;" class="m-2">
+          <li v-for="(event, index) in currentSchedule.friday" :key="index" style="display:flex; padding:10px;" v-bind:style="{background:getBackground(index)}" class="mx-2">
               <u>{{ event.timeSlot }}</u>- {{event.name}} <div v-if="event.signUp">*</div>
           </li>
         </ul>
     </div>
     <div class="schedule-day">
-     <h2 style="text-align:center; text-decoration:underline;">Saturday </h2>
+     <h2 style="padding: 20px 40px;text-align: center;background: #3a3737;color: #fff; "><span>Saturday</span></h2>
        <ul>
-            <li v-for="(event, index) in currentSchedule.saturday" :key="index" style="display:flex; background:#eee;padding:10px;" class="m-2">
+            <li v-for="(event, index) in currentSchedule.saturday" :key="index" style="display:flex;padding:10px;" v-bind:style="{background:getBackground(index)}" class="m-2">
                 <u>{{ event.timeSlot }}</u>- {{event.name}} <div v-if="event.signUp">*</div>
             </li>
        </ul>
     </div>
     <div class="schedule-day">
-       <h2 style="text-align:center; text-decoration:underline;">Sunday </h2>
+       <h2 style="padding: 20px 40px;text-align: center;background: #3a3737;color: #fff; "><span>Sunday</span></h2>
         <ul>
-             <li v-for="(event, index) in currentSchedule.sunday" :key="index" style="display:flex; background:#eee;padding:10px;" class="m-2">
+             <li v-for="(event, index) in currentSchedule.sunday" :key="index" style="display:flex; padding:10px;" v-bind:style="{background:getBackground(index)}" class="m-2">
                   <u>{{ event.timeSlot }}</u>- {{event.name}} <div v-if="event.signUp">*</div>
              </li>
         </ul>
@@ -119,6 +120,15 @@ export default{
     },
     
     methods:{
+        getBackground(index){
+            if(index%2==0)
+            {
+                return "rgba(215, 211, 211, 0.3)"
+            }
+            else{
+                return "rgba(215, 211, 211, 0.1)"
+            }
+        },
         bumpToEnd(index){
             this.currentEvent.usersSignedUp.push( this.currentEvent.usersSignedUp.splice(index, 1)[0]);
             ScheduleDataService.update(this.currentSchedule.id, this.currentSchedule)
@@ -208,6 +218,15 @@ export default{
 }
 </script>
 <style>
+.orange-underline {
+  background-image: linear-gradient(to right, #f37121 0%, #f37121 100%);
+    background-repeat: repeat-x;
+    background-position: 0 85%;
+    background-size: 100% 8px;
+}
+.go-to-details{
+    margin-bottom:7px;
+}
 .schedule-body {
     overflow-y: auto;
     background: url(/img/background-wave.png);
@@ -225,6 +244,7 @@ export default{
 }
 .go-to-details:hover{
     background:#eee;
+    border-radius:10px;
     cursor:pointer
 }
 .schedule-container{
@@ -258,7 +278,7 @@ export default{
 
 
 .wrap .button:hover {
-    background: #2980b9;
+    background: #f37121;
 }
 
 @media screen and (max-width:768px)
@@ -297,7 +317,7 @@ export default{
   .schedule-day{
       width:33%;
       border:1px solid #eee;
-      padding:10px;
+      padding:5px;
 
   }
 </style>

@@ -1,8 +1,8 @@
 <template>
 <div class="event-body">
-<div style="max-width:900px;margin:auto;background:white;border-radius:10px;display:flex;justify-content:center;text-align:center;">
+<div style="max-width:900px;margin:auto;color:white;border-radius:10px;display:flex;justify-content:center;text-align:center;">
   <div v-if="currentEvent" class="edit-form" style="padding:10px;">
-    <h1>{{currentEvent.name}}</h1>
+    <h1 style="color:white"><span class="orange-underline">{{currentEvent.name}}</span></h1>
       <div class="form-group" style="max-width:300px">
         <label for="name">Name</label>
         <input type="text" class="form-control" id="name"
@@ -21,13 +21,13 @@
       </div>
 
     
-    <button class="badge badge-danger mr-2" style="border:none"
+    <button class="default-yellow" 
       @click="deleteEvent"
     >
-      Delete
+      Delete Event
     </button>
 
-    <button type="submit" class="badge badge-success" style="border:none"
+    <button class="default" 
       @click="updateEvent"
     >
       Update Event
@@ -45,7 +45,7 @@ import 'ant-design-vue/dist/antd.css';
 Vue.config.productionTip = false;
 Vue.use(Antd);
 export default {
-  name: "event",
+  name: "event-details",
   data() {
     return {
       currentEvent: null,
@@ -104,7 +104,52 @@ export default {
   height:100vh;
   width:100%;
 }
+.orange-underline{
+    background-image: linear-gradient(to right, #f37121 0%, #f37121 100%);
+    background-repeat: repeat-x;
+    background-position: 0 85%;
+    background-size: 100% 8px;
+}
 .badge{
   padding:10px;
 }
+.default {
+    display: inline-block;
+    border: 2px solid transparent;
+    margin: 0;
+    padding: 10px 20px;
+    background: #f37121;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bolder;
+    line-height: 15px;
+    border-radius: 0;
+    text-align: center;
+    text-transform: uppercase;
+    -webkit-transition: .3s;
+    transition: .3s;
+    border-radius: 7px;
+}
+
+.default:hover {
+    background:#db6115;
+    color:white;
+}
+.default-yellow{
+      font-weight: bolder;
+  border: 2px solid transparent;
+    margin: 0;
+    padding: 10px 20px;
+    background: #f7e212;
+    color: #121111;
+    font-size: 10px;
+    line-height: 15px;
+    border-radius: 0;
+    text-align: center;
+    -webkit-transition: .3s;
+    transition: .3s;
+  border-radius:7px;
+  text-transform: uppercase;
+}
+
 </style>

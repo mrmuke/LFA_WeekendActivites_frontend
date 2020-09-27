@@ -2,15 +2,15 @@
 <div class = "schedules-container">
    
     <div class="schedule-list">
-         <h1 class="text-center" style="color:white"> Welcome, Admin </h1>
-        <div style="background:white;border:2px solid #eee; padding:20px;box-shadow: 0 0 0 1px #d9d9d9, 0 1px 8px 0 rgba(0,0,0,0.25);border-radius:5px">
+         <h1 class="text-center" style="color:white"><span class="orange-underline"> Welcome, Admin </span></h1>
+        <div>
+            <div style="display:flex;justify-content:center;">
+             <i class="fa fa-search" style="background:#efefef; border-top-left-radius:10px; border-bottom-left-radius:10px;display:flex; align-items:center;width:5%;height:35px; justify-content:center;"></i>
+        <input type="text" style="width:50%;height:35px;border-top-left-radius:0px; border-bottom-left-radius:0px;" class="form-control" placeholder="Search by date"
+          v-model="date"/></div>
+
             
-            <div class="input-group mb-3">
-               <input type="text" class="form-control" placeholder="Search by date"
-                v-model="date"/>
-            </div>
-            
-            <div class="button_cont" style="margin:3%;display:flex;justify-content:center;"><a style="width:60%;" class="create" href="/createSchedule" rel="nofollow noopener">Create Schedule</a></div>
+            <div class="button_cont" style="margin:3%;display:flex;justify-content:center;"><a style="width:75%;" class="create" href="/createSchedule" rel="nofollow noopener">Create Schedule</a></div>
             <ul style="display:flex;flex-wrap:wrap; margin:0;padding:0">
                 <li class="schedule-item"
                 v-for="(schedule, index) in filteredSchedules"
@@ -27,7 +27,7 @@
                             >
                             View Schedule
                             </b-button>
-                            <b-button class = "red-default" @click = "deleteSchedule(schedule.id)">Delete Schedule</b-button>
+                            <button class = "default-yellow" @click = "deleteSchedule(schedule.id)">Delete Schedule</button>
                             </div>
                     </div>  
                 </div>
@@ -106,7 +106,12 @@ export default{
 }
 </script>
 <style>
-
+.orange-underline {
+  background-image: linear-gradient(to right, #f37121 0%, #f37121 100%);
+    background-repeat: repeat-x;
+    background-position: 0 77%;
+    background-size: 100% 8px;
+}
 .schedule-list {
 
   width: 900px;
@@ -137,13 +142,20 @@ export default{
       background: #ff8216;
       
   }
-  .red-default{
-      border:#ea3c53;
-      background:#ea3c53;
-  }
-  .red-default:hover{
-      background:#cd3549;
-  }
+  .default-yellow{
+
+  border: 2px solid transparent;
+    margin: 0;
+    padding: 10px 20px;
+    background: #f7e212;
+
+    text-align: center;
+    -webkit-transition: .3s;
+    transition: .3s;
+  border-radius:7px;
+
+}
+
   @media screen and (max-width:500px){
       .schedule-item{
           width:50%;

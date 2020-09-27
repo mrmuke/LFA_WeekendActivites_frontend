@@ -3,7 +3,7 @@
         <div class="wrapper wrapper--w900">
             <div class="card card-6"  v-if="!submitted">
                 <div class="card-heading">
-                    <h2 class="title">Create Schedule</h2>
+                    <h2 class="title"><span class="orange-underline">Create Schedule</span></h2>
                 </div>
                 <div class="card-body">
                         <div class="form-row">
@@ -363,6 +363,12 @@ button {
   outline: none;
   background: none;
   border: none;
+}
+.orange-underline {
+  background-image: linear-gradient(to right, #f37121 0%, #f37121 100%);
+    background-repeat: repeat-x;
+    background-position: 0 77%;
+    background-size: 100% 8px;
 }
 
 /* ==========================================================================

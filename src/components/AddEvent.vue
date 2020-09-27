@@ -3,7 +3,7 @@
         <div class="wrapper wrapper--w900">
             <div class="card card-6"  v-if="!submitted">
                 <div class="card-heading">
-                    <h2 class="title">Request Event</h2>
+                    <h2 class="title"><span class="orange-underline">Request Event</span></h2>
                 </div>
                 <div class="card-body">
                         <div class="form-row">
@@ -39,7 +39,7 @@
                     <button @click="saveEvent" class="btn btn--radius-2 btn--blue-2" type="submit">Request Event</button>
                 </div>
             </div>
-            <div v-else style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:25%;">
+            <div v-else style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:2%;">
               <i class="fa fa-check" style="font-size:100px;color:green;background:#eee;border-radius:50%;"></i>
               <h1 style="color:white;text-align:center;padding:5%;">You submitted an event successfully!</h1>
               <button class="btn btn--radius-2 btn--blue-2 mt-2" @click="newEvent">Submit Another Event</button>
@@ -358,12 +358,19 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 36px;
+     
 }
 
 h2 {
   font-size: 30px;
+   
 }
-
+.orange-underline{
+  background-image: linear-gradient(to right, #f37121 0%, #f37121 100%);
+    background-repeat: repeat-x;
+    background-position: 0 78%;
+    background-size: 100% 8px;
+}
 h3 {
   font-size: 24px;
 }
@@ -522,7 +529,7 @@ h6 {
 }
 
 .btn--blue-2:hover {
-  background: #185ac1;
+  background: #f37121;
   color:white;
 }
 
@@ -702,6 +709,8 @@ textarea {
   text-align: left;
   color: #fff;
   margin-bottom: 24px;
+  
+
 }
 
 @media (max-width: 767px) {
@@ -718,6 +727,7 @@ textarea {
   -moz-border-radius: 3px;
   border-radius: 3px;
   background: #fff;
+    border:0px;
 }
 
 .card-6 {
