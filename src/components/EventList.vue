@@ -6,10 +6,10 @@
     
     <div style="display:flex;justify-content:center;align-items:center;">
       <i class="fa fa-search" style="background:#efefef; border-top-left-radius:10px; border-bottom-left-radius:10px;display:flex; align-items:center;width:5%;height:35px; justify-content:center;"></i>
-        <input type="text" style="width:75%;height:35px;border-top-left-radius:0px; border-bottom-left-radius:0px;" class="form-control" placeholder="Search by name"
+        <input type="text" style="width:50%;height:35px;border-top-left-radius:0px; border-bottom-left-radius:0px;" class="form-control" placeholder="Search by name"
           v-model="name"/>
-      <div style="color:white;" class="ml-3">
-      Sort by <select v-model="orderBy" >
+      <div style="color:white;display:flex;white-space: nowrap;" class="ml-3">
+      <select class="form-control" v-model="orderBy" >
                 <option  value="1">Popularity</option>
                 <option value="2">Date</option>
                 <option value="3">Name</option>
