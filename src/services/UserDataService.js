@@ -4,7 +4,7 @@ import http from "../http-common";
 class UserDataService {
     create(data) {
         return axios.create({
-            baseURL: "http://localhost:8080/api",
+            baseURL: "http://3.101.80.179.xip.io/api",
             headers: {
               "Content-type": "application/json",
               "id_token":data
