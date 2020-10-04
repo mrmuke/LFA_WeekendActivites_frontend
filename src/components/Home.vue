@@ -69,7 +69,7 @@
       <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
       <b-carousel-slide img-src="/img/tutorial-start.png">
         <h2 class="mb-3">Welcome</h2>
-        <a href="/schedule" style="background:#ffab62;color:white;padding:10px;margin-bottom:50px;">This Week's Schedule</a>
+        <a href="/schedule" style="background:#f7931e;color:white;padding:10px;margin-bottom:50px;">This Week's Schedule</a>
       </b-carousel-slide>
 
       <!-- Slide with blank fluid image to maintain slide aspect ratio -->

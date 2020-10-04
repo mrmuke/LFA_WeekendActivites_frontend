@@ -134,8 +134,8 @@ export default{
   margin: 0; /* Remove margins */
   width:25%}
   .orange-default{
-      border:#Ffab62;
-      background:#ffab62;
+      border:#f7931e;
+      background:#f7931e;
       margin:2%;
   }
   .orange-default:hover{

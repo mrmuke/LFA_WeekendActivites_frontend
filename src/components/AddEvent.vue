@@ -525,7 +525,7 @@ h6 {
 }
 
 .btn--blue-2 {
-  background: #ffab62;
+  background: #f7931e;
 }
 
 .btn--blue-2:hover {

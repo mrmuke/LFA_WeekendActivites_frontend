@@ -270,7 +270,7 @@ export default{
     color: #fff;
     line-height: 60px;
     min-height: 60px;
-    background: #ffab62;
+    background: #f7931e;
     text-transform: uppercase;
     font-weight: 700;
     cursor: pointer;
