@@ -177,38 +177,31 @@ export default {
       
       EventDataService.get(event.id)
       .then(response=>{
-        let curEvent = response.data
-        curEvent.upVotes++;
-        EventDataService.update(curEvent.id, curEvent)
-          .then(response=>{
-            event=response.data
-          })
-        this.currentUser.upvotes.push(curEvent);
+        event.upvotes=response.data.upvotes+1
+        EventDataService.update(event.id, event)
+        this.currentUser.upvotes.push(event);
         UserDataService.update(this.currentUser.id, this.currentUser)
-        this.$message.success("Upvoted " + event.name)
-
+        .then(()=>{
+            this.$message.success("Upvoted " + event.name)
+          })
       })
       
         
 
     },
     down(event){
-      
       EventDataService.get(event.id)
       .then(response=>{
-        let curEvent = response.data
-       curEvent.upVotes--;
-        EventDataService.update(curEvent.id, curEvent)
-          .then(response=>{
-            event=response.data
-          })
-        this.currentUser.upvotes=this.currentUser.upvotes.filter(i=>i.id!=event.id)
+        event.upvotes=response.data.upvotes-1
+        EventDataService.update(event.id, event)
+                this.currentUser.upvotes=this.currentUser.upvotes.filter(i=>i.id!=event.id)
 
         UserDataService.update(this.currentUser.id, this.currentUser)
-        this.$message.error("Downvoted " + event.name)
-
+        .then(()=>{
+            this.$message.error("Downvoted " + event.name)
+          })
       })
-      
+
 
     },
 
