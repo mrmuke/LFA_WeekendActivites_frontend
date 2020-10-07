@@ -180,6 +180,9 @@ export default {
         let curEvent = response.data
         curEvent.upVotes++;
         EventDataService.update(curEvent.id, curEvent)
+          .then(response=>{
+            event=response.data
+          })
         this.currentUser.upvotes.push(curEvent);
         UserDataService.update(this.currentUser.id, this.currentUser)
         this.$message.success("Upvoted " + event.name)
@@ -196,6 +199,9 @@ export default {
         let curEvent = response.data
        curEvent.upVotes--;
         EventDataService.update(curEvent.id, curEvent)
+          .then(response=>{
+            event=response.data
+          })
         this.currentUser.upvotes=this.currentUser.upvotes.filter(i=>i.id!=event.id)
 
         UserDataService.update(this.currentUser.id, this.currentUser)
