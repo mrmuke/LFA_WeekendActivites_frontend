@@ -79,7 +79,7 @@
     <div style="width:100%;height:100%;padding:15px; display:flex;justify-content:space-between " v-if="currentEvent">
         <div>
     <u><strong>Users Signed Up:</strong></u>
-    <p v-for="(user, index) in currentEvent.usersSignedUp" :key="index">
+    <p style="margin-bottom:0px !important" v-for="(user, index) in currentEvent.usersSignedUp" :key="index">
         <u><strong v-if="index===currentEvent.personLimit">Waitlist<br></strong></u>
         {{index+1}}. {{getFullName(user)}} <button v-if="currentUser.admin" @click="bumpToEnd(index)" style="border:0px">Bump to End</button>
     </p></div>

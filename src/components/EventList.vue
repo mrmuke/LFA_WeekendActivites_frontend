@@ -44,7 +44,7 @@
           </div>
       <div class="p-l-6 p-r-6 pb-4 pt-4">
         <div class="wrap">
-              <div class="button" v-on:click="down(event)" v-if="upVoteExists(event.id)"><i class="fa fa-arrow-up"></i>Down Vote</div>
+              <div class="button" v-on:click="down(event)" v-if="upVoteExists(event.id)"><i class="fa fa-arrow-up"></i>DOWN VOTE</div>
               <div class="button" v-on:click="upvote(event)" v-else><i class="fa fa-arrow-up"></i>VOTE UP</div>
 
 
@@ -174,32 +174,28 @@ export default {
         });
     },
     upvote(event){
-      EventDataService.get(event.id)
-        .then(response=>{
-          let curEvent=response.data
-          curEvent.upVotes++;
-          EventDataService.update(curEvent.id, curEvent)
-          this.$message.success("Upvoted " + event.name)
-        })
+      this.$message.success("Upvoted " + event.name)
         event.upVotes++;
+        /* EventDataService.upvote(event.id) */
+        EventDataService.update(event.id, event)
         this.currentUser.upvotes.push(event);
         UserDataService.update(this.currentUser.id, this.currentUser)
-        
+        .then(response=>{
+            console.log(response.data)
+          })
 
     },
     down(event){
-      EventDataService.get(event.id)
-        .then(response=>{
-          let curEvent=response.data
-          curEvent.upVotes--;
-          EventDataService.update(curEvent.id, curEvent)
-          this.$message.error("Downvoted " + event.name)
-        })
-      
+      this.$message.error("Downvoted " + event.name)
         event.upVotes--;
+        /* EventDataService.downvote(event.id) */
+        EventDataService.update(event.id, event)
         this.currentUser.upvotes=this.currentUser.upvotes.filter(i=>i.id!=event.id)
-        UserDataService.update(this.currentUser.id, this.currentUser)
 
+        UserDataService.update(this.currentUser.id, this.currentUser)
+          .then(response=>{
+            console.log(response.data)
+          })
 
     },
 
