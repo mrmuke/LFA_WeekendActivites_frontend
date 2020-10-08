@@ -9,11 +9,11 @@ class EventDataService {
         return http.get(`/voteEvents/${id}`);
     }
     upvote(id){
-        return http.put(`/voteEvents/${id}`)
+        return http.put(`/voteEvents/upvote/${id}`)
     }
     downvote(id)
     {
-        return http.put(`/voteEvents/${id}`)
+        return http.put(`/voteEvents/downvote/${id}`)
     }
 
 
