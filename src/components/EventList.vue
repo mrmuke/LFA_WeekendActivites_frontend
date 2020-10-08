@@ -176,8 +176,7 @@ export default {
     upvote(event){
       this.$message.success("Upvoted " + event.name)
         event.upVotes++;
-        /* EventDataService.upvote(event.id) */
-        EventDataService.update(event.id, event)
+        EventDataService.upvote(event.id)
         this.currentUser.upvotes.push(event);
         UserDataService.update(this.currentUser.id, this.currentUser)
         .then(response=>{
@@ -188,8 +187,7 @@ export default {
     down(event){
       this.$message.error("Downvoted " + event.name)
         event.upVotes--;
-        /* EventDataService.downvote(event.id) */
-        EventDataService.update(event.id, event)
+        EventDataService.downvote(event.id)
         this.currentUser.upvotes=this.currentUser.upvotes.filter(i=>i.id!=event.id)
 
         UserDataService.update(this.currentUser.id, this.currentUser)

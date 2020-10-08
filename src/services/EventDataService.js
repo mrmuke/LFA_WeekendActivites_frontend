@@ -8,14 +8,14 @@ class EventDataService {
     get(id) {
         return http.get(`/voteEvents/${id}`);
     }
-    /* upvote(id){
-        return http.post(`/voteEvents/${id}`)
+    upvote(id){
+        return http.put(`/voteEvents/${id}`)
     }
     downvote(id)
     {
-        return http.post(`/voteEvents/${id}`)
+        return http.put(`/voteEvents/${id}`)
     }
- */
+
 
     create(data) {
         return http.post("/voteEvents", data);
