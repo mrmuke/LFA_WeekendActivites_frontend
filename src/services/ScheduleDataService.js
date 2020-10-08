@@ -18,6 +18,9 @@ class ScheduleDataService {
     update(id, data) {
         return http.put(`/schedules/${id}`, data);
     }
+    bumpToEnd(event){
+        return http.post("/schedules/bump", event)
+    }
 
     delete(id) {
         return http.delete(`/schedules/${id}`);

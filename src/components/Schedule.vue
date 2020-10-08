@@ -130,8 +130,10 @@ export default{
             }
         },
         bumpToEnd(index){
+            /* this.getSchedule(this.currentSchedule.id) */
             this.currentEvent.usersSignedUp.push( this.currentEvent.usersSignedUp.splice(index, 1)[0]);
             ScheduleDataService.update(this.currentSchedule.id, this.currentSchedule)
+           
 
         },
         showModal(event){
@@ -185,14 +187,15 @@ export default{
         deleteFromEvent(event){
             if(confirm("Are you sure you want to be removed from the list?"))
             {
-                event.usersSignedUp.splice(event.usersSignedUp.find(e=>e.userName===this.currentUser.userName),1)
+                event.usersSignedUp.splice(event.usersSignedUp.find(e=>e.id===this.currentUser.id),1)
             ScheduleDataService.update(this.currentSchedule.id, this.currentSchedule)
             this.$message.error("Removed from " + event.name)
+            this.showModal(event)
             }
             
         },
         signedUp(event){
-            return event.usersSignedUp.filter(e=>e.userName===this.currentUser.userName).length>0
+            return event.usersSignedUp.filter(e=>e.id===this.currentUser.id).length>0
         }
     },
     mounted(){

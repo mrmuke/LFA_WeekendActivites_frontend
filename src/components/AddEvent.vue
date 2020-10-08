@@ -42,6 +42,7 @@
             <div v-else style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:2%;">
               <i class="fa fa-check" style="font-size:100px;color:green;background:#eee;border-radius:50%;"></i>
               <h1 style="color:white;text-align:center;padding:5%;">You submitted an event successfully!</h1>
+              <button class="btn btn--radius-2 btn--blue-2 mt-2" @click="viewEvents">View Events</button>
               <button class="btn btn--radius-2 btn--blue-2 mt-2" @click="newEvent">Submit Another Event</button>
             </div>
         </div>
@@ -86,6 +87,10 @@ export default {
       date.setDate(date.getDate() + 7);
       return date;
     },
+    viewEvents(){
+      this.$router.push('/events')
+    },
+
     saveEvent() {
       if(this.events.filter(i=>i.name===this.event.name).length>0)
       {
