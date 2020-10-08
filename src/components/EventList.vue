@@ -174,23 +174,30 @@ export default {
         });
     },
     upvote(event){
-      this.retrieveEvents()
-      this.$message.success("Upvoted " + event.name)
-      
+      EventDataService.get(event.id)
+        .then(response=>{
+          let curEvent=response.data
+          curEvent.upVotes++;
+          EventDataService.update(curEvent.id, curEvent)
+          this.$message.success("Upvoted " + event.name)
+        })
         event.upVotes++;
-        EventDataService.update(event.id, event)
         this.currentUser.upvotes.push(event);
         UserDataService.update(this.currentUser.id, this.currentUser)
         
 
     },
     down(event){
-      this.retrieveEvents()
-      this.$message.error("Downvoted " + event.name)
+      EventDataService.get(event.id)
+        .then(response=>{
+          let curEvent=response.data
+          curEvent.upVotes--;
+          EventDataService.update(curEvent.id, curEvent)
+          this.$message.error("Downvoted " + event.name)
+        })
+      
         event.upVotes--;
-        EventDataService.update(event.id, event)
         this.currentUser.upvotes=this.currentUser.upvotes.filter(i=>i.id!=event.id)
-
         UserDataService.update(this.currentUser.id, this.currentUser)
 
 
