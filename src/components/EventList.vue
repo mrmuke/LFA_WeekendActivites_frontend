@@ -44,7 +44,7 @@
           </div>
       <div class="p-l-6 p-r-6 pb-4 pt-4">
         <div class="wrap">
-              <div class="button" v-on:click="down(event)" v-if="upVoteExists(event.id)"><i class="fa fa-arrow-up"></i>UNVOTEs</div>
+              <div class="button" v-on:click="down(event)" v-if="upVoteExists(event.id)"><i class="fa fa-arrow-up"></i>Down Vote</div>
               <div class="button" v-on:click="upvote(event)" v-else><i class="fa fa-arrow-up"></i>VOTE UP</div>
 
 
