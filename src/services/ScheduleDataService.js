@@ -21,6 +21,9 @@ class ScheduleDataService {
     bumpToEnd(event){
         return http.post("/schedules/bump", event)
     }
+    deleteUser(scheduleId, eventName,user){
+        return http.delete(`/schedules/${scheduleId}/${eventName}`, user)
+    }
 
     delete(id) {
         return http.delete(`/schedules/${id}`);

@@ -34,13 +34,13 @@
     </div>
     
     </div><div style="display:flex; flex-wrap:wrap;">
-           <div v-for="(event) in filtered('friday').concat(filtered('saturday'),filtered('sunday'))" :key="event.id" class="event-signup-item">
+           <div v-for="(event) in filtered('friday')" :key="event.name" class="event-signup-item">
                <div  class="flex shadow-sm border justify-content-center text-center align-items-center h-screen m-1 rounded p-3" style="background:white;" >
-                   <div class="go-to-details" @click="showModal(event)">
+                   <div class="go-to-details" @click="showModal(event,'friday')">
                 <div class="rounded overflow-hidden">
                     <div class=" p-l-6 pt-4 p-r-6">
                         <div style="font-weight:700; font-size:1.25rem" class="mb-2">{{ event.name }}</div>
-                        <div class="mb-2">{{event.timeSlot}}-Sunday</div>
+                        <div class="mb-2">{{event.timeSlot}}-<strong>Friday</strong></div>
                     
                         <p style="color:#4a5568; font-size:1rem">
                         <ol>
@@ -59,7 +59,87 @@
                     </div>
                 <div class="p-l-6 p-r-6 pb-4">
                     <div class="wrap">
-                         <div class="button" v-if="!signedUp(event)" @click="signUpEvent(event)">Sign Up</div><div class ="button" v-else @click="deleteFromEvent(event)">Signed Up</div>
+                         <div class="button" v-if="!signedUp(event)" @click="signUpEvent(event,'friday')">Sign Up</div><div class ="button" v-else @click="deleteFromEvent(event, 'friday')">Signed Up</div>
+                        <!-- <div class="button" v-if="$cookies.get('user').admin" @click= "sendEmail(event)">Send Notification</div> -->
+                        
+
+
+                    </div>
+   
+                </div>
+                    
+                  
+
+            
+        
+
+    </div></div>
+    <div v-for="(event) in filtered('saturday')" :key="event.name" class="event-signup-item">
+               <div  class="flex shadow-sm border justify-content-center text-center align-items-center h-screen m-1 rounded p-3" style="background:white;" >
+                   <div class="go-to-details" @click="showModal(event,'saturday')">
+                <div class="rounded overflow-hidden">
+                    <div class=" p-l-6 pt-4 p-r-6">
+                        <div style="font-weight:700; font-size:1.25rem" class="mb-2">{{ event.name }}</div>
+                        <div class="mb-2">{{event.timeSlot}}-<strong>Saturday</strong></div>
+                    
+                        <p style="color:#4a5568; font-size:1rem">
+                        <ol>
+                        <!-- s -->
+                    </ol>
+                        </p>
+                    </div>
+                
+                    <div class="p-l-6 p-r-6 pt-4 pb-4">
+                        <span style="color:#4a5568; background:#edf2f7; font-weight:600; font-size: .875rem" class="inline-block rounded-lg px-3 py-1 mr-2">
+                         Max. {{event.personLimit}}
+                        </span>
+                    
+                    </div>
+                    </div>
+                    </div>
+                <div class="p-l-6 p-r-6 pb-4">
+                    <div class="wrap">
+                         <div class="button" v-if="!signedUp(event)" @click="signUpEvent(event,'saturday')">Sign Up</div><div class ="button" v-else @click="deleteFromEvent(event, 'saturday')">Signed Up</div>
+                        <!-- <div class="button" v-if="$cookies.get('user').admin" @click= "sendEmail(event)">Send Notification</div> -->
+                        
+
+
+                    </div>
+   
+                </div>
+                    
+                  
+
+            
+        
+
+    </div></div>
+    <div v-for="(event) in filtered('sunday')" :key="event.name" class="event-signup-item">
+               <div  class="flex shadow-sm border justify-content-center text-center align-items-center h-screen m-1 rounded p-3" style="background:white;" >
+                   <div class="go-to-details" @click="showModal(event,'sunday')">
+                <div class="rounded overflow-hidden">
+                    <div class=" p-l-6 pt-4 p-r-6">
+                        <div style="font-weight:700; font-size:1.25rem" class="mb-2">{{ event.name }}</div>
+                        <div class="mb-2">{{event.timeSlot}}-<strong>Sunday</strong></div>
+                    
+                        <p style="color:#4a5568; font-size:1rem">
+                        <ol>
+                        <!-- s -->
+                    </ol>
+                        </p>
+                    </div>
+                
+                    <div class="p-l-6 p-r-6 pt-4 pb-4">
+                        <span style="color:#4a5568; background:#edf2f7; font-weight:600; font-size: .875rem" class="inline-block rounded-lg px-3 py-1 mr-2">
+                         Max. {{event.personLimit}}
+                        </span>
+                    
+                    </div>
+                    </div>
+                    </div>
+                <div class="p-l-6 p-r-6 pb-4">
+                    <div class="wrap">
+                         <div class="button" v-if="!signedUp(event)" @click="signUpEvent(event,'sunday')">Sign Up</div><div class ="button" v-else @click="deleteFromEvent(event, 'sunday')">Signed Up</div>
                         <!-- <div class="button" v-if="$cookies.get('user').admin" @click= "sendEmail(event)">Send Notification</div> -->
                         
 
@@ -112,6 +192,7 @@ export default{
         return {
             currentSchedule:null,
             currentEvent:null,
+            currentDate:null,
             currentUser:JSON.parse(localStorage.getItem("user"))
         };
     },
@@ -130,14 +211,25 @@ export default{
             }
         },
         bumpToEnd(index){
-            /* this.getSchedule(this.currentSchedule.id) */
+            /* ScheduleDataService.get(id)
+                .then(response => {
+                  this.currentSchedule = response.data;
+                }) */ 
+                ScheduleDataService.get(this.currentSchedule.id)
+                    .then(response=>{
+                        let schedule= response.data
+                        let updatedEvent = schedule[this.currentDate].find(e=>e.name===this.currentEvent.name)
+                        updatedEvent.usersSignedUp.push( updatedEvent.usersSignedUp.splice(index, 1)[0]);
+                        ScheduleDataService.update(schedule.id, schedule)
+                    })      
             this.currentEvent.usersSignedUp.push( this.currentEvent.usersSignedUp.splice(index, 1)[0]);
-            ScheduleDataService.update(this.currentSchedule.id, this.currentSchedule)
+
            
 
         },
-        showModal(event){
+        showModal(event,date){
             this.currentEvent=event
+            this.currentDate=date
             this.$modal.show('event-details')
         },
         filtered(date){
@@ -178,19 +270,33 @@ export default{
                 })
                 
         },
-        signUpEvent(event){
+        signUpEvent(event, date){
             this.$message.success("Signed up for " + event.name)
             event.usersSignedUp.push(this.currentUser)
-            ScheduleDataService.update(this.currentSchedule.id,this.currentSchedule)
-            this.showModal(event)
+            ScheduleDataService.get(this.currentSchedule.id)
+                    .then(response=>{
+                        let schedule= response.data
+                        let updatedEvent = schedule[date].find(e=>e.name===event.name)
+                        updatedEvent.usersSignedUp.push(this.currentUser)
+                        ScheduleDataService.update(schedule.id, schedule)
+                    })            
+                    this.showModal(event,date)
         },
-        deleteFromEvent(event){
+        deleteFromEvent(event,date){
             if(confirm("Are you sure you want to be removed from the list?"))
             {
-                event.usersSignedUp.splice(event.usersSignedUp.find(e=>e.id===this.currentUser.id),1)
-            ScheduleDataService.update(this.currentSchedule.id, this.currentSchedule)
-            this.$message.error("Removed from " + event.name)
-            this.showModal(event)
+
+
+                event.usersSignedUp.splice(event.usersSignedUp.findIndex(e=>e.id===this.currentUser.id),1)
+                ScheduleDataService.get(this.currentSchedule.id)
+                    .then(response=>{
+                        let schedule= response.data
+                        let updatedEvent = schedule[date].find(e=>e.name===event.name)
+                        updatedEvent.usersSignedUp.splice(updatedEvent.usersSignedUp.findIndex(e=>e.id===this.currentUser.id),1)
+                        ScheduleDataService.update(schedule.id, schedule)
+                    })
+                this.$message.error("Removed from " + event.name)
+                this.showModal(event,date)
             }
             
         },
@@ -251,6 +357,7 @@ export default{
     cursor:pointer
 }
 .schedule-container{
+    border-radius:15px;
     background:white;
     border:2px solid #eee;
     padding:15px;

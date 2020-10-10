@@ -119,13 +119,15 @@ export default{
 
 }
 .schedules-container {
+   
   background: #343a40;
   min-height:100vh;
   text-align: center;
   display:flex;
   justify-content: center;
   background:url(/img/background-wave.png);
-  background-size:cover
+  background-size:cover;
+  
 
 
 } 
