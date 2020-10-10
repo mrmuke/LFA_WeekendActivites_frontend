@@ -211,10 +211,6 @@ export default{
             }
         },
         bumpToEnd(index){
-            /* ScheduleDataService.get(id)
-                .then(response => {
-                  this.currentSchedule = response.data;
-                }) */ 
                 ScheduleDataService.get(this.currentSchedule.id)
                     .then(response=>{
                         let schedule= response.data
