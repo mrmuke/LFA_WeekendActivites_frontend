@@ -4,7 +4,7 @@ import http from "../http-common";
 class UserDataService {
     create(data) {
         return axios.create({
-		baseURL:/*  "http://localhost:8080/api" */ "http://54.177.140.153.xip.io/api",
+		baseURL:/*  "http://localhost:8080/api" */ "https://lfawa-api.herokuapp.com/api",
             headers: {
               "Content-type": "application/json",
               "id":data
