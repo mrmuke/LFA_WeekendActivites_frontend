@@ -177,23 +177,30 @@ export default {
       this.$message.success("Upvoted " + event.name)
         event.upVotes++;
         EventDataService.upvote(event.id)
-        this.currentUser.upvotes.push(event);
-        UserDataService.update(this.currentUser.id, this.currentUser)
+        UserDataService.upvote(this.currentUser.id, event)
+         .then(result=>{
+            this.currentUser=result.data
+          })
+        /* this.currentUser.upvotes.push(event); */
+        /* UserDataService.update(this.currentUser.id, this.currentUser)
         .then(response=>{
             console.log(response.data)
-          })
+          }) */
 
     },
     down(event){
       this.$message.error("Downvoted " + event.name)
         event.upVotes--;
         EventDataService.downvote(event.id)
-        this.currentUser.upvotes=this.currentUser.upvotes.filter(i=>i.id!=event.id)
-
-        UserDataService.update(this.currentUser.id, this.currentUser)
+        /* this.currentUser.upvotes=this.currentUser.upvotes.filter(i=>i.id!=event.id) */
+        UserDataService.downvote(this.currentUser.id, event)
+          .then(result=>{
+            this.currentUser=result.data
+          })
+        /* UserDataService.update(this.currentUser.id, this.currentUser)
           .then(response=>{
             console.log(response.data)
-          })
+          }) */
 
     },
 
