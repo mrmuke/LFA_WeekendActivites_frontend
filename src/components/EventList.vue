@@ -43,7 +43,7 @@
           
           </div>
       <div class="p-l-6 p-r-6 pb-4 pt-4">
-        <div class="wrap">
+        <div class="wrap" v-if="loading">
               <div class="button" v-on:click="down(event)" v-if="upVoteExists(event.id)"><i class="fa fa-arrow-up"></i>DOWN VOTE</div>
               <div class="button" v-on:click="upvote(event)" v-else><i class="fa fa-arrow-up"></i>VOTE UP</div>
 
@@ -96,7 +96,8 @@ export default {
       name: "",
       index:-1,
       orderBy:"1",
-      currentEvent:null
+      currentEvent:null,
+      loading:false
 
 
     };
@@ -174,12 +175,14 @@ export default {
         });
     },
     upvote(event){
+      this.loading=true
       this.$message.success("Upvoted " + event.name)
         event.upVotes++;
         EventDataService.upvote(event.id)
         UserDataService.upvote(this.currentUser.id, event)
          .then(result=>{
             this.currentUser=result.data
+            this.loading=false
           })
         /* this.currentUser.upvotes.push(event); */
         /* UserDataService.update(this.currentUser.id, this.currentUser)
@@ -189,6 +192,7 @@ export default {
 
     },
     down(event){
+      this.loading=true
       this.$message.error("Downvoted " + event.name)
         event.upVotes--;
         EventDataService.downvote(event.id)
@@ -196,6 +200,7 @@ export default {
         UserDataService.downvote(this.currentUser.id, event)
           .then(result=>{
             this.currentUser=result.data
+            this.loading=false
           })
         /* UserDataService.update(this.currentUser.id, this.currentUser)
           .then(response=>{
