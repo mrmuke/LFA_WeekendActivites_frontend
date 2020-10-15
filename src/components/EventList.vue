@@ -43,12 +43,18 @@
           
           </div>
       <div class="p-l-6 p-r-6 pb-4 pt-4">
-        <div class="wrap" v-if="loading">
+        <div class="wrap" v-if="!loading">
               <div class="button" v-on:click="down(event)" v-if="upVoteExists(event.id)"><i class="fa fa-arrow-up"></i>DOWN VOTE</div>
               <div class="button" v-on:click="upvote(event)" v-else><i class="fa fa-arrow-up"></i>VOTE UP</div>
 
 
         </div>
+        <div class="wrap" v-else>
+              <div class="button">Loading...</div>
+
+
+        </div>
+      
         <a class="default" style="margin-top:5px"
               :href="'/events/' + event.id"
               v-if="currentUser.admin"
