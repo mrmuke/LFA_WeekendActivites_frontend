@@ -77,7 +77,7 @@ export default {
       },
       events:[],
       submitted: false,
-      disabledDates:{days: [1,2,3,4,5], to:this.getDate()}
+      disabledDates:{days: [1,2,3,4], to:this.getDate()}
 
     };
   },
