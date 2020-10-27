@@ -99,7 +99,12 @@ export default {
 </script>
 <style>
 .event-body{
-  background:url(/img/background-wave.png);
+  background-image: 
+    linear-gradient(
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    ),
+    url(/img/background-wave.jpg);
   background-size:cover;
   height:100vh;
   width:100%;

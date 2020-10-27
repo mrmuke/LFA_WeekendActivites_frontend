@@ -252,7 +252,13 @@ export default {
   text-align: center;
   display:flex;
   justify-content: center;
-  background:url(/img/background-wave.png);
+  background-image: 
+    linear-gradient(
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    ),
+    url(/img/background-wave.jpg);
+  padding-top:20px;
   background-size:cover
 
 }

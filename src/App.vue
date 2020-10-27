@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <b-navbar toggleable="lg" type="dark" variant="dark" style="padding:1%">
-        <b-navbar-brand href="/"><img class = "image" src="../public/img/logo.svg"></b-navbar-brand>
+    <b-navbar toggleable="lg" type="dark" variant="dark" style="padding:1%;border-bottom:7px solid lightgrey">
+        <b-navbar-brand href="/"><img class = "image" src="../public/img/logo.png"></b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
