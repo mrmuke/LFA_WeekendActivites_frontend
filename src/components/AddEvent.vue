@@ -13,8 +13,11 @@
                                 required
                                 v-model="event.name"
                                 placeholder="What is the event?"
+                                :maxlength="max"
                                 class="input--style-6" type="text" name="event_name">
+                                <small style="float:right">{{max-event.name.length}}</small>
                             </div>
+                            
                         </div>
                         <div class="form-row">
                             <div class="name">Preferred Date</div>
@@ -75,6 +78,7 @@ export default {
         upVotes: 0,
         description:""
       },
+      max:30,
       events:[],
       submitted: false,
       disabledDates:{days: [1,2,3,4], to:this.getDate()}
