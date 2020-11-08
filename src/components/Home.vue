@@ -5,10 +5,11 @@
 
             <div class="title">
                    <p class="text">Lake Forest Academy Weekend Activities</p>
+                   <div v-if="loading" class="computer-signin">Loading...</div>
                    <g-signin-button
                       :params="googleSignInParams"
                       @success="onSignIn"
-                      v-if="signedIn"
+                      v-else-if="signedIn"
                       class="computer-signin">
                       <i class="fa fa-google"></i>
                        Signed in with LFA Email
@@ -102,6 +103,7 @@ export default {
     data(){
         return {
             signedIn:false,
+            loading:false,
             googleSignInParams: {
                     client_id: '978419002714-0ngcjc58363k85n3a6fpmrdl0tome13b.apps.googleusercontent.com'
             },
@@ -118,6 +120,7 @@ export default {
 
         },
         createUser(idToken){
+          this.loading=true
           this.$message.info("Logging in...")
             UserDataService.create(idToken)
                     .then(response => {
@@ -130,6 +133,7 @@ export default {
                       if(response.status==201){
                           this.$modal.show('tutorial-modal')
                       }
+                      this.loading=false
 
                     })
                     .catch(() => {
@@ -139,6 +143,7 @@ export default {
                       localStorage.setItem("user",null)
                       localStorage.setItem("token",null)
                       eventBus.$emit('userSet', null);
+                      this.loading=false
 
                     });
 
