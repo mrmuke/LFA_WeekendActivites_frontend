@@ -50,7 +50,13 @@ export default new Router({
             component: () =>
                 import ("./components/Schedules")
         },
+        {
+            path: "/editSchedule/:id",
+            name: "editSchedule",
+            component: () =>
+                import ("./components/CreateSchedule"),
 
+        },
         {
             path: "/createSchedule",
             name: "createSchedule",
@@ -58,6 +64,7 @@ export default new Router({
                 import ("./components/CreateSchedule"),
 
         },
+        
         
     ]
 });

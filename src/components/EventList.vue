@@ -37,14 +37,14 @@
           </div>
       
           <div class="p-l-6 p-r-6 pt-4">
-            <span style="color:#4a5568; background:#edf2f7; font-weight:600; font-size: .875rem" class="inline-block rounded-lg px-3 py-1 mr-2">
-              {{event.upVotes}} upvotes
+            <span style="color:#4a5568; background:#edf2f7; font-weight:600; font-size: .875rem" class="inline-block rounded-lg px-3 py-1 mr-2" v-if="event.upvotes">
+              {{event.upvotes.length}} upvotes
               </span>
           
           </div>
       <div class="p-l-6 p-r-6 pb-4 pt-4">
         <div class="wrap" v-if="!loading">
-              <div class="button" v-on:click="down(event)" v-if="upVoteExists(event.id)"><i class="fa fa-arrow-up"></i>DOWN VOTE</div>
+              <div class="button" v-on:click="down(event)" v-if="upVoteExists(event)"><i class="fa fa-arrow-up"></i>DOWN VOTE</div>
               <div class="button" v-on:click="upvote(event)" v-else><i class="fa fa-arrow-up"></i>VOTE UP</div>
 
 
@@ -150,8 +150,8 @@ export default {
       this.currentEvent=event
       this.$modal.show('event-details')
     },
-     upVoteExists(id){
-         if(this.currentUser.upvotes.some(e=>e.id===id)){
+     upVoteExists(event){
+         if(event.upvotes.some(e=>e===this.currentUser.emailAddress)){
            return true
          }
           return false;
@@ -172,6 +172,7 @@ export default {
       EventDataService.getAll()
         .then(response => {
           this.events = response.data;
+          console.log(response.data)
 
         })
 
@@ -181,15 +182,17 @@ export default {
         });
     },
     upvote(event){
-      this.loading=true
       this.$message.success("Upvoted " + event.name)
-        event.upVotes++;
-        EventDataService.upvote(event.id)
-        UserDataService.upvote(this.currentUser.id, event)
+        event.upvotes.push(this.currentUser.emailAddress);
+                console.log(this.currentUser)
+
+        EventDataService.upvote(event.id, this.currentUser.emailAddress)
+        /* UserDataService.upvote(this.currentUser.id, event)
          .then(result=>{
+           console.log(result.data)
             this.currentUser=result.data
             this.loading=false
-          })
+          }) */
         /* this.currentUser.upvotes.push(event); */
         /* UserDataService.update(this.currentUser.id, this.currentUser)
         .then(response=>{
@@ -198,16 +201,17 @@ export default {
 
     },
     down(event){
-      this.loading=true
       this.$message.error("Downvoted " + event.name)
-        event.upVotes--;
-        EventDataService.downvote(event.id)
+        event["upvotes"]=event.upvotes.filter(e=>e!==this.currentUser.emailAddress)
+        console.log(event)
+        EventDataService.downvote(event.id, this.currentUser.emailAddress)
         /* this.currentUser.upvotes=this.currentUser.upvotes.filter(i=>i.id!=event.id) */
-        UserDataService.downvote(this.currentUser.id, event)
+        /* UserDataService.downvote(this.currentUser.id, event)
           .then(result=>{
+            console.log(result.data)
             this.currentUser=result.data
             this.loading=false
-          })
+          }) */ 
         /* UserDataService.update(this.currentUser.id, this.currentUser)
           .then(response=>{
             console.log(response.data)

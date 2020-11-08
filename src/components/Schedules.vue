@@ -27,6 +27,8 @@
                             >
                             View Schedule
                             </b-button>
+                                          <b-button style="background:darkgrey; border:darkgrey;" class="mb-1" :href="'/editSchedule/' +schedule.id">Edit Schedule</b-button>
+
                             <button class = "default-yellow" @click = "deleteSchedule(schedule.id)">Delete Schedule</button>
                             </div>
                     </div>  

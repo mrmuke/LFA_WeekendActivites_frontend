@@ -10,6 +10,7 @@
                       @success="onSignIn"
                       v-if="signedIn"
                       class="computer-signin">
+                      <i class="fa fa-google"></i>
                        Signed in with LFA Email
                       </g-signin-button>
                    <g-signin-button
@@ -17,11 +18,12 @@
                        @success="onSignIn"
                        v-else
                        class="computer-signin">
+                       <i class="fa fa-google"></i>
                        Sign in with LFA Email
                      </g-signin-button>
 
                 </div>
-                <p class = "desc">Convenient and improved sign out system.</p>
+                <p class = "desc">Convenient and improved weekend activities.</p>
                 <div class = "column" v-if="signedIn">
                     <a href="/add" class="bigbutton">Request Activities</a>
                     <a href="/events" class="bigbutton">Vote for Activities</a>

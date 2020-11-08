@@ -3,7 +3,7 @@
         <div class="wrapper wrapper--w900">
             <div class="card card-6"  v-if="!submitted">
                 <div class="card-heading">
-                    <h2 class="title"><span class="orange-underline">Create Schedule</span></h2>
+                    <h2 class="title"><span class="orange-underline">Schedule</span></h2>
                 </div>
                 <div class="card-body">
                         <div class="form-row">
@@ -120,7 +120,8 @@ export default {
             saturday:[],
             sunday:[]
           },
-          submitted: false
+          submitted: false,
+          edit:false
         };
     },
     computed:{
@@ -159,7 +160,14 @@ export default {
                     saturday:this.schedule.saturday,
                     sunday:this.schedule.sunday
                 }
-                ScheduleDataService.create(data)
+                if(this.edit){
+                  ScheduleDataService.update(this.schedule.id,data)
+                    .then(()=>{
+                      this.submitted=true
+                    })
+                }
+                else{
+                  ScheduleDataService.create(data)
                     .then(() => {
                        this.submitted=true;
                       
@@ -167,8 +175,16 @@ export default {
                     .catch(e => {
                       console.log(e);
                       });
+                }
+                
 
 
+         },
+         getSchedule(id){
+           ScheduleDataService.get(id)
+            .then(result=>{
+              this.schedule=result.data
+            })
          }
     },
 
@@ -176,7 +192,11 @@ export default {
         if(JSON.parse(localStorage.getItem("user"))==null ||JSON.parse(localStorage.getItem("user")).admin==false)
         {
            this.$message.error("Sign in as an admin to access this page...")
-           this.$router.push('/')
+           window.location.href="/"
+        }
+        if(this.$route.params.id){
+          this.edit=true
+          this.getSchedule(this.$route.params.id)
         }
 
     }
@@ -245,6 +265,7 @@ export default {
 }
 
 .form-row {
+  margin:0px;
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
