@@ -114,8 +114,7 @@ export default {
     },
      methods:{
         onSignIn(user){
-                
-                this.createUser(user.wc.id_token)
+                this.createUser(user.getAuthResponse().id_token)
 
 
         },
