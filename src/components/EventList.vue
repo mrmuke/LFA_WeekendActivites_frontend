@@ -17,7 +17,7 @@
       </div>
     </div>
     
-      <ul style="display:flex;flex-wrap:wrap" class="event-list-ul">
+      <ul style="display:flex;flex-wrap:wrap;" class="event-list-ul">
         
         <li class="event-list-item"
           v-for="(event, index) in filteredEvents"
@@ -28,7 +28,7 @@
 
       <div class="rounded overflow-hidden">
           <div class=" p-l-6 pt-4 p-r-6">
-            <div style="font-weight:700; font-size:1.25rem" class="mb-2">{{ event.name }}<i class="fa fa-trophy ml-2" v-if="index==0" style="color:gold"></i></div>
+            <div style="font-weight:700; font-size:1.25rem; display:flex; justify-content:center; align-items:center; height: 4.5rem; overflow: hidden;" class="mb-2"><div>{{ event.name }}<i class="fa fa-trophy ml-2" v-if="index==0" style="color:gold"></i></div></div>
             <div class="mb-2">{{event.timeSlot}}</div>
           
             <p style="color:#4a5568; font-size:1rem">
@@ -69,16 +69,23 @@
       </ul>
 
   </div></div>
-  <modal name="event-details">
-    <div style="width:100%;height:100%;padding:15px;  " v-if="currentEvent">
-    <u><strong>Event Name:</strong></u><p>{{currentEvent.name}}</p>
-    <u><strong>Event Description:</strong></u><p>{{currentEvent.description}}</p>
-    <u><strong>Event Date:</strong></u><p>{{currentEvent.timeSlot}}</p>
+
+  <div id="modal" style="height:100%;width:100%; position:absolute; top: 0px; left:0px; display: none; justify-content: center">
+    <div style="height:100%; width:100%; background-color:black; position: absolute; top: 0px; opacity:0.5;" v-on:click="closeModal()">
     </div>
-    <!-- <p v-for="(user, index) in currentEvent.usersSignedUp" :key="index">
-        {{user.userName}}
-    </p> -->
-    </modal>
+    <div class="modalContainer">
+        <div class="modal-date">
+          <div  v-if="currentEvent">
+            <div class="modal-date-number">{{currentEvent.timeSlot.split('-')[2]}}</div>
+            <div class="modal-date-month">{{dateToMonth(currentEvent.timeSlot.split('-')[1])}}</div>
+          </div>
+        </div>
+        <div class="modal-information" v-if="currentEvent">
+          <div>{{currentEvent.name}}</div>
+          <div>{{currentEvent.description}}</div>
+        </div>
+    </div>
+  </div>
 </div>
 </template>
 
@@ -147,15 +154,20 @@ export default {
   },
   methods: {
     showModal(event){
-      this.currentEvent=event
-      this.$modal.show('event-details')
+      this.currentEvent=event;
+  
+        document.getElementById('modal').style.display = "flex";
+      
     },
-     upVoteExists(event){
-         if(event.upvotes.some(e=>e===this.currentUser.emailAddress)){
-           return true
-         }
-          return false;
-       },
+    closeModal(){
+      document.getElementById('modal').style.display = "none";
+    },
+    upVoteExists(event){
+        if(event.upvotes.some(e=>e===this.currentUser.emailAddress)){
+          return true
+        }
+        return false;
+      },
     getCurrentUser(){
          UserDataService.get(this.currentUser.id)
                  .then(response => {
@@ -218,7 +230,35 @@ export default {
           }) */
 
     },
-
+    dateToMonth(month){
+      switch(month){
+        case "01":
+          return "January";
+        case "02":
+          return "February";
+        case "03":
+          return "March";
+        case "04":
+          return "April";
+        case "05":
+          return "May";
+        case "06":
+          return "June";
+        case "07":
+          return "July";
+        case "08":
+          return "August";
+        case "09":
+          return "September";
+        case "10":
+          return "October";
+        case "11":
+          return "November";
+        case "12":
+          return "December";
+      }
+      return month
+    },
   },
 
   mounted() {
@@ -231,19 +271,40 @@ export default {
       this.getCurrentUser()
     this.retrieveEvents();
     }
-    
-    
-
-
-
-
   },
 };
-
 </script>
 
 <style>
 
+.modalContainer{
+  position: absolute;
+  background-color:white;
+  top:40%;
+  height: 20vh; 
+  width: 80vh;
+  display:flex;
+  flex-direction:row;
+}
+.modal-date{
+  height:100%;
+  width:275px;
+  background-color:#f7931e;
+  color: white;
+  font-family: Tahoma;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.modal-date-number{
+  font-size:4rem; line-height:1
+}
+.modal-date-month{
+  font-size:1.8rem; letter-spacing:2px;
+}
+.modal-information{
+  width:100%;
+}
 .orange-underline {
   background-image: linear-gradient(to right, #f37121 0%, #f37121 100%);
     background-repeat: repeat-x;
@@ -270,7 +331,7 @@ select{
   color: black;
 }
 .event-list-container{
-  width: 900px;
+  width: 1100px;
 
 }
 .event-list-item{
@@ -296,6 +357,9 @@ select{
   padding: 0; /* Remove padding */
   margin: 0; /* Remove margins */
 }
+.modal{
+
+}
 @media screen and (max-width:900px)
 {
   .event-list-container{
@@ -306,6 +370,35 @@ select{
 {
   .event-list-item{
     width:100%;
+  }
+}
+
+@media screen and (max-width:726px)
+{
+  .modalContainer{
+    position: absolute;
+    background-color:white; 
+    top:20%;
+    height: 60vh;
+    width: 80vw;
+    display:flex;
+    flex-direction:column;
+  }
+  .modal-date{
+    width:100%;
+    height:20%;
+    background-color:#f7931e;
+    color: white;
+    font-family: Tahoma;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  .modal-date-number{
+    font-size:2rem; line-height:1
+  }
+  .modal-date-month{
+    font-size:1rem; letter-spacing:2px;
   }
 }
 </style>
