@@ -70,7 +70,7 @@
 
   </div></div>
 
-  <div id="modal" style="height:100%;width:100%; position:absolute; top: 0px; left:0px; display: none; justify-content: center">
+  <div id="modal" style="min-height:100vh;width:100%; position:fixed; top: 0px; left:0px; display: none; justify-content: center">
     <div style="height:100%; width:100%; background-color:black; position: absolute; top: 0px; opacity:0.5;" v-on:click="closeModal()">
     </div>
     <div class="modalContainer">
@@ -81,7 +81,7 @@
           </div>
         </div>
         <div class="modal-information" v-if="currentEvent">
-          <div>{{currentEvent.name}}</div>
+          <h2>{{currentEvent.name}}</h2>
           <div>{{currentEvent.description}}</div>
         </div>
     </div>
@@ -303,7 +303,12 @@ export default {
   font-size:1.8rem; letter-spacing:2px;
 }
 .modal-information{
+  height:100%;
   width:100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .orange-underline {
   background-image: linear-gradient(to right, #f37121 0%, #f37121 100%);
