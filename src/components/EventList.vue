@@ -44,23 +44,18 @@
           </div>
       <div class="p-l-6 p-r-6 pb-4 pt-4">
         <div class="wrap" v-if="!loading">
-              <div class="button" v-on:click="down(event)" v-if="upVoteExists(event)"><i class="fa fa-arrow-up"></i>DOWN VOTE</div>
+              <div class="button downvote" v-on:click="down(event)" v-if="upVoteExists(event)"><i class="fa fa-arrow-down"></i>DOWN VOTE</div>
               <div class="button" v-on:click="upvote(event)" v-else><i class="fa fa-arrow-up"></i>VOTE UP</div>
-
-
         </div>
         <div class="wrap" v-else>
               <div class="button">Loading...</div>
-
-
         </div>
-      
         <a class="default" style="margin-top:5px"
               :href="'/events/' + event.id"
               v-if="currentUser.admin"
             >
               Edit or View Info (Admin)
-            </a>
+        </a>
       </div>
 		
       </div>  
@@ -342,9 +337,15 @@ select{
   padding: 0; /* Remove padding */
   margin: 0; /* Remove margins */
 }
-.modal{
 
+.downvote{
+  background:#f37121 !important;
 }
+
+.downvote:hover{
+  background: #f7931e !important;
+}
+
 @media screen and (max-width:900px)
 {
   .event-list-container{
