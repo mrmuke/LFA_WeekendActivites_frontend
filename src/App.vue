@@ -58,6 +58,7 @@ export default{
 }
 </script>
 <style>
+
 @media only screen and (max-width: 415px) {
     .image{
         width:200px;

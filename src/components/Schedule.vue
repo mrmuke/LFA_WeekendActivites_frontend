@@ -303,8 +303,9 @@ export default{
     mounted(){
         if(this.currentUser==null)
         {
-        this.$message.error("Sign in to access this page")
-        window.location.href="/"
+            this.$message.error("Sign in to access this page")
+            window.location.href="/"
+            
         }
         else{
             if(this.$route.params.id){

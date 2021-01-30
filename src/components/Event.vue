@@ -77,7 +77,7 @@ export default {
       EventDataService.delete(this.currentEvent.id)
         .then(() => {
           this.$message.error("Event deleted")
-          window.location.href="/events"
+          this.$router.push("/events")
         })
         .catch(e => {
           console.log(e);
@@ -90,7 +90,7 @@ export default {
 
     if(!JSON.parse(localStorage.getItem("user"))||JSON.parse(localStorage.getItem("user")).admin==false){
        this.$message.error("Admin permission denied...")
-       window.location.href="/"
+       window.location.replace("/")
     }
     else{this.getEvent(this.$route.params.id);}
     
