@@ -39,7 +39,7 @@
                    <div class="go-to-details" @click="showModal(event,'friday')">
                 <div class="rounded overflow-hidden">
                     <div class=" p-l-6 pt-4 p-r-6">
-                        <div style="font-weight:700; font-size:1.25rem" class="mb-2">{{ event.name }}</div>
+                        <div style="font-weight:700; font-size:1.25rem; height:5em; display: flex; justify-content:center; align-items: center; overflow: scroll" class="mb-2">{{ event.name }}</div>
                         <div class="mb-2">{{event.timeSlot}}-<strong>Friday</strong></div>
                     
                         <p style="color:#4a5568; font-size:1rem">
@@ -79,7 +79,7 @@
                    <div class="go-to-details" @click="showModal(event,'saturday')">
                 <div class="rounded overflow-hidden">
                     <div class=" p-l-6 pt-4 p-r-6">
-                        <div style="font-weight:700; font-size:1.25rem" class="mb-2">{{ event.name }}</div>
+                        <div style="font-weight:700; font-size:1.25rem; height:5em; display: flex; justify-content:center; align-items: center; overflow: scroll" class="mb-2">{{ event.name }}</div>
                         <div class="mb-2">{{event.timeSlot}}-<strong>Saturday</strong></div>
                     
                         <p style="color:#4a5568; font-size:1rem">
@@ -119,7 +119,7 @@
                    <div class="go-to-details" @click="showModal(event,'sunday')">
                 <div class="rounded overflow-hidden">
                     <div class=" p-l-6 pt-4 p-r-6">
-                        <div style="font-weight:700; font-size:1.25rem" class="mb-2">{{ event.name }}</div>
+                        <div style="font-weight:700; font-size:1.25rem; height:5em; display: flex; justify-content:center; align-items: center; overflow: scroll" class="mb-2">{{ event.name }}</div>
                         <div class="mb-2">{{event.timeSlot}}-<strong>Sunday</strong></div>
                     
                         <p style="color:#4a5568; font-size:1rem">
