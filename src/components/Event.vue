@@ -3,13 +3,13 @@
 <div style="max-width:900px;margin:auto;color:white;border-radius:10px;display:flex;justify-content:center;text-align:center;">
   <div v-if="currentEvent" class="edit-form" style="padding:10px;">
     <h1 style="color:white"><span class="orange-underline">{{currentEvent.name}}</span></h1>
-      <div class="form-group" style="max-width:300px">
+      <div class="form-group" style="max-width:100%">
         <label for="name">Name</label>
         <input type="text" class="form-control" id="name"
           v-model="currentEvent.name"
         />
       </div>
-      <div class="form-group" style="max-width:300px">
+      <div class="form-group" style="max-width:100%">
         <label for="timeSlot">Time Slot</label>
         <input type="text" class="form-control" id="timeSlot"
           v-model="currentEvent.timeSlot"

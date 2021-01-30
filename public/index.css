@@ -204,7 +204,7 @@ li.highlight {
     border-radius: 5px;
     text-align: center;
     color: #fff;
-    line-height: 60px;
+    padding:20px
     min-height: 60px;
     background: #f7931e;
     text-transform: uppercase;

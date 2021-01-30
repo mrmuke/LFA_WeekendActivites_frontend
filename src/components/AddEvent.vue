@@ -42,8 +42,8 @@
                     <button @click="saveEvent" class="btn btn--radius-2 btn--blue-2" type="submit">Request Event</button>
                 </div>
             </div>
-            <div v-else style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:2%;">
-              <i class="fa fa-check" style="font-size:100px;color:green;background:#eee;border-radius:50%;"></i>
+            <div v-else style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:5%;">
+              <i class="fa fa-check" style="font-size:100px;color:orange;background:#eee;border-radius:50%;"></i>
               <h1 style="color:white;text-align:center;padding:5%;">You submitted an event successfully!</h1>
               <button class="btn btn--radius-2 btn--blue-2 mt-2" @click="viewEvents">View Events</button>
               <button class="btn btn--radius-2 btn--blue-2 mt-2" @click="newEvent">Submit Another Event</button>
@@ -144,8 +144,6 @@ export default {
     },
 
     },
-
-
   mounted(){
     if(JSON.parse(localStorage.getItem("user"))==null)
     {
@@ -166,64 +164,10 @@ export default {
 /* ==========================================================================
    #FONT
    ========================================================================== */
-.font-robo {
-  font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
-}
-
-.font-poppins {
-  font-family: "Poppins", "Arial", "Helvetica Neue", sans-serif;
-}
-
-.font-opensans {
-  font-family: "Open Sans", "Arial", "Helvetica Neue", sans-serif;
-}
 
 /* ==========================================================================
    #GRID
    ========================================================================== */
-.row {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-}
-
-.row .col-2:last-child .input-group-desc {
-  margin-bottom: 0;
-}
-
-.row-space {
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -moz-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-}
-
-.row-refine {
-  margin: 0 -15px;
-}
-
-.row-refine .col-3 .input-group-desc,
-.row-refine .col-9 .input-group-desc {
-  margin-bottom: 0;
-}
-
-.col-2 {
-  width: -webkit-calc((100% - 30px) / 2);
-  width: -moz-calc((100% - 30px) / 2);
-  width: calc((100% - 30px) / 2);
-}
-
-@media (max-width: 767px) {
-  .col-2 {
-    width: 100%;
-  }
-}
 
 .form-row {
   display: -webkit-box;
@@ -280,71 +224,17 @@ export default {
  * More sensible default box-sizing:
  * css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice
  */
-html {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-* {
-  padding: 0;
-  margin: 0;
-}
-
-*, *:before, *:after {
-  -webkit-box-sizing: inherit;
-  -moz-box-sizing: inherit;
-  box-sizing: inherit;
-}
-
-/* ==========================================================================
+/*=====================================================
    #RESET
    ========================================================================== */
 /**
  * A very simple reset that sits on top of Normalize.css.
  */
-body,
-h1, h2, h3, h4, h5, h6,
-blockquote, p, pre,
-dl, dd, ol, ul,
-figure,
-hr,
-fieldset, legend {
-  margin: 0;
-  padding: 0;
-}
 
 /**
  * Remove trailing margins from nested lists.
  */
-li > ol,
-li > ul {
-  margin-bottom: 0;
-}
 
-/**
- * Remove default table spacing.
- */
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
-/**
- * 1. Reset Chrome and Firefox behaviour which sets a `min-width: min-content;`
- *    on fieldsets.
- */
-fieldset {
-  min-width: 0;
-  /* [1] */
-  border: 0;
-}
-
-button {
-  outline: none;
-  background: none;
-  border: none;
-}
 
 /* ==========================================================================
    #PAGE WRAPPER
@@ -364,20 +254,6 @@ body {
   font-family: "Open Sans", "Arial", "Helvetica Neue", sans-serif;
   font-weight: 400;
   font-size: 14px;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 400;
-}
-
-h1 {
-  font-size: 36px;
-     
-}
-
-h2 {
-  font-size: 30px;
-   
 }
 .orange-underline{
   background-image: linear-gradient(to right, #f37121 0%, #f37121 100%);

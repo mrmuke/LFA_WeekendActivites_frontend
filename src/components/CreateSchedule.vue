@@ -91,7 +91,7 @@
                     <button @click="submit" class="btn btn--radius-2 btn--blue-2" style="width:100%">Submit Schedule</button>
                 </div>
             </div>
-            <div v-else style="display:flex;flex-direction:column;justify-content:center;align-items:center;padding-bottom:20%">
+            <div v-else style="display:flex;flex-direction:column;justify-content:center;align-items:center;padding-top:5%">
               <i class="fa fa-check" style="font-size:100px;color:green;background:#eee;border-radius:50%;"></i>
               <h1 style="color:white;text-align:center;padding:1%;">You submitted a schedule successfully!</h1>
               <b-button class="btn btn--radius-2 btn--blue-2 mt-2" :href="'/schedule/'">View Schedule</b-button>

@@ -261,7 +261,7 @@ export default {
   position: absolute;
   background-color:white;
   top:40%;
-  height: 20vh; 
+  height: 30vh; 
   width: 80vh;
   display:flex;
   flex-direction:row;
@@ -285,6 +285,7 @@ export default {
 .modal-information{
   height:100%;
   width:100%;
+  
   display: flex;
   flex-direction: column;
   align-items: center;

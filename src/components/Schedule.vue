@@ -359,10 +359,10 @@ export default{
     cursor:pointer
 }
 .schedule-container{
-    border-radius:15px;
+    border-radius:5px;
     background:white;
     border:2px solid #eee;
-    padding:15px;
+
     display:flex;
 }
 .event-signup-item{
@@ -380,7 +380,7 @@ export default{
     border-radius: 5px;
     text-align: center;
     color: #fff;
-    line-height: 60px;
+    padding:15px;
     min-height: 60px;
     background: #f7931e;
     text-transform: uppercase;
@@ -427,7 +427,7 @@ export default{
       padding:0px;
   }
   .schedule-day{
-      width:33%;
+      width:34%;
       border:1px solid #eee;
       padding:5px;
 
