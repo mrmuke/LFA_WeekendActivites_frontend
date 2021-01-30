@@ -59,7 +59,7 @@
                     </div>
                 <div class="p-l-6 p-r-6 pb-4">
                     <div class="wrap">
-                         <div class="button" v-if="!signedUp(event)" @click="signUpEvent(event,'friday')">Sign Up</div><div class ="button" v-else @click="deleteFromEvent(event, 'friday')">Signed Up</div>
+                         <div class="button" v-if="!signedUp(event)" @click="signUpEvent(event,'friday')">Sign Up</div><div class ="button signedup" v-else @click="deleteFromEvent(event, 'friday')">Signed Up</div>
                         <!-- <div class="button" v-if="$cookies.get('user').admin" @click= "sendEmail(event)">Send Notification</div> -->
                         
 
@@ -388,6 +388,14 @@ export default{
     cursor: pointer;
 }
 
+.signedup{
+    background: #f37121 !important;
+}
+
+.signedup:hover{
+    
+    background: #f7931e !important;
+}
 
 .wrap .button:hover {
     background: #f37121;
