@@ -11,7 +11,7 @@
       <div style="color:white;display:flex;white-space: nowrap;" class="ml-3">
       <select class="form-control" v-model="orderBy" >
                 <option  value="1">Popularity</option>
-                <option value="2">Date</option>
+                <option value="2">Early</option>
                 <option value="3">Name</option>
               </select>
       </div>
@@ -115,7 +115,7 @@ export default {
           return this.events.filter(event => {
           return event.name.toLowerCase().includes(this.name.toLowerCase())
         }).sort(function(a,b){
-          return b.upVotes-a.upVotes
+          return b.upvotes.length-a.upvotes.length
         })
         }
         else if(this.orderBy==="2")
@@ -187,17 +187,7 @@ export default {
                 console.log(this.currentUser)
 
         EventDataService.upvote(event.id, this.currentUser.emailAddress)
-        /* UserDataService.upvote(this.currentUser.id, event)
-         .then(result=>{
-           console.log(result.data)
-            this.currentUser=result.data
-            this.loading=false
-          }) */
-        /* this.currentUser.upvotes.push(event); */
-        /* UserDataService.update(this.currentUser.id, this.currentUser)
-        .then(response=>{
-            console.log(response.data)
-          }) */
+
 
     },
     down(event){
@@ -205,17 +195,7 @@ export default {
         event["upvotes"]=event.upvotes.filter(e=>e!==this.currentUser.emailAddress)
         console.log(event)
         EventDataService.downvote(event.id, this.currentUser.emailAddress)
-        /* this.currentUser.upvotes=this.currentUser.upvotes.filter(i=>i.id!=event.id) */
-        /* UserDataService.downvote(this.currentUser.id, event)
-          .then(result=>{
-            console.log(result.data)
-            this.currentUser=result.data
-            this.loading=false
-          }) */ 
-        /* UserDataService.update(this.currentUser.id, this.currentUser)
-          .then(response=>{
-            console.log(response.data)
-          }) */
+
 
     },
 
