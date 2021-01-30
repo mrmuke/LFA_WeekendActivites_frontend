@@ -99,7 +99,7 @@
                     </div>
                 <div class="p-l-6 p-r-6 pb-4">
                     <div class="wrap">
-                         <div class="button" v-if="!signedUp(event)" @click="signUpEvent(event,'saturday')">Sign Up</div><div class ="button" v-else @click="deleteFromEvent(event, 'saturday')">Signed Up</div>
+                         <div class="button" v-if="!signedUp(event)" @click="signUpEvent(event,'saturday')">Sign Up</div><div class ="button signedup" v-else @click="deleteFromEvent(event, 'saturday')">Signed Up</div>
                         <!-- <div class="button" v-if="$cookies.get('user').admin" @click= "sendEmail(event)">Send Notification</div> -->
                         
 
@@ -139,7 +139,7 @@
                     </div>
                 <div class="p-l-6 p-r-6 pb-4">
                     <div class="wrap">
-                         <div class="button" v-if="!signedUp(event)" @click="signUpEvent(event,'sunday')">Sign Up</div><div class ="button" v-else @click="deleteFromEvent(event, 'sunday')">Signed Up</div>
+                         <div class="button" v-if="!signedUp(event)" @click="signUpEvent(event,'sunday')">Sign Up</div><div class ="button signedup" v-else @click="deleteFromEvent(event, 'sunday')">Signed Up</div>
                         <!-- <div class="button" v-if="$cookies.get('user').admin" @click= "sendEmail(event)">Send Notification</div> -->
                         
 
