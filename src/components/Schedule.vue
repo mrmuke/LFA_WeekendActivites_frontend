@@ -33,7 +33,8 @@
         </ul>
     </div>
     
-    </div><div style="display:flex; flex-wrap:wrap;">
+    </div>
+    <div style="display:flex; flex-wrap:wrap;">
            <div v-for="(event) in filtered('friday')" :key="event.name" class="event-signup-item">
                <div  class="flex shadow-sm border justify-content-center text-center align-items-center h-screen m-1 rounded p-3" style="background:white;" >
                    <div class="go-to-details" @click="showModal(event,'friday')">
@@ -334,6 +335,7 @@ export default{
 .go-to-details{
     margin-bottom:7px;
 }
+
 .schedule-body {
     overflow-y: auto;
     background-image: 
