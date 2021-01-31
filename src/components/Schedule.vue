@@ -156,18 +156,19 @@
     </div></div>
     
 </div></div><modal name="event-details">
-    <div style="width:100%;height:100%;padding:15px; display:flex;justify-content:space-between " v-if="currentEvent">
-        <div>
-    <u><strong>Users Signed Up:</strong></u>
-    <p style="margin-bottom:0px !important" v-for="(user, index) in currentEvent.usersSignedUp" :key="index">
-        <u><strong v-if="index===currentEvent.personLimit">Waitlist<br></strong></u>
-        {{index+1}}. {{getFullName(user)}} <button v-if="currentUser.admin" @click="bumpToEnd(index)" style="border:0px">Bump to End</button>
-    </p></div>
+    <div style="width:100%;height:100%;padding:10px; display:flex;justify-content:space-between " v-if="currentEvent">
+        <div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center;">
+            <div style="width: 100%; background-color: #f7931e; color: white; font-weight:600; font-size: 1.25em; padding: 0.25em 0em; text-align:center; border-radius: 0.2em;">Users Signed Up</div>
+            <div style="width: 95%; margin-top: 1em;" v-for="(user, index) in currentEvent.usersSignedUp" :key="index">
+                <u><strong v-if="index===currentEvent.personLimit">Waitlist<br></strong></u>
+                <strong>{{index+1}}.</strong> {{getFullName(user)}} <button v-if="currentUser.admin" @click="bumpToEnd(index)" style="border:0px">Bump to End</button>
+                <div style="width:100%; display:flex; justify-content:center; padding-top: 0.5em;">
+                    <div style="width: 93%; border-bottom: 1.5px solid black"></div>
+                </div>
+            </div>
+        </div>
     <div class="wrap" v-if="currentUser.admin" style="align-self:flex-end;width:50%;">
         <div class="button" @click= "sendEmail(currentEvent)">Notify Participants</div>
-        
-
-
     </div>
     </div>
     <!-- <p v-for="(user, index) in currentEvent.usersSignedUp" :key="index">
