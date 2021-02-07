@@ -356,6 +356,55 @@ export default {
            ScheduleDataService.get(id)
             .then(result=>{
               this.schedule=result.data
+              if(this.schedule.phoneNumbers == null){
+                this.schedule.phoneNumbers = [
+                  {
+                    dorm:"On Call",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Atlass Up",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Atlass Down",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Field #1",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Field #2",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Warner",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Ferry Hall",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Writing Center",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Math Help",
+                    teacherName: "",
+                    phoneNumber: ""
+                  }
+                ];
+              }
             })
          },
          changeDutyOpen(){
