@@ -17,6 +17,7 @@
     "core-js": "^3.6.4",
     "express": "^4.17.1",
     "http-vue-loader": "^1.4.2",
+    "jspdf": "^2.3.0",
     "moment": "^2.24.0",
     "path": "^0.12.7",
     "serve-static": "^1.14.1",

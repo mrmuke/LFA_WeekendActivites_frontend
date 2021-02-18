@@ -22,15 +22,15 @@
                             <div style="font-weight:700; font-size:1.25rem" class="mb-2">{{ schedule.date }}</div>
                         </div>
                         <div style="display:flex;flex-direction:column;">
-                            <b-button class = "orange-default"
-                                :href="'/schedule/' + schedule.id"
-                            >
-                            View Schedule
-                            </b-button>
-                                          <b-button style="background:darkgrey; border:darkgrey;" class="mb-1" :href="'/editSchedule/' +schedule.id">Edit Schedule</b-button>
+                            <b-button class = "orange-default" :href="'/schedule/' + schedule.id">View Schedule</b-button>
+                                          
+                            <b-button style="background:darkgrey; border:darkgrey; margin-bottom:0.4em !important; padding:0.6em;" class="mb-1" :href="'/editSchedule/' +schedule.id">Edit Schedule</b-button>
+
+                            <!--<button class = "downloadpdf" @click = "downloadpdf()">Download As PDF</button>-->
 
                             <button class = "default-yellow" @click = "deleteSchedule(schedule.id)">Delete Schedule</button>
-                            </div>
+
+                        </div>
                     </div>  
                 </div>
                 </li>
@@ -47,6 +47,7 @@ import ScheduleDataService from '../services/ScheduleDataService';
 import Vue from 'vue'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+//import { jsPDF } from 'jspdf';
 Vue.config.productionTip = false;
 Vue.use(Antd);
 export default{
@@ -92,6 +93,59 @@ export default{
             }
         },
 
+        /*downloadpdf(){
+            //210 297
+            var doc = new jsPDF();
+            //HEADER
+            doc.setFillColor(0, 0, 0);
+            doc.rect(5, 5, 200, 15, 'F');
+            doc.setFont('Helvetica', '', "bold");
+            doc.setFontSize(30);
+            doc.setTextColor(255,255,255);
+            doc.text('Weekend Activities',8.5, 16.5);
+            doc.setFontSize(15);
+            doc.text('Feb. 12 - 15', 170, 16.5);
+            doc.setTextColor(0,0,0);
+            doc.setFontSize(8);
+
+            //PHONE NUMBERS TITLE
+            doc.setFont("Helvetica", "", 'bold');
+            doc.text('On Call:', 5, 28);
+            doc.text('Atlass Up:', 5, 34);
+            doc.text('Atlass Down:', 5, 40);
+            doc.text('Field #1:', 71.67, 28);
+            doc.text('Field #2:', 71.67, 34);
+            doc.text('Warner:', 71.67, 40);
+            doc.text('Ferry:', 138.33, 28);
+            doc.text('Writing Center:', 138.33, 34);
+            doc.text('Study Help:', 138.33, 40);
+
+            //PHONE NUMBERS INFO
+            doc.setFont("Helvetica", "", 'normal');
+            doc.text('Ms. Hagar   (847) 997-0291', 65, 28, {align:"right"});
+            doc.text('Mr. Wetherbee   (847) 997-0498', 65, 34, {align:"right"});
+            doc.text('Mr. Atas   (847) 997-2687', 65, 40, {align:"right"});
+            doc.text('Ms.Kim   (847) 997-0462', 132, 28, {align:"right"});
+            doc.text('Mr.Vaughn   (847) 997-2685', 132, 34, {align:"right"});
+            doc.text('Ms. Carter   (847) 997-0469', 132, 40, {align:"right"});
+            doc.text('Mr.Koenig   (224) 300-3047', 197, 28, {align:"right"});
+            doc.text('Ms. Wells   (847) 345-4573', 197, 34, {align:"right"});
+            doc.text('Ms.Chen   (312) 498-0649', 197, 40, {align:"right"});
+
+            //Friday Events
+            //16 is text x axis
+            doc.setFillColor(200,200,200);
+            doc.rect(5,50,13,70,'F');
+            doc.setDrawColor(0,0,0);
+            doc.setLineWidth(0.5);
+            doc.rect(5,50,13,70);
+            doc.setFont('Helvetica', '', 'bold');
+            doc.setFontSize(25);
+            doc.text('Friday', 14, 90, {angle:90});
+
+            window.open(doc.output("datauri"));
+        }*/
+
     },
     mounted(){
         if(!(JSON.parse(localStorage.getItem("user"))&&JSON.parse(localStorage.getItem("user")).admin))
@@ -115,11 +169,16 @@ export default{
     background-size: 100% 8px;
 }
 .schedule-list {
-
   width: 900px;
-   
-
 }
+
+.downloadpdf{
+    padding:0.6em;
+    margin-bottom:0.4em;
+    border:none;
+    border-radius:0.5em;
+}
+
 .schedules-container {
    
   background: #343a40;
@@ -146,7 +205,8 @@ padding-top:20px;
   .orange-default{
       border:#f7931e;
       background:#f7931e;
-      margin:2%;
+      margin-bottom:0.4em;
+      padding:0.6em;
   }
   .orange-default:hover{
       background: #ff8216;

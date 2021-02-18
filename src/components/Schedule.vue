@@ -193,7 +193,7 @@
     </div></div>
     
 </div></div><modal name="event-details">
-    <div style="width:100%;height:100%;padding:10px; display:flex;flex-direction:column " v-if="currentEvent">
+    <div style="width:100%;height:100%;padding:10px; display:flex;flex-direction:column; overflow:auto;" v-if="currentEvent">
         <div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center;">
             <div style="width: 100%; background-color: #f7931e; color: white; font-weight:600; font-size: 1.25em; padding: 0.25em 0em; text-align:center; border-radius: 0.2em;">Users Signed Up</div>
             <div style="width: 95%; margin-top: 1em;" v-for="(user, index) in currentEvent.usersSignedUp" :key="index">
