@@ -10,10 +10,135 @@
                             <div class="name">Date Range of Weekend</div>
                             <div class="value">
                                 <input
-                                
                                 v-model="schedule.date"
                                 placeholder="Month Date-Date"
                                 class="input--style-6" type="text" name="event_name">
+                            </div>
+                        </div>
+                        <div class = "form-row" style="flex-direction:column">
+                            <div style="display:flex; align-items:center;width:100%; cursor:pointer; position: relative;" v-on:click="changeDutyOpen()">
+                              <h1>On Duty</h1>
+                              <i style="font-size:2.5rem; position: absolute; right: 1em;top:9px;" v-if="!onDutyOpen" class="fa fa-sort-up"></i>
+                              <i style="font-size:2.5rem; position: absolute; right: 1em;top:-9px;" v-if="onDutyOpen" class="fa fa-sort-down"></i>
+                            </div>
+                            <div style="overflow:hidden;" id="onDuty-container">
+                              <div style="width:100%; display:flex; justify-content:center; align-items:center; margin-bottom: 1rem; margin-top: 1rem;">
+                                <div class="duty-option">On Call:</div>
+                                  <input
+                                  v-model="schedule.phoneNumbers[0].teacherName"
+                                  style="width:37.5%; margin-right: 5%;"
+                                  placeholder="Name"
+                                  class="input--style-6" type="text">
+                                  <input
+                                  v-model="schedule.phoneNumbers[0].phoneNumber"
+                                  style="width:37.5%;"
+                                  placeholder="Number"
+                                  class="input--style-6" type="text">
+                              </div>
+                              <div style="width:100%; display:flex; justify-content:center; align-items:center; margin-bottom: 1rem;">
+                                <div class="duty-option">Atlass Up</div>
+                                  <input
+                                  v-model="schedule.phoneNumbers[1].teacherName"
+                                  style="width:37.5%; margin-right: 5%;"
+                                  placeholder="Name"
+                                  class="input--style-6" type="text">
+                                  <input
+                                  v-model="schedule.phoneNumbers[1].phoneNumber"
+                                  style="width:37.5%;"
+                                  placeholder="Number"
+                                  class="input--style-6" type="text">
+                              </div>
+                              <div style="width:100%; display:flex; justify-content:center; align-items:center; margin-bottom: 1rem;">
+                                <div class="duty-option">Atlass Down:</div>
+                                  <input
+                                  v-model="schedule.phoneNumbers[2].teacherName"
+                                  style="width:37.5%; margin-right: 5%;"
+                                  placeholder="Name"
+                                  class="input--style-6" type="text">
+                                  <input
+                                  v-model="schedule.phoneNumbers[2].phoneNumber"
+                                  style="width:37.5%;"
+                                  placeholder="Number"
+                                  class="input--style-6" type="text">
+                              </div>
+                              <div style="width:100%; display:flex; justify-content:center; align-items:center; margin-bottom: 1rem;">
+                                <div class="duty-option">Field #1:</div>
+                                  <input
+                                  v-model="schedule.phoneNumbers[3].teacherName"
+                                  style="width:37.5%; margin-right: 5%;"
+                                  placeholder="Name"
+                                  class="input--style-6" type="text">
+                                  <input
+                                  v-model="schedule.phoneNumbers[3].phoneNumber"
+                                  style="width:37.5%;"
+                                  placeholder="Number"
+                                  class="input--style-6" type="text">
+                              </div>
+                              <div style="width:100%; display:flex; justify-content:center; align-items:center; margin-bottom: 1rem;">
+                                <div class="duty-option">Field #2:</div>
+                                  <input
+                                  v-model="schedule.phoneNumbers[4].teacherName"
+                                  style="width:37.5%; margin-right: 5%;"
+                                  placeholder="Name"
+                                  class="input--style-6" type="text">
+                                  <input
+                                  v-model="schedule.phoneNumbers[4].phoneNumber"
+                                  style="width:37.5%;"
+                                  placeholder="Number"
+                                  class="input--style-6" type="text">
+                              </div>
+                              <div style="width:100%; display:flex; justify-content:center; align-items:center; margin-bottom: 1rem;">
+                                <div class="duty-option">Warner:</div>
+                                  <input
+                                  v-model="schedule.phoneNumbers[5].teacherName"
+                                  style="width:37.5%; margin-right: 5%;"
+                                  placeholder="Name"
+                                  class="input--style-6" type="text">
+                                  <input
+                                  v-model="schedule.phoneNumbers[5].phoneNumber"
+                                  style="width:37.5%;"
+                                  placeholder="Number"
+                                  class="input--style-6" type="text">
+                              </div>
+                              <div style="width:100%; display:flex; justify-content:center; align-items:center; margin-bottom: 1rem;">
+                                <div class="duty-option">Ferry Hall:</div>
+                                  <input
+                                  v-model="schedule.phoneNumbers[6].teacherName"
+                                  style="width:37.5%; margin-right: 5%;"
+                                  placeholder="Name"
+                                  class="input--style-6" type="text">
+                                  <input
+                                  v-model="schedule.phoneNumbers[6].phoneNumber"
+                                  style="width:37.5%;"
+                                  placeholder="Number"
+                                  class="input--style-6" type="text">
+                              </div>
+                              <div style="width:100%; display:flex; justify-content:center; align-items:center; margin-bottom: 1rem;">
+                                <div class="duty-option">Writing Center:</div>
+                                  <input
+                                  v-model="schedule.phoneNumbers[7].teacherName"
+                                  style="width:37.5%; margin-right: 5%;"
+                                  placeholder="Name"
+                                  class="input--style-6" type="text">
+                                  <input
+                                  v-model="schedule.phoneNumbers[7].phoneNumber"
+                                  style="width:37.5%;"
+                                  placeholder="Number"
+                                  class="input--style-6" type="text">
+                              </div>
+                              <div style="width:100%; display:flex; justify-content:center; align-items:center; margin-bottom: 1rem;">
+                                <div class="duty-option">Math Help:</div>
+                                  <input
+                                  v-model="schedule.phoneNumbers[8].teacherName"
+                                  style="width:37.5%; margin-right: 5%;"
+                                  placeholder="Name"
+                                  class="input--style-6" type="text">
+                                  <input
+                                  v-model="schedule.phoneNumbers[8].phoneNumber"
+                                  style="width:37.5%;"
+                                  placeholder="Number"
+                                  class="input--style-6" type="text">
+                              </div>
                             </div>
                         </div>
                         <div class = "form-row" style="flex-direction:column">
@@ -91,7 +216,7 @@
                     <button @click="submit" class="btn btn--radius-2 btn--blue-2" style="width:100%">Submit Schedule</button>
                 </div>
             </div>
-            <div v-else style="display:flex;flex-direction:column;justify-content:center;align-items:center;padding-top:5%">
+            <div v-if="submitted" style="display:flex;flex-direction:column;justify-content:center;align-items:center;padding-top:5%">
               <i class="fa fa-check" style="font-size:100px;color:green;background:#eee;border-radius:50%;"></i>
               <h1 style="color:white;text-align:center;padding:1%;">You submitted a schedule successfully!</h1>
               <b-button class="btn btn--radius-2 btn--blue-2 mt-2" :href="'/schedule/'">View Schedule</b-button>
@@ -118,10 +243,58 @@ export default {
             date: "",
             friday:[],
             saturday:[],
-            sunday:[]
+            sunday:[],
+            phoneNumbers:[
+              {
+                dorm:"On Call",
+                teacherName: "",
+                phoneNumber: ""
+              },
+              {
+                dorm:"Atlass Up",
+                teacherName: "",
+                phoneNumber: ""
+              },
+              {
+                dorm:"Atlass Down",
+                teacherName: "",
+                phoneNumber: ""
+              },
+              {
+                dorm:"Field #1",
+                teacherName: "",
+                phoneNumber: ""
+              },
+              {
+                dorm:"Field #2",
+                teacherName: "",
+                phoneNumber: ""
+              },
+              {
+                dorm:"Warner",
+                teacherName: "",
+                phoneNumber: ""
+              },
+              {
+                dorm:"Ferry Hall",
+                teacherName: "",
+                phoneNumber: ""
+              },
+              {
+                dorm:"Writing Center",
+                teacherName: "",
+                phoneNumber: ""
+              },
+              {
+                dorm:"Math Help",
+                teacherName: "",
+                phoneNumber: ""
+              }
+            ]
           },
           submitted: false,
-          edit:false
+          edit:false,
+          onDutyOpen: false,
         };
     },
     computed:{
@@ -143,7 +316,6 @@ export default {
          deleteEvent(array, index){
              this.schedule[array].splice(index, 1);
          },
-
          submit(){
                /*  if(!confirm("Are you sure you want to submit?"))
                 {
@@ -158,23 +330,23 @@ export default {
                     date:this.schedule.date,
                     friday:this.schedule.friday,
                     saturday:this.schedule.saturday,
-                    sunday:this.schedule.sunday
+                    sunday:this.schedule.sunday,
+                    phoneNumbers:this.schedule.phoneNumbers
                 }
                 if(this.edit){
                   ScheduleDataService.update(this.schedule.id,data)
                     .then(()=>{
                       this.submitted=true
-                    })
+                  })
                 }
                 else{
                   ScheduleDataService.create(data)
                     .then(() => {
                        this.submitted=true;
-                      
                     })
                     .catch(e => {
                       console.log(e);
-                      });
+                    });
                 }
                 
 
@@ -184,7 +356,64 @@ export default {
            ScheduleDataService.get(id)
             .then(result=>{
               this.schedule=result.data
+              if(this.schedule.phoneNumbers == null){
+                this.schedule.phoneNumbers = [
+                  {
+                    dorm:"On Call",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Atlass Up",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Atlass Down",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Field #1",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Field #2",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Warner",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Ferry Hall",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Writing Center",
+                    teacherName: "",
+                    phoneNumber: ""
+                  },
+                  {
+                    dorm:"Math Help",
+                    teacherName: "",
+                    phoneNumber: ""
+                  }
+                ];
+              }
             })
+         },
+         changeDutyOpen(){
+           this.onDutyOpen = !this.onDutyOpen;
+           if(this.onDutyOpen){
+              document.getElementById('onDuty-container').style.maxHeight="1000px";
+           } else {
+              document.getElementById('onDuty-container').style.maxHeight="0px";
+           }
          }
     },
 
@@ -198,13 +427,17 @@ export default {
           this.edit=true
           this.getSchedule(this.$route.params.id)
         }
-
     }
 
 }
 
 </script>
 <style>
+#onDuty-container{
+  transition: max-height 0.75s;
+  width:100%;
+  max-height:0px;
+}
 .font-robo {
   font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
 }
@@ -780,6 +1013,11 @@ textarea {
   font-size: 13px;
   color: #999;
   margin-top: 10px;
+}
+
+.duty-option{
+  display:inline;
+  width: 35%;
 }
 
 @media (max-width: 767px) {

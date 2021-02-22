@@ -5,11 +5,47 @@
     <div style="text-align:center">
             <h1 style="color:white"><span class="orange-underline">{{currentSchedule.date}}</span></h1>
     </div>
+    <div class="phoneNumbers">
+        <div class="phoneNumbers-header" v-on:click="showHideDuty()">On Duty This Weekend<i v-if="!displayOnDuty" style="margin-left:1em; position:relative; top:0.2em;" class="fa fa-caret-up"></i><i v-if="displayOnDuty" style="margin-left:1em; position:relative; top:0.2em;" class="fa fa-caret-down"></i></div>
+        <div class="phoneNumbers-content">
+            <div class="phoneNumebrs-row">
+                <div class="phoneNumbers-item">
+                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[0].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[0].teacherName}}</span><span>{{currentSchedule.phoneNumbers[0].phoneNumber}}</span>
+                </div>
+                <div class="phoneNumbers-item">
+                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[1].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[1].teacherName}}</span><span>{{currentSchedule.phoneNumbers[1].phoneNumber}}</span>
+                </div>
+                <div class="phoneNumbers-item">
+                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[2].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[2].teacherName}}</span><span>{{currentSchedule.phoneNumbers[2].phoneNumber}}</span>
+                </div>
+            </div>
+            <div class="phoneNumebrs-row">
+                <div class="phoneNumbers-item">
+                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[3].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[3].teacherName}}</span><span>{{currentSchedule.phoneNumbers[3].phoneNumber}}</span>
+                </div>
+                <div class="phoneNumbers-item">
+                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[4].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[4].teacherName}}</span><span>{{currentSchedule.phoneNumbers[4].phoneNumber}}</span>
+                </div>
+                <div class="phoneNumbers-item">
+                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[5].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[5].teacherName}}</span><span>{{currentSchedule.phoneNumbers[5].phoneNumber}}</span>
+                </div>
+            </div>
+            <div class="phoneNumebrs-row">
+                <div class="phoneNumbers-item">
+                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[6].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[6].teacherName}}</span><span>{{currentSchedule.phoneNumbers[6].phoneNumber}}</span>
+                </div>
+                <div class="phoneNumbers-item">
+                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[7].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[7].teacherName}}</span><span>{{currentSchedule.phoneNumbers[7].phoneNumber}}</span>
+                </div>
+                <div class="phoneNumbers-item">
+                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[8].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[8].teacherName}}</span><span>{{currentSchedule.phoneNumbers[8].phoneNumber}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class = "schedule-container">
-
     <div class="schedule-day">
      <h2 style="padding: 20px 40px;text-align: center;background: #3a3737;color: #fff"><span>Friday</span></h2>
-
         <ul>
           <li v-for="(event, index) in currentSchedule.friday" :key="index" style="display:flex; padding:10px;" v-bind:style="{background:getBackground(index)}" class="mx-2">
               <u>{{ event.timeSlot }}</u>- {{event.name}} <div v-if="event.signUp">*</div>
@@ -157,8 +193,8 @@
     </div></div>
     
 </div></div><modal name="event-details">
-    <div style="width:100%;height:100%;display:flex;flex-direction:column " v-if="currentEvent">
-        <div style="width:100%;margin:10px; display:flex; flex-direction:column; align-items:center;">
+    <div style="width:100%;height:95%;padding:10px; display:flex;flex-direction:column; overflow:auto;" v-if="currentEvent">
+        <div style="width:100%; display:flex; flex-direction:column; align-items:center;">
             <div style="width: 100%; background-color: #f7931e; color: white; font-weight:600; font-size: 1.25em; padding: 0.25em 0em; text-align:center; border-radius: 0.2em;">Users Signed Up</div>
             <div style="width: 95%; margin-top: 1em;" v-for="(user, index) in currentEvent.usersSignedUp" :key="index">
                 <u><strong v-if="index===currentEvent.personLimit">Waitlist<br></strong></u>
@@ -200,7 +236,8 @@ export default{
             currentEvent:null,
             currentDate:null,
             currentUser:JSON.parse(localStorage.getItem("user")),
-            message:""
+            message:"",
+            displayOnDuty:false
         };
     },
     computed:{
@@ -312,8 +349,6 @@ export default{
         deleteFromEvent(event,date){
             if(confirm("Are you sure you want to be removed from the list?"))
             {
-
-
                 event.usersSignedUp.splice(event.usersSignedUp.findIndex(e=>e.id===this.currentUser.id),1)
                 ScheduleDataService.get(this.currentSchedule.id)
                     .then(response=>{
@@ -329,6 +364,26 @@ export default{
         },
         signedUp(event){
             return event.usersSignedUp.filter(e=>e.id===this.currentUser.id).length>0
+        },
+        showHideDuty(){
+            this.displayOnDuty = !this.displayOnDuty;
+            var amount = "0px";
+            if(window.innerWidth < 900){
+                amount = "400px";
+            } else {
+                amount = "200px";
+            }
+            if(this.displayOnDuty){
+                document.getElementsByClassName('phoneNumbers-content')[0].style.display="flex";
+                setTimeout(function(){
+                    document.getElementsByClassName('phoneNumbers-content')[0].style.maxHeight=amount;
+                }, 10);
+            } else {
+                document.getElementsByClassName('phoneNumbers-content')[0].style.maxHeight="0px";
+                setTimeout(function(){
+                    document.getElementsByClassName('phoneNumbers-content')[0].style.display="none";
+                },300);
+            }
         }
     },
     mounted(){
@@ -345,16 +400,71 @@ export default{
             else{
                 this.getCurrentSchedule()
             }
-        }
-        
-        
-    
-        
+        }    
     }
 
 }
 </script>
 <style>
+.phoneNumbers{
+    width:100%;
+    background-color:white;
+    margin-bottom: 1em;
+    border-radius: 0.5em;
+    overflow:hidden;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+.phoneNumbers-header{
+    font-weight: 600;
+    font-size:2rem;
+    padding: 0.25em 0em;
+    display:flex;
+    justify-content: center;
+    cursor:pointer;
+    background-color:rgb(58, 55, 55);
+    color:white;
+    width: 98.7%;
+    margin-top:0.2em;
+    margin-bottom:0.2em;
+}
+.phoneNumbers-content{
+    max-height:0px;
+    padding-bottom: 1em;
+    width:100%;
+    display:none;
+    transition: max-height 0.5s;
+}
+.phoneNumebrs-row{
+    width:33.33%;
+    display:flex;
+    justify-content:center;
+    align-items: center;
+    flex-direction:column;
+}
+.phoneNumbers-item{
+    margin-top: 1em;
+    width:100%;
+    position:relative;
+    text-align: right;
+    padding-right:1em;
+}
+.phoneNumbers-item b{
+    position:absolute;
+    left:1em;
+}
+@media screen and (max-width:900px){
+    .phoneNumbers-header{
+        font-size:1.5em;
+    }
+    .phoneNumbers-content{
+        flex-direction:column;
+    }
+    .phoneNumebrs-row{
+        width:100%;
+    }
+}
 .orange-underline {
   background-image: linear-gradient(to right, #f37121 0%, #f37121 100%);
     background-repeat: repeat-x;
