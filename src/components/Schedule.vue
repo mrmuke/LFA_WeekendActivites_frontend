@@ -157,8 +157,8 @@
     </div></div>
     
 </div></div><modal name="event-details">
-    <div style="width:100%;height:100%;padding:10px; display:flex;flex-direction:column " v-if="currentEvent">
-        <div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center;">
+    <div style="width:100%;height:100%;display:flex;flex-direction:column " v-if="currentEvent">
+        <div style="width:100%;margin:10px; display:flex; flex-direction:column; align-items:center;">
             <div style="width: 100%; background-color: #f7931e; color: white; font-weight:600; font-size: 1.25em; padding: 0.25em 0em; text-align:center; border-radius: 0.2em;">Users Signed Up</div>
             <div style="width: 95%; margin-top: 1em;" v-for="(user, index) in currentEvent.usersSignedUp" :key="index">
                 <u><strong v-if="index===currentEvent.personLimit">Waitlist<br></strong></u>
@@ -168,10 +168,11 @@
                 </div>
             </div>
         </div>
-        <div style="justify-content:space-between;display:flex">
-            <div></div>
+        <div style="justify-content:space-between;display:flex;margin:5px">
+            <textarea style="flex:1;margin-right:10px;padding:7px" placeholder="Optional Message.." v-model="message"></textarea>
         <div class="wrap" style="width:50%" v-if="currentUser.admin">
         <div class="button" @click= "sendEmail(currentEvent)">Notify Participants</div>
+        
     </div></div>
     
     </div>
@@ -198,7 +199,8 @@ export default{
             currentSchedule:null,
             currentEvent:null,
             currentDate:null,
-            currentUser:JSON.parse(localStorage.getItem("user"))
+            currentUser:JSON.parse(localStorage.getItem("user")),
+            message:""
         };
     },
     computed:{
@@ -232,6 +234,7 @@ export default{
             this.currentEvent=event
             this.currentDate=date
             this.$modal.show('event-details')
+            this.message=""
         },
         filtered(date){
             if(this.currentSchedule){   
@@ -244,19 +247,42 @@ export default{
             return user.userName 
         },
         sendEmail(event){
-
+            
             for(var i =0;i<event.usersSignedUp.length;i++){
                 this.$message.info("Sending email...")
-                EmailDataService.sendEmail(event,event.usersSignedUp[i].id)
+                EmailDataService.sendEmail({"event":event,"message":this.message},event.usersSignedUp[i].id)
                     .then(result=>{
                         console.log(result)
                         this.$message.success("Emails Successfully Sent!")
                     })
             } 
+            this.message=""
             
 
 
         },
+
+        /* gettext(pdfUrl){
+        var pdf = PDFJS.getDocument(pdfUrl);
+        return pdf.then(function(pdf) { // get all pages text
+            var maxPages = pdf.pdfInfo.numPages;
+            var countPromises = []; // collecting all page promises
+            for (var j = 1; j <= maxPages; j++) {
+            var page = pdf.getPage(j);
+
+            countPromises.push(page.then(function(page) { // add page promise
+                var textContent = page.getTextContent();
+                return textContent.then(function(text){ // return content promise
+                return text.items.map(function (s) { return s.str; }).join(''); // value page text 
+                });
+            }));
+            }
+            // Wait for all pages and join text
+            return Promise.all(countPromises).then(function (texts) {
+            return texts.join('');
+            });
+        });
+        }, */
 
         getCurrentSchedule(){
             ScheduleDataService.getCurrent()
