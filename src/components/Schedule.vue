@@ -205,7 +205,7 @@
             </div>
         </div>
         <div style="justify-content:space-between;display:flex;margin:5px">
-            <textarea style="flex:1;margin-right:10px;padding:7px" placeholder="Optional Message.." v-model="message"></textarea>
+            <textarea v-if="currentUser.admin" style="flex:1;margin-right:10px;padding:7px" placeholder="Optional Message.." v-model="message"></textarea>
         <div class="wrap" style="width:50%" v-if="currentUser.admin">
         <div class="button" @click= "sendEmail(currentEvent)">Notify Participants</div>
         
