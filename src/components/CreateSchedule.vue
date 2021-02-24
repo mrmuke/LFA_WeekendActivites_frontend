@@ -114,7 +114,7 @@
                                   class="input--style-6" type="text">
                               </div>
                               <div style="width:100%; display:flex; justify-content:center; align-items:center; margin-bottom: 1rem;">
-                                <div class="duty-option">Writing Center:</div>
+                                <div class="duty-option"><input placeholder="SSH/Writing Center/Math Help" v-model="schedule.phoneNumbers[7].dorm" style="border: 1px solid #b4b4b4; width:80%; padding: 6px;"></div>
                                   <input
                                   v-model="schedule.phoneNumbers[7].teacherName"
                                   style="width:37.5%; margin-right: 5%;"
@@ -127,7 +127,7 @@
                                   class="input--style-6" type="text">
                               </div>
                               <div style="width:100%; display:flex; justify-content:center; align-items:center; margin-bottom: 1rem;">
-                                <div class="duty-option">Math Help:</div>
+                                <div class="duty-option"><input placeholder="SSH/Writing Center/Math Help" v-model="schedule.phoneNumbers[8].dorm" style="border: 1px solid #b4b4b4; width:80%; padding: 6px;"></div>
                                   <input
                                   v-model="schedule.phoneNumbers[8].teacherName"
                                   style="width:37.5%; margin-right: 5%;"
@@ -248,45 +248,45 @@ export default {
               {
                 dorm:"On Call",
                 teacherName: "",
-                phoneNumber: ""
+                phoneNumber: "(847) 997-0291"
               },
               {
                 dorm:"Atlass Up",
                 teacherName: "",
-                phoneNumber: ""
+                phoneNumber: "(847) 997-0498"
               },
               {
                 dorm:"Atlass Down",
                 teacherName: "",
-                phoneNumber: ""
+                phoneNumber: "(847) 997-2687"
               },
               {
                 dorm:"Field #1",
                 teacherName: "",
-                phoneNumber: ""
+                phoneNumber: "(847) 997-0462"
               },
               {
                 dorm:"Field #2",
                 teacherName: "",
-                phoneNumber: ""
+                phoneNumber: "(847) 997-2685"
               },
               {
                 dorm:"Warner",
                 teacherName: "",
-                phoneNumber: ""
+                phoneNumber: "(847) 997-0469"
               },
               {
                 dorm:"Ferry Hall",
                 teacherName: "",
-                phoneNumber: ""
+                phoneNumber: "(224) 300-3047"
               },
               {
-                dorm:"Writing Center",
+                dorm:"",
                 teacherName: "",
                 phoneNumber: ""
               },
               {
-                dorm:"Math Help",
+                dorm:"",
                 teacherName: "",
                 phoneNumber: ""
               }
