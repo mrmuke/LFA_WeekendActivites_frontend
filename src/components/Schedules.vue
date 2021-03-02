@@ -190,7 +190,7 @@ export default{
                 doc.text(item.sunday[i].name + required, 45, 50 + item.friday.length * 8 + 2 + 10 + item.saturday.length * 8 + 2 + 6 + 10 + (8 * i));
             }
 
-            window.open(doc.output("datauri"));
+            doc.save('Weekend Schedule: ' + item.date + ".pdf");
         }
 
     },
