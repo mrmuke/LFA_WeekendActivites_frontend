@@ -141,11 +141,11 @@
                               </div>
                             </div>
                         </div>
-                        <div class = "form-row" style="flex-direction:column">
-                            <div style="display:flex; align-items:center;"><h1>Friday</h1><b-button @click="addNewEvent('friday')" style="background:none;border:none; padding:5px; color:black"><i class="fa fa-plus"></i></b-button>
+                        <div class = "form-row" style="flex-direction:column" v-for="(eachDay, i) in scheduleDays" :key="i" >
+                            <div style="display:flex; align-items:center;justify-content:center;width:100%;"><input placeholder="Please Enter Day" v-model="eachDay.date" style="font-size:30px;width:80%;"><b-button @click="removeDay(i)" style="background:none;border:none; padding:5px; color:black; width:134px;">Remove Day</b-button><b-button @click="addNewEvent(i)" style="background:none;border:none; padding:5px; color:black; width:100px;">Add event</b-button>
                             <!-- <b-button style="background:none;border:none; padding-right:5px;padding-left:5px; color:black" @click="deleteEvent('friday')"><i class="fa fa-minus"></i></b-button> --></div>
-                            <div v-for="(event, index) in schedule.friday" :key="index" style="display:flex">
-                                <div style="display:flex; flex-direction:column; justify-content:center;"><button @click="deleteEvent('friday',index)"><i style="font-size:25px;" class="fa fa-times mr-2"></i></button></div>
+                            <div v-for="(event, index) in scheduleDays[i].events" :key="index" style="display:flex">
+                                <div style="display:flex; flex-direction:column; justify-content:center;"><button @click="deleteEvent(i,index)"><i style="font-size:25px;" class="fa fa-times mr-2"></i></button></div>
                                 <div style="border-bottom:0.5px solid #eee;padding-bottom:10px;">
                                 Name
                                 <input type="text" class="form-control" v-model="event.name" placeholder="e.x. SuperTarget Run">
@@ -154,63 +154,13 @@
                                 <div style="display:flex; align-items:center;">
                                 <label :for="event.name" style="margin:0px;">Require Sign Up</label>
                                 <input type="checkbox" style="width:30px;" :id="event.name" v-model="event.signUp"></div>
-                                
                                 <div v-if="event.signUp">
-                                    
                                     <input type="text" class="form-control" v-model="event.personLimit" placeholder="Person Limit">
                                 </div></div>
-                                <div style="display:flex; flex-direction:column; justify-content:center;" v-if="schedule.friday.length>1"><button v-if="index>0" @click="moveEventUp(index, 'friday')"><i class="fa fa-arrow-up m-2"></i></button><button v-if="index<schedule.friday.length-1" @click="moveEventDown(index, 'friday')"><i class="fa fa-arrow-down m-2"></i></button></div>
-                                
+                                <div style="display:flex; flex-direction:column; justify-content:center;" v-if="scheduleDays[0].events.length>1"><button v-if="index>0" @click="moveEventUp(index)"><i class="fa fa-arrow-up m-2"></i></button><button v-if="index<scheduleDays[0].events.length-1" @click="moveEventDown(index)"><i class="fa fa-arrow-down m-2"></i></button></div>
                             </div>
-                            
                         </div>
-                        
-                        <div class = "form-row" style="flex-direction:column">
-                            <div style="display:flex; align-items:center;"><h1>Saturday</h1><b-button @click="addNewEvent('saturday')" style="background:none;border:none; padding:5px; color:black"><i class="fa fa-plus"></i></b-button>
-                            <!-- <b-button style="background:none;border:none; padding-right:5px;padding-left:5px; color:black" @click="deleteEvent('saturday')"><i class="fa fa-minus"></i></b-button> --></div>
-                            <div v-for="(event, index) in schedule.saturday" :key="index" style="display:flex">
-                                <div style="display:flex; flex-direction:column; justify-content:center;"><button @click="deleteEvent('saturday',index)"><i style="font-size:25px;" class="fa fa-times mr-2"></i></button></div>
-                                <div style="border-bottom:0.5px solid #eee;padding-bottom:10px;">
-                                Name
-                                <input type="text" class="form-control" v-model="event.name" placeholder="e.x. SuperTarget Run">
-                                Time Slot
-                                <input type="text" class="form-control" v-model="event.timeSlot" placeholder="format-'5:00-6:00'">
-                                <div style="display:flex; align-items:center;">
-                                <label :for="event.name" style="margin:0px;">Require Sign Up</label>
-                                <input type="checkbox" style="width:30px;" :id="event.name" v-model="event.signUp"></div>
-                                
-                                <div v-if="event.signUp">
-                                    
-                                    <input type="text" class="form-control" v-model="event.personLimit" placeholder="Person Limit">
-                                </div></div>
-                                <div style="display:flex; flex-direction:column; justify-content:center;" v-if="schedule.saturday.length>1"><button v-if="index>0" @click="moveEventUp(index, 'saturday')"><i class="fa fa-arrow-up m-2"></i></button><button v-if="index<schedule.saturday.length-1" @click="moveEventDown(index, 'saturday')"><i class="fa fa-arrow-down m-2"></i></button></div>
-                            </div>
-                            
-                        </div>
-                        <div class = "form-row" style="flex-direction:column">
-                            <div style="display:flex; align-items:center;"><h1>Sunday</h1><b-button @click="addNewEvent('sunday')" style="background:none;border:none; padding:5px; color:black"><i class="fa fa-plus"></i></b-button>
-                            <!-- <b-button style="background:none;border:none; padding-right:5px;padding-left:5px; color:black" @click="deleteEvent('sunday')"><i class="fa fa-minus"></i></b-button> --></div>
-                            <div v-for="(event, index) in schedule.sunday" :key="index" style="display:flex">
-                                <div style="display:flex; flex-direction:column; justify-content:center;"><button @click="deleteEvent('sunday',index)"><i style="font-size:25px;" class="fa fa-times mr-2"></i></button></div>
-                                <div style="border-bottom:0.5px solid #eee;padding-bottom:10px;">
-                                Name
-                                <input type="text" class="form-control" v-model="event.name" placeholder="e.x. SuperTarget Run">
-                                Time Slot
-                                <input type="text" class="form-control" v-model="event.timeSlot" placeholder="format-'5:00-6:00'">
-                                <div style="display:flex; align-items:center;">
-                                <label :for="event.name" style="margin:0px;">Require Sign Up</label>
-                                <input type="checkbox" style="width:30px;" :id="event.name" v-model="event.signUp"></div>
-                                
-                                <div v-if="event.signUp">
-                                    
-                                    <input type="text" class="form-control" v-model="event.personLimit" placeholder="Person Limit">
-                                </div></div>
-                                <div style="display:flex; flex-direction:column; justify-content:center;" v-if="schedule.sunday.length>1"><button v-if="index>0" @click="moveEventUp(index, 'sunday')"><i class="fa fa-arrow-up m-2"></i></button><button v-if="index<schedule.sunday.length-1" @click="moveEventDown(index, 'sunday')"><i class="fa fa-arrow-down m-2"></i></button></div>
-                            </div>
-                            
-                        </div>
-                        
-
+                        <b-button @click="addNewDay()" style="background:none;border:none; padding:5px; color:black; width:100%">Add day</b-button>
                 </div>
                 <div class="card-footer">
                     <button @click="submit" class="btn btn--radius-2 btn--blue-2" style="width:100%">Submit Schedule</button>
@@ -238,12 +188,24 @@ import ScheduleDataService from "../services/ScheduleDataService";
 export default {
     data(){
         return {
+          i: 0,
+          scheduleDays: [
+            {
+              date:"Friday",
+              events:[]
+            },
+            {
+              date:"Saturday",
+              events:[]
+            },
+            {
+              date:"Sunday",
+              events:[]
+            }
+          ],
           schedule: {
             id: null,
             date: "",
-            friday:[],
-            saturday:[],
-            sunday:[],
             phoneNumbers:[
               {
                 dorm:"On Call",
@@ -301,37 +263,43 @@ export default {
 
     },
     methods:{
-        moveEventUp(index, array){
-           this.schedule[array].splice(index-1, 2, this.schedule[array][index], this.schedule[array][index-1])
+        moveEventUp(index){
+           var array=this.i
+           this.scheduleDays[array].events.splice(index-1, 2, this.scheduleDays[array].events[index], this.scheduleDays[array].events[index-1])
         },
-        moveEventDown(index, array){
-            /* let x=this.schedule[array][index]
-            this.schedule[array][index]=this.schedule[array][index+1]
-            this.schedule[array][index+1]=x */
-            this.schedule[array].splice(index, 2, this.schedule[array][index+1], this.schedule[array][index])
+        moveEventDown(index){
+            /* let x=this.scheduleDays[array][index]
+            this.scheduleDays[array][index]=this.scheduleDays[array][index+1]
+            this.scheduleDays[array][index+1]=x */
+            var array= this.i
+            this.scheduleDays[array].events.splice(index, 2, this.scheduleDays[array].events[index+1], this.scheduleDays[array].events[index])
         },
          addNewEvent(array){
-            this.schedule[array].push({name:'',timeSlot:'', usersSignedUp:[]});
+            this.scheduleDays[array].events.push({name:'',timeSlot:'', usersSignedUp:[],waitlist:[]});
+         },
+         addNewDay(){
+           this.scheduleDays.push({
+              date:"",
+              events:[]
+            },);
          },
          deleteEvent(array, index){
-             this.schedule[array].splice(index, 1);
+             this.scheduleDays[array].events.splice(index, 1);
+         },
+         removeDay(day){
+           this.scheduleDays.splice(day, 1);
          },
          submit(){
-               /*  if(!confirm("Are you sure you want to submit?"))
-                {
-                    return;
-                } */
-                if(this.schedule.date.length==0/*  || this.schedule.date.match() */)
+               
+                if(this.schedule.date.length==0)
                 {
                     this.$message.error("Enter a valid date...")
                     return;
                 }
                 var data ={
                     date:this.schedule.date,
-                    friday:this.schedule.friday,
-                    saturday:this.schedule.saturday,
-                    sunday:this.schedule.sunday,
-                    phoneNumbers:this.schedule.phoneNumbers
+                    phoneNumbers:this.schedule.phoneNumbers,
+                    scheduleDays:this.scheduleDays
                 }
                 if(this.edit){
                   ScheduleDataService.update(this.schedule.id,data)
@@ -348,63 +316,12 @@ export default {
                       console.log(e);
                     });
                 }
-                
-
-
          },
          getSchedule(id){
            ScheduleDataService.get(id)
             .then(result=>{
-              this.schedule=result.data
-              if(this.schedule.phoneNumbers == null){
-                this.schedule.phoneNumbers = [
-                  {
-                    dorm:"On Call",
-                    teacherName: "",
-                    phoneNumber: ""
-                  },
-                  {
-                    dorm:"Atlass Up",
-                    teacherName: "",
-                    phoneNumber: ""
-                  },
-                  {
-                    dorm:"Atlass Down",
-                    teacherName: "",
-                    phoneNumber: ""
-                  },
-                  {
-                    dorm:"Field #1",
-                    teacherName: "",
-                    phoneNumber: ""
-                  },
-                  {
-                    dorm:"Field #2",
-                    teacherName: "",
-                    phoneNumber: ""
-                  },
-                  {
-                    dorm:"Warner",
-                    teacherName: "",
-                    phoneNumber: ""
-                  },
-                  {
-                    dorm:"Ferry Hall",
-                    teacherName: "",
-                    phoneNumber: ""
-                  },
-                  {
-                    dorm:"Writing Center",
-                    teacherName: "",
-                    phoneNumber: ""
-                  },
-                  {
-                    dorm:"Math Help",
-                    teacherName: "",
-                    phoneNumber: ""
-                  }
-                ];
-              }
+              this.schedule=result.data;
+              this.scheduleDays=result.data.scheduleDays;
             })
          },
          changeDutyOpen(){
@@ -418,6 +335,7 @@ export default {
     },
 
     mounted(){
+      console.log(this.schedule);
         if(JSON.parse(localStorage.getItem("user"))==null ||JSON.parse(localStorage.getItem("user")).admin==false)
         {
            this.$message.error("Sign in as an admin to access this page...")

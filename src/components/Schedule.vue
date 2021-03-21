@@ -61,7 +61,7 @@
                 <div class="rounded overflow-hidden">
                     <div class=" p-l-6 pt-4 p-r-6">
                         <div style="font-weight:700; font-size:1.25rem; height:5em; display: flex; justify-content:center; align-items: center; overflow: auto;" class="mb-2">{{ event.info.name }}</div>
-                        <div class="mb-2">{{event.info.timeSlot}}-<strong>Friday</strong></div>
+                        <div class="mb-2">{{event.info.timeSlot}}-<strong>{{event.date}}</strong></div>
                         <p style="color:#4a5568; font-size:1rem">
                         <ol>
                         <!-- s -->
@@ -77,7 +77,7 @@
                     </div>
                 <div class="p-l-6 p-r-6 pb-4">
                     <div class="wrap">
-                         <div class="button" v-if="!signedUp(event.info)" @click="signUpEvent(event.info, event.date)">Sign Up</div><div class ="button signedup" v-else @click="deleteFromEvent(event.info, 'friday')">Signed Up</div>
+                         <div class="button" v-if="!signedUp(event.info)" @click="signUpEvent(event.info, event.date)">Sign Up</div><div class ="button signedup" v-else @click="deleteFromEvent(event.info, event.date)">Signed Up</div>
                         <!-- <div class="button" v-if="$cookies.get('user').admin" @click= "sendEmail(event)">Send Notification</div> -->
                     </div>
                 </div>
@@ -87,13 +87,20 @@
     <div style="width:100%;height:95%;padding:10px; display:flex;flex-direction:column; overflow:auto;" v-if="currentEvent">
         <div style="width:100%; display:flex; flex-direction:column; align-items:center;">
             <div style="width: 100%; background-color: #f7931e; color: white; font-weight:600; font-size: 1.25em; padding: 0.25em 0em; text-align:center; border-radius: 0.2em;">Users Signed Up</div>
-            <div style="width: 95%; margin-top: 1em;" v-for="(user, index) in currentEvent.usersSignedUp" :key="index">
-                <u><strong v-if="index===currentEvent.personLimit">Waitlist<br></strong></u>
-                <strong>{{index+1}}.</strong> {{getFullName(user)}} <button v-if="currentUser.admin" @click="bumpToEnd(index)" style="border:0px">Bump to End</button>
+            <div style="width: 95%; margin-top: 1em;" >
+                <div v-for="(user, index) in currentEvent.usersSignedUp" :key="index"> 
+                <strong>{{index+1}}.</strong> {{getFullName(user)}} <button v-if="currentUser.admin" @click="bumpToEnd(index)" style="border:0px">Bump to Waitlist</button>
                 <div style="width:100%; display:flex; justify-content:center; padding-top: 0.5em;">
                     <div style="width: 93%; border-bottom: 1.5px solid black"></div>
-                </div>
-            </div>
+                </div></div>
+            <u v-if="currentEvent.waitlist.length>0"><strong>Waitlist<br></strong></u>
+            <div v-for="(user, index) in currentEvent.waitlist" :key="index">
+                
+                <strong>{{index+1}}.</strong> {{getFullName(user)}} 
+                <div style="width:100%; display:flex; justify-content:center; padding-top: 0.5em;">
+                    <div style="width: 93%; border-bottom: 1.5px solid black"></div>
+                </div></div>
+</div>
         </div>
         <div style="justify-content:space-between;display:flex;margin:5px">
             <textarea v-if="currentUser.admin" style="flex:1;margin-right:10px;padding:7px" placeholder="Optional Message.." v-model="message"></textarea>
@@ -146,14 +153,26 @@ export default{
             }
         },
         bumpToEnd(index){
+
                 ScheduleDataService.get(this.currentSchedule.id)
                     .then(response=>{
                         let schedule= response.data
-                        let updatedEvent = schedule[this.currentDate].find(e=>e.name===this.currentEvent.name)
-                        updatedEvent.usersSignedUp.push(updatedEvent.usersSignedUp.splice(index, 1)[0]);
+                        let updatedSchedule = schedule.scheduleDays.find(e=>e.date===this.currentDate)
+                        let updatedEvent = updatedSchedule.events.find(e=>e.name===this.currentEvent.name)
+                        if(updatedEvent.waitlist.length>0){
+                            updatedEvent.usersSignedUp.push(updatedEvent.waitlist.splice(0,1)[0])
+                        }
+                        updatedEvent.waitlist.unshift(updatedEvent.usersSignedUp.splice(index, 1)[0])
                         ScheduleDataService.update(schedule.id, schedule)
-                    })
-            this.currentEvent.usersSignedUp.push(this.currentEvent.usersSignedUp.splice(index, 1)[0]);
+                    })    
+                    if(this.currentEvent.waitlist.length>0){
+  
+            this.currentEvent.usersSignedUp.push(this.currentEvent.waitlist.splice(0,1)[0])
+                    }
+            this.currentEvent.waitlist.unshift( this.currentEvent.usersSignedUp.splice(index, 1)[0]);
+
+           
+
         },
         showModal(event,date){
             this.currentEvent=event
@@ -166,11 +185,13 @@ export default{
                 var arr = [];
                 for(let i = 0; i < this.currentSchedule.scheduleDays.length; i++){
                     for(let j = 0; j < this.currentSchedule.scheduleDays[i].events.length; j++){
-                        let object = {
-                            info:this.currentSchedule.scheduleDays[i].events[j],
-                            date:this.currentSchedule.scheduleDays[i].date
+                        if(this.currentSchedule.scheduleDays[i].events[j].signUp){
+                            let object = {
+                                info:this.currentSchedule.scheduleDays[i].events[j],
+                                date:this.currentSchedule.scheduleDays[i].date
+                            }
+                            arr.push(object);
                         }
-                        arr.push(object);
                     }
                 }
                 return arr;
@@ -181,9 +202,10 @@ export default{
             return user.userName
         },
         sendEmail(event){
-            for(var i =0;i<event.usersSignedUp.length;i++){
+            var total = event.usersSignedUp.concat(event.waitlist)
+            for(var i =0;i<total.length;i++){
                 this.$message.info("Sending email...")
-                EmailDataService.sendEmail({"event":event,"message":this.message},event.usersSignedUp[i].id)
+                EmailDataService.sendEmail({"event":event,"message":this.message},total[i].id)
                     .then(result=>{
                         console.log(result)
                         this.$message.success("Emails Successfully Sent!")
@@ -230,13 +252,24 @@ export default{
         },
         signUpEvent(event, date){
             this.$message.success("Signed up for " + event.name)
-            event.usersSignedUp.push(this.currentUser)
+            var waitlist=event.usersSignedUp.length>event.personLimit
+            if(waitlist){
+                event.waitlist.push(this.currentUser)
+            }
+            else{
+                event.usersSignedUp.push(this.currentUser)
+            }
             ScheduleDataService.get(this.currentSchedule.id)
                     .then(response=>{
                         let schedule= response.data
                         let updatedSchedule = schedule.scheduleDays.find(e=>e.date===date)
                         let updatedEvent = updatedSchedule.events.find(e=>e.name===event.name)
-                        updatedEvent.usersSignedUp.push(this.currentUser)
+                        if(waitlist){
+                            updatedEvent.waitlist.push(this.currentUser)
+                        }
+                        else{
+                            updatedEvent.usersSignedUp.push(this.currentUser)
+                        }   
                         ScheduleDataService.update(schedule.id, schedule)
                     })
             this.showModal(event,date)
@@ -244,15 +277,27 @@ export default{
         deleteFromEvent(event,date){
             if(confirm("Are you sure you want to be removed from the list?"))
             {
-                event.usersSignedUp.splice(event.usersSignedUp.findIndex(e=>e.id===this.currentUser.id),1)
+                var i =event.usersSignedUp.findIndex(e=>e.id===this.currentUser.id)
+                var k=event.waitlist.findIndex(e=>e.id===this.currentUser.id)
+                if(i==-1){
+                    event.waitlist.splice(k,1)
+                }
+                else{
+                    event.usersSignedUp.splice(i,1)
+                }
                 ScheduleDataService.get(this.currentSchedule.id)
                     .then(response=>{
                         let schedule= response.data
                         let updatedSchedule = schedule.scheduleDays.find(e=>e.date===date)
                         let updatedEvent = updatedSchedule.events.find(e=>e.name===event.name)
-                        console.log(updatedEvent);
-                        /*updatedEvent.usersSignedUp.splice(updatedEvent.usersSignedUp.findIndex(e=>e.id===this.currentUser.id),1)
-                        ScheduleDataService.update(schedule.id, schedule)*/
+                        if(i==-1){
+                            updatedEvent.waitlist.splice(k,1)
+                        }
+                        else{
+                        updatedEvent.usersSignedUp.splice(i,1)
+
+                        }
+                        ScheduleDataService.update(schedule.id, schedule)
                     })
                 this.$message.error("Removed from " + event.name)
                 this.showModal(event,date)
@@ -260,7 +305,7 @@ export default{
             
         },
         signedUp(event){
-            return event.usersSignedUp.filter(e=>e.id===this.currentUser.id).length>0
+            return event.usersSignedUp.filter(e=>e.id===this.currentUser.id).length>0 || event.waitlist.filter(e=>e.id===this.currentUser.id).length>0
         },
         showHideDuty(){
             this.displayOnDuty = !this.displayOnDuty;
@@ -288,7 +333,6 @@ export default{
         {
             this.$message.error("Sign in to access this page")
             window.location.href="/"
-            
         }
         else{
             if(this.$route.params.id){
@@ -480,4 +524,6 @@ export default{
       padding:5px;
 
   }
+
+
 </style>
