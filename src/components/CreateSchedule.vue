@@ -311,7 +311,7 @@ export default {
             this.schedule[array].splice(index, 2, this.schedule[array][index+1], this.schedule[array][index])
         },
          addNewEvent(array){
-            this.schedule[array].push({name:'',timeSlot:'', usersSignedUp:[]});
+            this.schedule[array].push({name:'',timeSlot:'', usersSignedUp:[],waitlist:[]});
          },
          deleteEvent(array, index){
              this.schedule[array].splice(index, 1);

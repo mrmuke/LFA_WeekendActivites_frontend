@@ -20,6 +20,10 @@
                     <div class="rounded overflow-hidden">
                         <div class=" p-l-6 pt-4 p-r-6">
                             <div style="font-weight:700; font-size:1.25rem" class="mb-2">{{ schedule.date }}</div>
+                            <label class="switch">
+  <input type="checkbox" :disabled="schedule.displayed" v-model="schedule.displayed" v-on:change="publishSchedule(schedule)" >
+  <span class="slider round"></span>
+</label>
                         </div>
                         <div style="display:flex;flex-direction:column;">
                             <b-button class = "orange-default" :href="'/schedule/' + schedule.id">View Schedule</b-button>
@@ -65,6 +69,12 @@ export default{
         }
     },
     methods:{
+        publishSchedule(schedule){
+            
+            ScheduleDataService.publish(schedule.id).then(result=>{
+                this.schedules=result.data
+            })
+        },
         retrieveSchedules(){
             ScheduleDataService.getAll()
                .then(response => {
@@ -236,4 +246,65 @@ padding-top:20px;
           width:100%;
       }
   }
+  .switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
 </style>

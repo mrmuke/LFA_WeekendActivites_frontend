@@ -11,6 +11,10 @@ class ScheduleDataService {
         return http.get(`/schedules/${id}`);
     }
 
+    publish(id) {
+        return http.post(`/schedules/publish/${id}`);
+    }
+
     create(data) {
         return http.post("/schedules", data);
     }
