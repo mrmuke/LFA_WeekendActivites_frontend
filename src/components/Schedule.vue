@@ -43,153 +43,44 @@
             </div>
         </div>
     </div>
-    <div class = "schedule-container">
-    <div class="schedule-day">
-     <h2 style="padding: 20px 40px;text-align: center;background: #3a3737;color: #fff"><span>Friday</span></h2>
-        <ul>
-          <li v-for="(event, index) in currentSchedule.friday" :key="index" style="display:flex; padding:10px;" v-bind:style="{background:getBackground(index)}" class="mx-2">
-              <u>{{ event.timeSlot }}</u>- {{event.name}} <div v-if="event.signUp">*</div>
-          </li>
-        </ul>
-    </div>
-    <div class="schedule-day">
-     <h2 style="padding: 20px 40px;text-align: center;background: #3a3737;color: #fff; "><span>Saturday</span></h2>
-       <ul>
-            <li v-for="(event, index) in currentSchedule.saturday" :key="index" style="display:flex;padding:10px;" v-bind:style="{background:getBackground(index)}" class="m-2">
+    <div class="schedule-container">
+        <div v-for="(day, i) in currentSchedule.scheduleDays" :key="i" class="schedule-day">
+        <h2 style="padding: 20px 40px;text-align: center;background: #3a3737;color: #fff"><span>{{day.date}}</span></h2>
+            <ul>
+            <li v-for="(event, index) in day.events" :key="index" style="display:flex; padding:10px;" v-bind:style="{background:getBackground(index)}" class="mx-2">
                 <u>{{ event.timeSlot }}</u>- {{event.name}} <div v-if="event.signUp">*</div>
             </li>
-       </ul>
+            </ul>
+        </div>
     </div>
-    <div class="schedule-day">
-       <h2 style="padding: 20px 40px;text-align: center;background: #3a3737;color: #fff; "><span>Sunday</span></h2>
-        <ul>
-             <li v-for="(event, index) in currentSchedule.sunday" :key="index" style="display:flex; padding:10px;" v-bind:style="{background:getBackground(index)}" class="m-2">
-                  <u>{{ event.timeSlot }}</u>- {{event.name}} <div v-if="event.signUp">*</div>
-             </li>
-        </ul>
-    </div>
-    
-    </div>
+
     <div style="display:flex; flex-wrap:wrap;">
-           <div v-for="(event) in filtered('friday')" :key="event.name" class="event-signup-item">
+           <div v-for="(event, i) in filtered()" :key="i" class="event-signup-item">
                <div  class="flex shadow-sm border justify-content-center text-center align-items-center h-screen m-1 rounded p-3" style="background:white;" >
-                   <div class="go-to-details" @click="showModal(event,'friday')">
+                   <div class="go-to-details" @click="showModal(event.info,'friday')">
                 <div class="rounded overflow-hidden">
                     <div class=" p-l-6 pt-4 p-r-6">
-                        <div style="font-weight:700; font-size:1.25rem; height:5em; display: flex; justify-content:center; align-items: center; overflow: auto;" class="mb-2">{{ event.name }}</div>
-                        <div class="mb-2">{{event.timeSlot}}-<strong>Friday</strong></div>
-                    
+                        <div style="font-weight:700; font-size:1.25rem; height:5em; display: flex; justify-content:center; align-items: center; overflow: auto;" class="mb-2">{{ event.info.name }}</div>
+                        <div class="mb-2">{{event.info.timeSlot}}-<strong>Friday</strong></div>
                         <p style="color:#4a5568; font-size:1rem">
                         <ol>
                         <!-- s -->
                     </ol>
                         </p>
                     </div>
-                
                     <div class="p-l-6 p-r-6 pt-4 pb-4">
                         <span style="color:#4a5568; background:#edf2f7; font-weight:600; font-size: .875rem" class="inline-block rounded-lg px-3 py-1 mr-2">
-                         Max. {{event.personLimit}}
+                         Max. {{event.info.personLimit}}
                         </span>
-                    
                     </div>
                     </div>
                     </div>
                 <div class="p-l-6 p-r-6 pb-4">
                     <div class="wrap">
-                         <div class="button" v-if="!signedUp(event)" @click="signUpEvent(event,'friday')">Sign Up</div><div class ="button signedup" v-else @click="deleteFromEvent(event, 'friday')">Signed Up</div>
+                         <div class="button" v-if="!signedUp(event.info)" @click="signUpEvent(event.info, event.date)">Sign Up</div><div class ="button signedup" v-else @click="deleteFromEvent(event.info, 'friday')">Signed Up</div>
                         <!-- <div class="button" v-if="$cookies.get('user').admin" @click= "sendEmail(event)">Send Notification</div> -->
-                        
-
-
                     </div>
-   
                 </div>
-                    
-                  
-
-            
-        
-
-    </div></div>
-    <div v-for="(event) in filtered('saturday')" :key="event.name" class="event-signup-item">
-               <div  class="flex shadow-sm border justify-content-center text-center align-items-center h-screen m-1 rounded p-3" style="background:white;" >
-                   <div class="go-to-details" @click="showModal(event,'saturday')">
-                <div class="rounded overflow-hidden">
-                    <div class=" p-l-6 pt-4 p-r-6">
-                        <div style="font-weight:700; font-size:1.25rem; height:5em; display: flex; justify-content:center; align-items: center; overflow: auto;" class="mb-2">{{ event.name }}</div>
-                        <div class="mb-2">{{event.timeSlot}}-<strong>Saturday</strong></div>
-                    
-                        <p style="color:#4a5568; font-size:1rem">
-                        <ol>
-                        <!-- s -->
-                    </ol>
-                        </p>
-                    </div>
-                
-                    <div class="p-l-6 p-r-6 pt-4 pb-4">
-                        <span style="color:#4a5568; background:#edf2f7; font-weight:600; font-size: .875rem" class="inline-block rounded-lg px-3 py-1 mr-2">
-                         Max. {{event.personLimit}}
-                        </span>
-                    
-                    </div>
-                    </div>
-                    </div>
-                <div class="p-l-6 p-r-6 pb-4">
-                    <div class="wrap">
-                         <div class="button" v-if="!signedUp(event)" @click="signUpEvent(event,'saturday')">Sign Up</div><div class ="button signedup" v-else @click="deleteFromEvent(event, 'saturday')">Signed Up</div>
-                        <!-- <div class="button" v-if="$cookies.get('user').admin" @click= "sendEmail(event)">Send Notification</div> -->
-                        
-
-
-                    </div>
-   
-                </div>
-                    
-                  
-
-            
-        
-
-    </div></div>
-    <div v-for="(event) in filtered('sunday')" :key="event.name" class="event-signup-item">
-               <div  class="flex shadow-sm border justify-content-center text-center align-items-center h-screen m-1 rounded p-3" style="background:white;" >
-                   <div class="go-to-details" @click="showModal(event,'sunday')">
-                <div class="rounded overflow-hidden">
-                    <div class=" p-l-6 pt-4 p-r-6">
-                        <div style="font-weight:700; font-size:1.25rem; height:5em; display: flex; justify-content:center; align-items: center; overflow: auto;" class="mb-2">{{ event.name }}</div>
-                        <div class="mb-2">{{event.timeSlot}}-<strong>Sunday</strong></div>
-                    
-                        <p style="color:#4a5568; font-size:1rem">
-                        <ol>
-                        <!-- s -->
-                    </ol>
-                        </p>
-                    </div>
-                
-                    <div class="p-l-6 p-r-6 pt-4 pb-4">
-                        <span style="color:#4a5568; background:#edf2f7; font-weight:600; font-size: .875rem" class="inline-block rounded-lg px-3 py-1 mr-2">
-                         Max. {{event.personLimit}}
-                        </span>
-                    
-                    </div>
-                    </div>
-                    </div>
-                <div class="p-l-6 p-r-6 pb-4">
-                    <div class="wrap">
-                         <div class="button" v-if="!signedUp(event)" @click="signUpEvent(event,'sunday')">Sign Up</div><div class ="button signedup" v-else @click="deleteFromEvent(event, 'sunday')">Signed Up</div>
-                        <!-- <div class="button" v-if="$cookies.get('user').admin" @click= "sendEmail(event)">Send Notification</div> -->
-                        
-
-
-                    </div>
-   
-                </div>
-                    
-                  
-
-            
-        
-
     </div></div>
     
 </div></div><modal name="event-details">
@@ -259,13 +150,10 @@ export default{
                     .then(response=>{
                         let schedule= response.data
                         let updatedEvent = schedule[this.currentDate].find(e=>e.name===this.currentEvent.name)
-                        updatedEvent.usersSignedUp.push( updatedEvent.usersSignedUp.splice(index, 1)[0]);
+                        updatedEvent.usersSignedUp.push(updatedEvent.usersSignedUp.splice(index, 1)[0]);
                         ScheduleDataService.update(schedule.id, schedule)
-                    })      
-            this.currentEvent.usersSignedUp.push( this.currentEvent.usersSignedUp.splice(index, 1)[0]);
-
-           
-
+                    })
+            this.currentEvent.usersSignedUp.push(this.currentEvent.usersSignedUp.splice(index, 1)[0]);
         },
         showModal(event,date){
             this.currentEvent=event
@@ -273,18 +161,26 @@ export default{
             this.$modal.show('event-details')
             this.message=""
         },
-        filtered(date){
+        filtered(){
             if(this.currentSchedule){   
-                return this.currentSchedule[date].filter(e=>e.signUp==true)
+                var arr = [];
+                for(let i = 0; i < this.currentSchedule.scheduleDays.length; i++){
+                    for(let j = 0; j < this.currentSchedule.scheduleDays[i].events.length; j++){
+                        let object = {
+                            info:this.currentSchedule.scheduleDays[i].events[j],
+                            date:this.currentSchedule.scheduleDays[i].date
+                        }
+                        arr.push(object);
+                    }
+                }
+                return arr;
             }
             return []
-            
         },
         getFullName(user){
-            return user.userName 
+            return user.userName
         },
         sendEmail(event){
-            
             for(var i =0;i<event.usersSignedUp.length;i++){
                 this.$message.info("Sending email...")
                 EmailDataService.sendEmail({"event":event,"message":this.message},event.usersSignedUp[i].id)
@@ -294,9 +190,6 @@ export default{
                     })
             } 
             this.message=""
-            
-
-
         },
 
         /* gettext(pdfUrl){
@@ -325,6 +218,7 @@ export default{
             ScheduleDataService.getCurrent()
                 .then(result=>{
                     this.currentSchedule=result.data
+                    console.log(result.data.scheduleDays);
                 })
         },
         getSchedule(id){
@@ -340,11 +234,12 @@ export default{
             ScheduleDataService.get(this.currentSchedule.id)
                     .then(response=>{
                         let schedule= response.data
-                        let updatedEvent = schedule[date].find(e=>e.name===event.name)
+                        let updatedSchedule = schedule.scheduleDays.find(e=>e.date===date)
+                        let updatedEvent = updatedSchedule.events.find(e=>e.name===event.name)
                         updatedEvent.usersSignedUp.push(this.currentUser)
                         ScheduleDataService.update(schedule.id, schedule)
-                    })            
-                    this.showModal(event,date)
+                    })
+            this.showModal(event,date)
         },
         deleteFromEvent(event,date){
             if(confirm("Are you sure you want to be removed from the list?"))
@@ -353,9 +248,11 @@ export default{
                 ScheduleDataService.get(this.currentSchedule.id)
                     .then(response=>{
                         let schedule= response.data
-                        let updatedEvent = schedule[date].find(e=>e.name===event.name)
-                        updatedEvent.usersSignedUp.splice(updatedEvent.usersSignedUp.findIndex(e=>e.id===this.currentUser.id),1)
-                        ScheduleDataService.update(schedule.id, schedule)
+                        let updatedSchedule = schedule.scheduleDays.find(e=>e.date===date)
+                        let updatedEvent = updatedSchedule.events.find(e=>e.name===event.name)
+                        console.log(updatedEvent);
+                        /*updatedEvent.usersSignedUp.splice(updatedEvent.usersSignedUp.findIndex(e=>e.id===this.currentUser.id),1)
+                        ScheduleDataService.update(schedule.id, schedule)*/
                     })
                 this.$message.error("Removed from " + event.name)
                 this.showModal(event,date)
@@ -400,7 +297,7 @@ export default{
             else{
                 this.getCurrentSchedule()
             }
-        }    
+        }
     }
 
 }
