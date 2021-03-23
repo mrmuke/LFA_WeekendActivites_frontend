@@ -5,10 +5,10 @@ class ScheduleDataService {
         return http.get("/schedules");
     }
     getCurrent() {
-        return http.get(`/schedules/current`).catch(e=>
-            localStorage.setItem("user",null),
-            localStorage.setItem("token",null),
-            window.location.reload())
+        return http.get(`/schedules/current`).catch(()=>{
+            localStorage.setItem("user",null);
+            localStorage.setItem("token",null);
+            window.location.reload()})
     }
     get(id) {
         return http.get(`/schedules/${id}`);

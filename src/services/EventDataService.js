@@ -1,10 +1,10 @@
 import http from "../http-common";
 class EventDataService {
     getAll() {
-        return http.get("/voteEvents").catch(e=>
-        localStorage.setItem("user",null),
-        localStorage.setItem("token",null),
-        window.location.reload())
+        return http.get("/voteEvents").catch(()=>{
+        localStorage.setItem("user",null);
+        localStorage.setItem("token",null);
+        window.location.reload()})
     }
 
     get(id) {
