@@ -252,7 +252,7 @@ export default{
         },
         signUpEvent(event, date){
             this.$message.success("Signed up for " + event.name)
-            var waitlist=event.usersSignedUp.length>event.personLimit
+            var waitlist=event.usersSignedUp.length>=event.personLimit
             if(waitlist){
                 event.waitlist.push(this.currentUser)
             }
