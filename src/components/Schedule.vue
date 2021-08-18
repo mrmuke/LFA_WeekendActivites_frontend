@@ -18,6 +18,9 @@
                 <div class="phoneNumbers-item">
                     <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[2].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[2].teacherName}}</span><span>{{currentSchedule.phoneNumbers[2].phoneNumber}}</span>
                 </div>
+                <div class="phoneNumbers-item">
+                    <b style="margin-right:1em;">McIntosh:</b><span style="margin-right:1em;">Ms. Wood</span><span>(847) 997-0463</span>
+                </div>
             </div>
             <div class="phoneNumebrs-row">
                 <div class="phoneNumbers-item">
