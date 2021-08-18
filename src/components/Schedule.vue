@@ -57,14 +57,13 @@
     <div style="display:flex; flex-wrap:wrap;">
            <div v-for="(event, i) in filtered()" :key="i" class="event-signup-item">
                <div  class="flex shadow-sm border justify-content-center text-center align-items-center h-screen m-1 rounded p-3" style="background:white;" >
-                   <div class="go-to-details" @click="showModal(event.info,'friday')">
+                   <div class="go-to-details" @click="showModal(event.info,event.date)">
                 <div class="rounded overflow-hidden">
                     <div class=" p-l-6 pt-4 p-r-6">
                         <div style="font-weight:700; font-size:1.25rem; height:5em; display: flex; justify-content:center; align-items: center; overflow: auto;" class="mb-2">{{ event.info.name }}</div>
                         <div class="mb-2">{{event.info.timeSlot}}-<strong>{{event.date}}</strong></div>
                         <p style="color:#4a5568; font-size:1rem">
                         <ol>
-                        <!-- s -->
                     </ol>
                         </p>
                     </div>
@@ -92,7 +91,7 @@
                 <strong>{{index+1}}.</strong> {{getFullName(user)}} <button v-if="currentUser.admin" @click="bumpToEnd(index)" style="border:0px">Bump to Waitlist</button>
                 <div style="width:100%; display:flex; justify-content:center; padding-top: 0.5em;">
                     <div style="width: 93%; border-bottom: 1.5px solid black"></div>
-                </div></div>
+                </div></div><!-- on duty mcintosh, fix create schedule,bootstrap, waitlist, people sign in, reset database spring boot, polling to keep website alive -->
             <u v-if="currentEvent.waitlist.length>0"><strong>Waitlist<br></strong></u>
             <div v-for="(user, index) in currentEvent.waitlist" :key="index">
                 
@@ -124,10 +123,14 @@ import VModal from 'vue-js-modal'
 Vue.use(VModal)
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
-
+/* import draggable from 'vuedraggable'
+ */
 Vue.config.productionTip = false;
 Vue.use(Antd);
 export default{
+    /* components:{
+        draggable
+    }, */
     data(){
         return {
             currentSchedule:null,
@@ -157,7 +160,8 @@ export default{
                 ScheduleDataService.get(this.currentSchedule.id)
                     .then(response=>{
                         let schedule= response.data
-                        let updatedSchedule = schedule.scheduleDays.find(e=>e.date===this.currentDate)
+
+                        let updatedSchedule = schedule.scheduleDays.find(e=>e.date==this.currentDate)
                         let updatedEvent = updatedSchedule.events.find(e=>e.name===this.currentEvent.name)
                         if(updatedEvent.waitlist.length>0){
                             updatedEvent.usersSignedUp.push(updatedEvent.waitlist.splice(0,1)[0])
@@ -206,8 +210,7 @@ export default{
             for(var i =0;i<total.length;i++){
                 this.$message.info("Sending email...")
                 EmailDataService.sendEmail({"event":event,"message":this.message},total[i].id)
-                    .then(result=>{
-                        console.log(result)
+                    .then(()=>{
                         this.$message.success("Emails Successfully Sent!")
                     })
             } 
@@ -252,6 +255,7 @@ export default{
         },
         signUpEvent(event, date){
             this.$message.success("Signed up for " + event.name)
+            //doesnt work when two people on at same time
             var waitlist=event.usersSignedUp.length>=event.personLimit
             if(waitlist){
                 event.waitlist.push(this.currentUser)
@@ -264,6 +268,7 @@ export default{
                         let schedule= response.data
                         let updatedSchedule = schedule.scheduleDays.find(e=>e.date===date)
                         let updatedEvent = updatedSchedule.events.find(e=>e.name===event.name)
+                        waitlist=updatedEvent.usersSignedUp.length>=event.personLimit
                         if(waitlist){
                             updatedEvent.waitlist.push(this.currentUser)
                         }

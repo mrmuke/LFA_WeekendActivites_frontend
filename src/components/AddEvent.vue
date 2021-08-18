@@ -121,7 +121,6 @@ export default {
         .then(response => {
           this.event.id = response.data.id;
           this.submitted = true;
-          console.log(response.data)
         })
         }
     },

@@ -335,7 +335,6 @@ export default {
     },
 
     mounted(){
-      console.log(this.schedule);
         if(JSON.parse(localStorage.getItem("user"))==null ||JSON.parse(localStorage.getItem("user")).admin==false)
         {
            this.$message.error("Sign in as an admin to access this page...")

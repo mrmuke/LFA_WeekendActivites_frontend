@@ -27,6 +27,7 @@
     "vue-js-modal": "^2.0.0-rc.6",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.1.6",
+    "vuedraggable": "^2.24.3",
     "vuejs-datepicker": "^1.6.2"
   },
   "devDependencies": {
