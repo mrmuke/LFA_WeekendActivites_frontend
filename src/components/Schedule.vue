@@ -306,6 +306,8 @@ export default {
       var waitlist = event.usersSignedUp.length >= event.personLimit;
  
       if (waitlist) {
+        this.$message.info("You're on the waitlist")
+
         event.waitlist.push(this.currentUser);
       } else if(this.count>=2){
         this.$message.info("You have been pushed to the waitlist (3 event limit) ")
