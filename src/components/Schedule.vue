@@ -297,19 +297,20 @@ export default {
       });
     },
     signUpEvent(event, date) {
-      if(this.count>=2){
-        this.$message.error("You are limited to two events.")
-      }
-      else{
-
       
-      this.count++
+      
+
       this.$message.success("Signed up for " + event.name);
       //doesnt work when two people on at same time
       var waitlist = event.usersSignedUp.length >= event.personLimit;
+ 
       if (waitlist) {
         event.waitlist.push(this.currentUser);
-      } else {
+      } else if(this.count>=2){
+        this.$message.info("You have been pushed to the waitlist (2 event limit) ")
+        event.waitlist.push(this.currentUser)
+        }else {
+        this.count++
         event.usersSignedUp.push(this.currentUser);
       }
       ScheduleDataService.get(this.currentSchedule.id).then((response) => {
@@ -328,11 +329,11 @@ export default {
         }
         ScheduleDataService.update(schedule.id, schedule);
       });
-      this.showModal(event, date);}
+      this.showModal(event, date);
     },
     deleteFromEvent(event, date) {
       if (confirm("Are you sure you want to be removed from the list?")) {
-        this.count--
+        
         var i = event.usersSignedUp.findIndex(
           (e) => e.id === this.currentUser.id
         );
@@ -340,6 +341,7 @@ export default {
         if (i == -1) {
           event.waitlist.splice(k, 1);
         } else {
+          this.count--
           event.usersSignedUp.splice(i, 1);
         }
         ScheduleDataService.get(this.currentSchedule.id).then((response) => {
