@@ -50,8 +50,9 @@
         <div v-for="(day, i) in currentSchedule.scheduleDays" :key="i" class="schedule-day">
         <h2 style="padding: 20px 40px;text-align: center;background: #3a3737;color: #fff"><span>{{day.date}}</span></h2>
             <ul>
-            <li v-for="(event, index) in day.events" :key="index" style="display:flex; padding:10px;" v-bind:style="{background:getBackground(index)}" class="mx-2">
-                <u>{{ event.timeSlot }}</u>- {{event.name}} <div v-if="event.signUp">*</div>
+            <li v-for="(event, index) in day.events" :key="index" >
+              <div style="display:flex; padding:10px;" v-if="event" v-bind:style="{background:getBackground(index)}" class="mx-2">
+                <u>{{ event.timeSlot }}</u>- {{event.name}} <div v-if="event.signUp">*</div></div>
             </li>
             </ul>
         </div>
@@ -199,7 +200,7 @@ export default {
             j < this.currentSchedule.scheduleDays[i].events.length;
             j++
           ) {
-            if (this.currentSchedule.scheduleDays[i].events[j].signUp) {
+            if (this.currentSchedule.scheduleDays[i].events[j]&&this.currentSchedule.scheduleDays[i].events[j].signUp) {
               let object = {
                 info: this.currentSchedule.scheduleDays[i].events[j],
                 date: this.currentSchedule.scheduleDays[i].date,
@@ -266,7 +267,7 @@ export default {
 
         schedule.scheduleDays.forEach(day=>{
           day.events.forEach(e=>{
-            if(e.usersSignedUp.find(user=>user.id==this.currentUser.id))
+            if(e&&e.usersSignedUp.find(user=>user.id==this.currentUser.id))
             {
               this.count++
             }
