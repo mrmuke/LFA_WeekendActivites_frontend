@@ -158,7 +158,7 @@
                                 <div v-if="event.signUp">
                                     <input type="text" class="form-control" v-model="event.personLimit" placeholder="Person Limit">
                                 </div></div>
-                                <div style="display:flex; flex-direction:column; justify-content:center;" v-if="scheduleDays[0].events.length>1"><button v-if="index>0" @click="moveEventUp(index)"><i class="fa fa-arrow-up m-2"></i></button><button v-if="index<scheduleDays[0].events.length-1" @click="moveEventDown(index)"><i class="fa fa-arrow-down m-2"></i></button></div>
+                                <div style="display:flex; flex-direction:column; justify-content:center;" v-if="scheduleDays[i].events.length>1"><button v-if="index>0" @click="moveEventUp(index)"><i class="fa fa-arrow-up m-2"></i></button><button v-if="index<scheduleDays[i].events.length-1" @click="moveEventDown(index)"><i class="fa fa-arrow-down m-2"></i></button></div>
                                 </div>
                             </div>
                         </div>

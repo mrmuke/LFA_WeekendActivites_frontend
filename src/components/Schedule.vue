@@ -308,7 +308,7 @@ export default {
       if (waitlist) {
         event.waitlist.push(this.currentUser);
       } else if(this.count>=2){
-        this.$message.info("You have been pushed to the waitlist (2 event limit) ")
+        this.$message.info("You have been pushed to the waitlist (3 event limit) ")
         event.waitlist.push(this.currentUser)
         }else {
         this.count++
