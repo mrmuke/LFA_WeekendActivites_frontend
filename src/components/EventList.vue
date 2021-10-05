@@ -179,7 +179,6 @@ export default {
       EventDataService.getAll()
         .then(response => {
           this.events = response.data;
-          console.log(response.data)
 
         })
 
@@ -191,7 +190,6 @@ export default {
     upvote(event){
       this.$message.success("Upvoted " + event.name)
         event.upvotes.push(this.currentUser.emailAddress);
-                console.log(this.currentUser)
 
         EventDataService.upvote(event.id, this.currentUser.emailAddress)
 
@@ -200,7 +198,6 @@ export default {
     down(event){
       this.$message.error("Downvoted " + event.name)
         event["upvotes"]=event.upvotes.filter(e=>e!==this.currentUser.emailAddress)
-        console.log(event)
         EventDataService.downvote(event.id, this.currentUser.emailAddress)
 
 

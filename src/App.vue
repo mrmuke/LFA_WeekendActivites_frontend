@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import 'bootstrap/dist/css/bootstrap.css'
+
 import { eventBus } from './main.js';
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
@@ -52,7 +54,7 @@ export default{
       }
     },
     created() {
-        eventBus.$on('userSet', (data) => this.user = data);
+        eventBus.$on('userSet', () => {this.user=JSON.parse(localStorage.getItem('user'))});
     },
     
 }

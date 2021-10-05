@@ -126,7 +126,7 @@ export default {
                         this.$message.success("Logged In!")
                         localStorage.setItem("user", JSON.stringify(response.data.user))
                       localStorage.setItem("token", response.data.token)
-                      eventBus.$emit('userSet', response.data.user);
+                      eventBus.$emit('userSet', true);
                       this.admin=response.data.user.admin
                       this.signedIn = true
                       if(response.status==201){

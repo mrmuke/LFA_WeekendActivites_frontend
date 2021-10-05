@@ -157,7 +157,8 @@
                         <div class = "form-row" style="flex-direction:column" v-for="(eachDay, i) in scheduleDays" :key="i" >
                             <div style="display:flex; align-items:center;justify-content:center;width:100%;"><input placeholder="Please Enter Day" v-model="eachDay.date" style="font-size:30px;width:80%;"><b-button @click="removeDay(i)" style="background:none;border:none; padding:5px; color:black; width:134px;">Remove Day</b-button><b-button @click="addNewEvent(i)" style="background:none;border:none; padding:5px; color:black; width:100px;">Add event</b-button>
                             <!-- <b-button style="background:none;border:none; padding-right:5px;padding-left:5px; color:black" @click="deleteEvent('friday')"><i class="fa fa-minus"></i></b-button> --></div>
-                            <div v-for="(event, index) in scheduleDays[i].events" :key="index" style="display:flex">
+                            <div v-for="(event, index) in scheduleDays[i].events" :key="index" >
+                              <div v-if="event" style="display:flex">
                                 <div style="display:flex; flex-direction:column; justify-content:center;"><button @click="deleteEvent(i,index)"><i style="font-size:25px;" class="fa fa-times mr-2"></i></button></div>
                                 <div style="border-bottom:0.5px solid #eee;padding-bottom:10px;">
                                 Name
@@ -170,7 +171,8 @@
                                 <div v-if="event.signUp">
                                     <input type="text" class="form-control" v-model="event.personLimit" placeholder="Person Limit">
                                 </div></div>
-                                <div style="display:flex; flex-direction:column; justify-content:center;" v-if="scheduleDays[0].events.length>1"><button v-if="index>0" @click="moveEventUp(index)"><i class="fa fa-arrow-up m-2"></i></button><button v-if="index<scheduleDays[0].events.length-1" @click="moveEventDown(index)"><i class="fa fa-arrow-down m-2"></i></button></div>
+                                <div style="display:flex; flex-direction:column; justify-content:center;" v-if="scheduleDays[i].events.length>1"><button v-if="index>0" @click="moveEventUp(index,i)"><i class="fa fa-arrow-up m-2"></i></button><button v-if="index<scheduleDays[i].events.length-1" @click="moveEventDown(index,i)"><i class="fa fa-arrow-down m-2"></i></button></div>
+                                </div>
                             </div>
                         </div>
                         <b-button @click="addNewDay()" style="background:none;border:none; padding:5px; color:black; width:100%">Add day</b-button>
@@ -201,7 +203,6 @@ import ScheduleDataService from "../services/ScheduleDataService";
 export default {
     data(){
         return {
-          i: 0,
           scheduleDays: [
             {
               date:"Friday",
@@ -281,15 +282,15 @@ export default {
 
     },
     methods:{
-        moveEventUp(index){
-           var array=this.i
+        moveEventUp(index,i){
+           var array=i
            this.scheduleDays[array].events.splice(index-1, 2, this.scheduleDays[array].events[index], this.scheduleDays[array].events[index-1])
         },
-        moveEventDown(index){
+        moveEventDown(index,i){
             /* let x=this.scheduleDays[array][index]
             this.scheduleDays[array][index]=this.scheduleDays[array][index+1]
             this.scheduleDays[array][index+1]=x */
-            var array= this.i
+            var array= i
             this.scheduleDays[array].events.splice(index, 2, this.scheduleDays[array].events[index+1], this.scheduleDays[array].events[index])
         },
          addNewEvent(array){
@@ -338,6 +339,7 @@ export default {
          getSchedule(id){
            ScheduleDataService.get(id)
             .then(result=>{
+              console.log(result.data)
               this.schedule=result.data;
               this.scheduleDays=result.data.scheduleDays;
             })
@@ -353,7 +355,6 @@ export default {
     },
 
     mounted(){
-      console.log(this.schedule);
         if(JSON.parse(localStorage.getItem("user"))==null ||JSON.parse(localStorage.getItem("user")).admin==false)
         {
            this.$message.error("Sign in as an admin to access this page...")

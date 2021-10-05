@@ -104,7 +104,6 @@ export default{
         },
 
         downloadpdf(item){
-            console.log(item);
             //210 297
             var doc = new jsPDF();
             //HEADER
