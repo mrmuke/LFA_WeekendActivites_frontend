@@ -12,6 +12,7 @@
 
             <b-nav-item :href="'/schedule/'"><i class="fa fa-calendar mr-2"></i>Schedule</b-nav-item>
             <b-nav-item v-if="user && user.admin" href="/schedules"><i class="fa fa-book mr-2"></i>All Schedules</b-nav-item>
+            <b-nav-item v-if="user && user.admin" href="/strikes"><i class="fa fa-book mr-2"></i>Strikes</b-nav-item>
             
           </b-navbar-nav>
 

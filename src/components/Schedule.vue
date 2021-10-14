@@ -78,7 +78,7 @@
                     </div>
                     </div>
                     </div>
-                <div class="p-l-6 p-r-6 pb-4">
+                <div class="p-l-6 p-r-6 pb-4" v-if="strikes < 3">
                     <div class="wrap">
                          <div class="button" v-if="!signedUp(event.info)" @click="signUpEvent(event.info, event.date)">Sign Up</div><div class ="button signedup" v-else @click="deleteFromEvent(event.info, event.date)">Signed Up</div>
                         <!-- <div class="button" v-if="$cookies.get('user').admin" @click= "sendEmail(event)">Send Notification</div> -->
@@ -92,7 +92,7 @@
             <div style="width: 100%; background-color: #f7931e; color: white; font-weight:600; font-size: 1.25em; padding: 0.25em 0em; text-align:center; border-radius: 0.2em;">Users Signed Up</div>
             <div style="width: 95%; margin-top: 1em;" >
                 <div v-for="(user, index) in currentEvent.usersSignedUp" :key="index"> 
-                <strong>{{index+1}}.</strong> {{getFullName(user)}} <button v-if="currentUser.admin" @click="bumpToEnd(index)" style="border:0px">Bump to Waitlist</button>
+                <strong>{{index+1}}.</strong> {{getFullName(user)}} <button v-if="currentUser.admin" @click="bumpToEnd(index)" style="border:0px">Bump to Waitlist</button><button v-if="currentUser.admin" @click="strike(user.id)" style="border:0px; margin-left: 10px; background-color:red; color:white">Strike!</button>
                 <div style="width:100%; display:flex; justify-content:center; padding-top: 0.5em;">
                     <div style="width: 93%; border-bottom: 1.5px solid black"></div>
                 </div></div><!-- on duty mcintosh, fix create schedule,bootstrap, waitlist, people sign in, reset database spring boot, polling to keep website alive -->
@@ -127,6 +127,7 @@ import VModal from "vue-js-modal";
 Vue.use(VModal);
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
+import UserDataService from '../services/UserDataService';
 /* import draggable from 'vuedraggable'
  */
 Vue.config.productionTip = false;
@@ -143,7 +144,8 @@ export default {
       currentUser: JSON.parse(localStorage.getItem("user")),
       message: "",
       displayOnDuty: false,
-      count:0
+      count:0,
+      strikes: 0,
     };
   },
   computed: {},
@@ -222,6 +224,7 @@ export default {
                         updatedEvent.waitlist.splice(updatedEvent.usersSignedUp.splice(2, 1)[0])
                         ScheduleDataService.update(schedule.id, schedule)
                     }) */
+      console.log(user);
       return user.userName;
     },
     sendEmail(event) {
@@ -260,7 +263,7 @@ export default {
         });
         }, */
 
-    getCurrentSchedule() {
+    async getCurrentSchedule() {
       ScheduleDataService.getCurrent().then((result) => {
         let schedule = result.data
         this.currentSchedule = schedule;
@@ -280,24 +283,8 @@ export default {
             }
           })
         })
-        /* let schedule=result.data
-        let updatedSchedule = schedule.scheduleDays.find(
-          (e) => e.date === "Friday"
-        );
-        let updatedEvent = updatedSchedule.events.find(
-          (e) => e.name === "Par King Mini Golf – FREE (Wold)*"
-        );
-        updatedEvent.waitlist.splice(2,1)
-        updatedEvent.usersSignedUp.push({
-          id: 2,
-          emailAddress: "anna.nikishina@students.lfanet.org",
-          userName: "Anna Nikishina '23",
-          admin: false,
-          picture:
-            "https://lh3.googleusercontent.com/a-/AOh14GiWdgsiI57CfXDtG-FdqMXBDKTiwrrS0QMU16WrbQ=s96-c",
-        }); 
-        ScheduleDataService.update(schedule.id, schedule);*/
       });
+      this.strikes = (await UserDataService.get(this.currentUser.id)).data.strikes;
     },
     getSchedule(id) {
       ScheduleDataService.get(id).then((response) => {
@@ -407,6 +394,10 @@ export default {
           )[0].style.display = "none";
         }, 300);
       }
+    },
+    strike(id){
+      UserDataService.strike(id);
+      this.$message.success("User has been striked!");
     },
   },
   mounted() {
