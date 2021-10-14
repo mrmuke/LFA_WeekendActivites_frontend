@@ -103,6 +103,7 @@ h2{
   margin-top: 50px;
   border-radius: 10px;
   padding: 8px;
+  height:fit-content;
 }
 .listHead{
   background-color:#3a3737;
