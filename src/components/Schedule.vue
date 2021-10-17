@@ -19,7 +19,7 @@
                     <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[2].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[2].teacherName}}</span><span>{{currentSchedule.phoneNumbers[2].phoneNumber}}</span>
                 </div>
                 <div class="phoneNumbers-item">
-                    <b style="margin-right:1em;">McIntosh:</b><span style="margin-right:1em;">Ms. Wood</span><span>(847) 997-0463</span>
+                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[9].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[9].teacherName}}</span><span>{{currentSchedule.phoneNumbers[9].phoneNumber}}</span>
                 </div>
             </div>
             <div class="phoneNumebrs-row">
@@ -78,7 +78,7 @@
                     </div>
                     </div>
                     </div>
-                <div class="p-l-6 p-r-6 pb-4">
+                <div class="p-l-6 p-r-6 pb-4" v-if="strikes < 3">
                     <div class="wrap">
                          <div class="button" v-if="!signedUp(event.info)" @click="signUpEvent(event.info, event.date)">Sign Up</div><div class ="button signedup" v-else @click="deleteFromEvent(event.info, event.date)">Signed Up</div>
                         <!-- <div class="button" v-if="$cookies.get('user').admin" @click= "sendEmail(event)">Send Notification</div> -->
@@ -91,13 +91,22 @@
         <div style="width:100%; display:flex; flex-direction:column; align-items:center;">
             <div style="width: 100%; background-color: #f7931e; color: white; font-weight:600; font-size: 1.25em; padding: 0.25em 0em; text-align:center; border-radius: 0.2em;">Users Signed Up</div>
             <div style="width: 95%; margin-top: 1em;" >
-                <div v-for="(user, index) in currentEvent.usersSignedUp" :key="index"> 
-                <strong>{{index+1}}.</strong> {{getFullName(user)}} <button v-if="currentUser.admin" @click="bumpToEnd(index)" style="border:0px">Bump to Waitlist</button>
+                <div   v-for="(user, index) in currentEvent.usersSignedUp" 
+                @drop='onDrop($event, index,"list")' @dragover.prevent
+      @dragenter.prevent
+                draggable
+        @dragstart='startDrag($event, index,"list")' :key="index"> 
+                <strong>{{index+1}}.</strong> {{getFullName(user)}} <button v-if="currentUser.admin" @click="bumpToEnd(index)" style="border:0px">Bump to Waitlist</button><button v-if="currentUser.admin" @click="strike(user.id)" style="border:0px; margin-left: 10px; background-color:red; color:white">Strike!</button>
                 <div style="width:100%; display:flex; justify-content:center; padding-top: 0.5em;">
                     <div style="width: 93%; border-bottom: 1.5px solid black"></div>
                 </div></div><!-- on duty mcintosh, fix create schedule,bootstrap, waitlist, people sign in, reset database spring boot, polling to keep website alive -->
             <u v-if="currentEvent.waitlist.length>0"><strong>Waitlist<br></strong></u>
-            <div v-for="(user, index) in currentEvent.waitlist" :key="index">
+            <div v-for="(user, index) in currentEvent.waitlist"
+            
+            @drop='onDrop($event, index,"waitlist")' @dragover.prevent
+      @dragenter.prevent
+                draggable
+        @dragstart='startDrag($event, index,"waitlist")' :key="index">
                 
                 <strong>{{index+1}}.</strong> {{getFullName(user)}} 
                 <div style="width:100%; display:flex; justify-content:center; padding-top: 0.5em;">
@@ -113,9 +122,7 @@
     </div></div>
     
     </div>
-    <!-- <p v-for="(user, index) in currentEvent.usersSignedUp" :key="index">
-        {{user.userName}}
-    </p> -->
+    
     </modal></div>
 </template>
 
@@ -127,6 +134,7 @@ import VModal from "vue-js-modal";
 Vue.use(VModal);
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
+import UserDataService from "../services/UserDataService";
 /* import draggable from 'vuedraggable'
  */
 Vue.config.productionTip = false;
@@ -143,7 +151,8 @@ export default {
       currentUser: JSON.parse(localStorage.getItem("user")),
       message: "",
       displayOnDuty: false,
-      count:0
+      count: 0,
+      strikes: 0,
     };
   },
   computed: {},
@@ -171,7 +180,7 @@ export default {
             updatedEvent.waitlist.splice(0, 1)[0]
           );
         }
-        updatedEvent.waitlist.unshift(
+        updatedEvent.waitlist.push(
           updatedEvent.usersSignedUp.splice(index, 1)[0]
         );
         ScheduleDataService.update(schedule.id, schedule);
@@ -181,7 +190,7 @@ export default {
           this.currentEvent.waitlist.splice(0, 1)[0]
         );
       }
-      this.currentEvent.waitlist.unshift(
+      this.currentEvent.waitlist.push(
         this.currentEvent.usersSignedUp.splice(index, 1)[0]
       );
     },
@@ -200,7 +209,10 @@ export default {
             j < this.currentSchedule.scheduleDays[i].events.length;
             j++
           ) {
-            if (this.currentSchedule.scheduleDays[i].events[j]&&this.currentSchedule.scheduleDays[i].events[j].signUp) {
+            if (
+              this.currentSchedule.scheduleDays[i].events[j] &&
+              this.currentSchedule.scheduleDays[i].events[j].signUp
+            ) {
               let object = {
                 info: this.currentSchedule.scheduleDays[i].events[j],
                 date: this.currentSchedule.scheduleDays[i].date,
@@ -222,7 +234,37 @@ export default {
                         updatedEvent.waitlist.splice(updatedEvent.usersSignedUp.splice(2, 1)[0])
                         ScheduleDataService.update(schedule.id, schedule)
                     }) */
+      console.log(user);
       return user.userName;
+    },
+    startDrag: (evt, index, list) => {
+      evt.dataTransfer.dropEffect = "move";
+      evt.dataTransfer.effectAllowed = "move";
+      evt.dataTransfer.setData("index", index);
+      evt.dataTransfer.setData("list", list);
+    },
+    onDrop(evt, index, list) {
+      let receiveArr =
+        list == "waitlist"
+          ? this.currentEvent.waitlist
+          : this.currentEvent.usersSignedUp;
+      const sendList = evt.dataTransfer.getData("list");
+      const sendIndex = evt.dataTransfer.getData("index");
+      let sendArr =
+        sendList == "waitlist"
+          ? this.currentEvent.waitlist
+          : this.currentEvent.usersSignedUp;
+      let temp = receiveArr[index];
+    
+      console.log(receiveArr)
+      receiveArr.splice(index, 1);
+      //receiveArr.insert(index, sendArr[sendIndex]);
+      receiveArr.splice(index, 0, sendArr[sendIndex]);
+
+      sendArr.splice(sendIndex, 1);
+      sendArr.splice(sendIndex, 0, temp);
+
+      //sendArr.insert(sendIndex, temp);
     },
     sendEmail(event) {
       var total = event.usersSignedUp.concat(event.waitlist);
@@ -260,19 +302,26 @@ export default {
         });
         }, */
 
-    getCurrentSchedule() {
+    async getCurrentSchedule() {
       ScheduleDataService.getCurrent().then((result) => {
-        let schedule = result.data
+        let schedule = result.data;
         this.currentSchedule = schedule;
+        this.currentSchedule.phoneNumbers.push({
+          dorm: "McIntosh",
+          teacherName: "Ms. Woods",
+          phoneNumber: "(847) 997-0463",
+        });
 
-        schedule.scheduleDays.forEach(day=>{
-          day.events.forEach(e=>{
-            if(e&&e.usersSignedUp.find(user=>user.id==this.currentUser.id))
-            {
-              this.count++
+        schedule.scheduleDays.forEach((day) => {
+          day.events.forEach((e) => {
+            if (
+              e &&
+              e.usersSignedUp.find((user) => user.id == this.currentUser.id)
+            ) {
+              this.count++;
             }
-          })
-        })
+          });
+        });
         /* let updatedSchedule = schedule.scheduleDays.find(
           (e) => e.date === "Saturday"
         );
@@ -289,6 +338,9 @@ export default {
 }); 
         ScheduleDataService.update(schedule.id, schedule); */
       });
+      this.strikes = (
+        await UserDataService.get(this.currentUser.id)
+      ).data.strikes;
     },
     getSchedule(id) {
       ScheduleDataService.get(id).then((response) => {
@@ -296,22 +348,21 @@ export default {
       });
     },
     signUpEvent(event, date) {
-      
-      
-
       this.$message.success("Signed up for " + event.name);
       //doesnt work when two people on at same time
       var waitlist = event.usersSignedUp.length >= event.personLimit;
- 
+
       if (waitlist) {
-        this.$message.info("You're on the waitlist")
+        this.$message.info("You're on the waitlist");
 
         event.waitlist.push(this.currentUser);
-      } else if(this.count>=2){
-        this.$message.info("You have been pushed to the waitlist (3 event limit) ")
-        event.waitlist.push(this.currentUser)
-        }else {
-        this.count++
+      } else if (this.count >= 2) {
+        this.$message.info(
+          "You have been pushed to the waitlist (3 event limit) "
+        );
+        event.waitlist.push(this.currentUser);
+      } else {
+        this.count++;
         event.usersSignedUp.push(this.currentUser);
       }
       ScheduleDataService.get(this.currentSchedule.id).then((response) => {
@@ -334,7 +385,6 @@ export default {
     },
     deleteFromEvent(event, date) {
       if (confirm("Are you sure you want to be removed from the list?")) {
-        
         var i = event.usersSignedUp.findIndex(
           (e) => e.id === this.currentUser.id
         );
@@ -342,7 +392,7 @@ export default {
         if (i == -1) {
           event.waitlist.splice(k, 1);
         } else {
-          this.count--
+          this.count--;
           event.usersSignedUp.splice(i, 1);
         }
         ScheduleDataService.get(this.currentSchedule.id).then((response) => {
@@ -398,6 +448,10 @@ export default {
           )[0].style.display = "none";
         }, 300);
       }
+    },
+    strike(id) {
+      UserDataService.strike(id);
+      this.$message.success("User has been striked!");
     },
   },
   mounted() {

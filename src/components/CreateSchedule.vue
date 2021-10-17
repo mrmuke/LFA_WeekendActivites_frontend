@@ -114,6 +114,19 @@
                                   class="input--style-6" type="text">
                               </div>
                               <div style="width:100%; display:flex; justify-content:center; align-items:center; margin-bottom: 1rem;">
+                                <div class="duty-option">McIntosh:</div>
+                                  <input
+                                  v-model="schedule.phoneNumbers[9].teacherName"
+                                  style="width:37.5%; margin-right: 5%;"
+                                  placeholder="Name"
+                                  class="input--style-6" type="text">
+                                  <input
+                                  v-model="schedule.phoneNumbers[9].phoneNumber"
+                                  style="width:37.5%;"
+                                  placeholder="Number"
+                                  class="input--style-6" type="text">
+                              </div>
+                              <div style="width:100%; display:flex; justify-content:center; align-items:center; margin-bottom: 1rem;">
                                 <div class="duty-option"><input placeholder="SSH/Writing Center/Math Help" v-model="schedule.phoneNumbers[7].dorm" style="border: 1px solid #b4b4b4; width:80%; padding: 6px;"></div>
                                   <input
                                   v-model="schedule.phoneNumbers[7].teacherName"
@@ -252,6 +265,11 @@ export default {
                 dorm:"",
                 teacherName: "",
                 phoneNumber: ""
+              },
+              {
+                dorm:"McIntosh",
+                teacherName:"",
+                phoneNumber:"(847) 997-0463"
               }
             ]
           },

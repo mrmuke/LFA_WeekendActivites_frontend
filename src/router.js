@@ -62,9 +62,12 @@ export default new Router({
             name: "createSchedule",
             component: () =>
                 import ("./components/CreateSchedule"),
-
         },
-        
-        
+        {
+            path: "/strikes",
+            name: "studentStrikes",
+            component: () =>
+                import ("./components/Strikes.vue"),
+        },
     ]
 });

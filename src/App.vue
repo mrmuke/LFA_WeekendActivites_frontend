@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <b-navbar toggleable="lg" type="dark" variant="dark" style="padding:1%;">
+    <b-navbar toggleable="xl" type="dark" variant="dark" style="padding:1%;">
         <b-navbar-brand href="/"><img class = "image" src="../public/img/logo.png"></b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -9,9 +9,9 @@
           <b-navbar-nav> 
             <b-nav-item href="/add"><i class="fa fa-plus-circle mr-2"></i>Request Event</b-nav-item>
             <b-nav-item href="/events"><i class="fa fa-thumbs-up mr-2"></i>Events</b-nav-item>
-
             <b-nav-item :href="'/schedule/'"><i class="fa fa-calendar mr-2"></i>Schedule</b-nav-item>
             <b-nav-item v-if="user && user.admin" href="/schedules"><i class="fa fa-book mr-2"></i>All Schedules</b-nav-item>
+            <b-nav-item v-if="user && user.admin" href="/strikes"><i class="fa fa-strikethrough mr-2"></i>Strikes</b-nav-item>
             
           </b-navbar-nav>
 
