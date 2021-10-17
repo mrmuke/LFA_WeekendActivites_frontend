@@ -273,23 +273,21 @@ export default {
             }
           })
         })
-        /* let schedule=result.data
-        let updatedSchedule = schedule.scheduleDays.find(
-          (e) => e.date === "Friday"
+        /* let updatedSchedule = schedule.scheduleDays.find(
+          (e) => e.date === "Saturday"
         );
         let updatedEvent = updatedSchedule.events.find(
-          (e) => e.name === "Par King Mini Golf – FREE (Wold)*"
+          (e) => e.name === "Old Orchard Mall (Pugliese)*"
         );
-        updatedEvent.waitlist.splice(2,1)
+        updatedEvent.waitlist.splice(14,1)
         updatedEvent.usersSignedUp.push({
-          id: 2,
-          emailAddress: "anna.nikishina@students.lfanet.org",
-          userName: "Anna Nikishina '23",
-          admin: false,
-          picture:
-            "https://lh3.googleusercontent.com/a-/AOh14GiWdgsiI57CfXDtG-FdqMXBDKTiwrrS0QMU16WrbQ=s96-c",
-        }); 
-        ScheduleDataService.update(schedule.id, schedule);*/
+    "id": 17,
+    "emailAddress": "heewoong.kim@students.lfanet.org",
+    "userName": "Heewoong Kim '23",
+    "admin": false,
+    "picture": "https://lh3.googleusercontent.com/-FoSWADIqCZQ/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucmh1iIigSzXDZgPQRsKG1L6L_TPZQ/s96-c/photo.jpg"
+}); 
+        ScheduleDataService.update(schedule.id, schedule); */
       });
     },
     getSchedule(id) {
