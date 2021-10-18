@@ -1,5 +1,5 @@
 <template>
-    <div class = "containerHome">
+    <div class = "containerStrikes">
       <div class="listContainer">
         <div class="listHead">
           <div>Name</div>
@@ -93,7 +93,7 @@ export default {
 h2{
     color:white
 }
-.containerHome{
+.containerStrikes{
   display:flex;
   justify-content: center;
 }

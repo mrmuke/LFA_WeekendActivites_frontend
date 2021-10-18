@@ -244,27 +244,54 @@ export default {
       evt.dataTransfer.setData("list", list);
     },
     onDrop(evt, index, list) {
+
       let receiveArr =
         list == "waitlist"
           ? this.currentEvent.waitlist
           : this.currentEvent.usersSignedUp;
       const sendList = evt.dataTransfer.getData("list");
       const sendIndex = evt.dataTransfer.getData("index");
+      if(sendIndex<index||list!=sendList){
+
+      
       let sendArr =
         sendList == "waitlist"
           ? this.currentEvent.waitlist
           : this.currentEvent.usersSignedUp;
       let temp = receiveArr[index];
-    
-      console.log(receiveArr)
+
       receiveArr.splice(index, 1);
-      //receiveArr.insert(index, sendArr[sendIndex]);
       receiveArr.splice(index, 0, sendArr[sendIndex]);
 
       sendArr.splice(sendIndex, 1);
       sendArr.splice(sendIndex, 0, temp);
+      ScheduleDataService.get(this.currentSchedule.id).then((response) => {
+        let schedule = response.data;
 
-      //sendArr.insert(sendIndex, temp);
+        let updatedSchedule = schedule.scheduleDays.find(
+          (e) => e.date == this.currentDate
+        );
+        let updatedEvent = updatedSchedule.events.find(
+          (e) => e.name === this.currentEvent.name
+        );
+        
+        if(list=="waitlist"){
+          updatedEvent.waitlist=receiveArr
+        }
+        else{
+          updatedEvent.usersSignedUp=receiveArr
+        }
+
+        if(sendList == "waitlist"){
+          updatedEvent.waitlist=sendArr
+        }
+        else{
+          updatedEvent.usersSignedUp=sendArr
+        }
+          
+
+        ScheduleDataService.update(schedule.id, schedule);
+      });}
     },
     sendEmail(event) {
       var total = event.usersSignedUp.concat(event.waitlist);
@@ -316,7 +343,11 @@ export default {
           day.events.forEach((e) => {
             if (
               e &&
-              e.usersSignedUp.find((user) => user.id == this.currentUser.id)
+              e.usersSignedUp.find((user) => {
+                if (user) {
+                  user.id == this.currentUser.id;
+                }
+              })
             ) {
               this.count++;
             }
@@ -416,9 +447,16 @@ export default {
     },
     signedUp(event) {
       return (
-        event.usersSignedUp.filter((e) => e.id === this.currentUser.id).length >
-          0 ||
-        event.waitlist.filter((e) => e.id === this.currentUser.id).length > 0
+        event.usersSignedUp.filter((e) => {
+          if (e) {
+            e.id === this.currentUser.id;
+          }
+        }).length > 0 ||
+        event.waitlist.filter((e) => {
+          if (e) {
+            e.id === this.currentUser.id;
+          }
+        }).length > 0
       );
     },
     showHideDuty() {

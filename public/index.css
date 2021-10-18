@@ -17,9 +17,26 @@ body {
     margin:0px !important;
 }
 .containerHome {
-    background-color: #343a40;
+    background-image: 
+    linear-gradient(
+      rgba(0, 0, 0, 0.1),
+      rgba(0, 0, 0, 0.1)
+    ),
+    url("img/lfa_background_3.JPG");
     overflow: auto;
-       width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    height: 100%;
+    width: 100%;
+/*     opacity:0.9; */
+    position: absolute;
+}
+.containerStrikes {
+    background-color:#494949;
+    overflow: auto;
+
+    width: 100%;
 /*     opacity:0.9; */
 }
 
