@@ -446,17 +446,12 @@ export default {
       }
     },
     signedUp(event) {
+      let signed = event.usersSignedUp.filter(e => e.id === this.currentUser.id
+          ).length > 0 ||
+        event.waitlist.filter(e => e.id === this.currentUser.id
+        ).length > 0
       return (
-        event.usersSignedUp.filter((e) => {
-          if (e) {
-            e.id === this.currentUser.id;
-          }
-        }).length > 0 ||
-        event.waitlist.filter((e) => {
-          if (e) {
-            e.id === this.currentUser.id;
-          }
-        }).length > 0
+        signed
       );
     },
     showHideDuty() {
