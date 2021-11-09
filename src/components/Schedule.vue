@@ -94,7 +94,7 @@
                 <div   v-for="(user, index) in currentEvent.usersSignedUp" 
                 @drop='onDrop($event, index,"list")' @dragover.prevent
       @dragenter.prevent
-                draggable
+                
         @dragstart='startDrag($event, index,"list")' :key="index"> 
                 <strong>{{index+1}}.</strong> {{getFullName(user)}} <button v-if="currentUser.admin" @click="bumpToEnd(index)" style="border:0px">Bump to Waitlist</button><button v-if="currentUser.admin" @click="strike(user.id)" style="border:0px; margin-left: 10px; background-color:red; color:white">Strike!</button>
                 <div style="width:100%; display:flex; justify-content:center; padding-top: 0.5em;">
@@ -244,7 +244,8 @@ export default {
       evt.dataTransfer.setData("list", list);
     },
     onDrop(evt, index, list) {
-
+      if(this.currentUser.admin){
+        
       let receiveArr =
         list == "waitlist"
           ? this.currentEvent.waitlist
@@ -292,6 +293,8 @@ export default {
 
         ScheduleDataService.update(schedule.id, schedule);
       });}
+      
+      }
     },
     sendEmail(event) {
       var total = event.usersSignedUp.concat(event.waitlist);
