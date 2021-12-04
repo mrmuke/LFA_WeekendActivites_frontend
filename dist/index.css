@@ -32,6 +32,13 @@ body {
 /*     opacity:0.9; */
     position: absolute;
 }
+.containerStrikes {
+    background-color:#494949;
+    overflow: auto;
+
+    width: 100%;
+/*     opacity:0.9; */
+}
 
 
 .title {

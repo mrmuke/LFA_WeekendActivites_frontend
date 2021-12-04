@@ -342,6 +342,26 @@ export default {
           phoneNumber: "(847) 997-0463",
         });
 
+        for(let day of schedule.scheduleDays){
+          for(let event of day.events){
+
+            var i = event.usersSignedUp.indexOf(null);
+            while(i != -1) {
+              event.usersSignedUp.splice(i, 1);
+              i = event.usersSignedUp.indexOf(null);
+            }
+
+            i = event.waitlist.indexOf(null);
+            while(i != -1) {
+              event.waitlist.splice(i, 1);
+              i = event.waitlist.indexOf(null);
+            }
+
+          }
+        }
+
+        console.log(schedule);
+
         schedule.scheduleDays.forEach((day) => {
           day.events.forEach((e) => {
             if (
