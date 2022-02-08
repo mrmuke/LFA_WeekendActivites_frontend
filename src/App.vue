@@ -36,6 +36,8 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 import { eventBus } from './main.js';
 import Vue from 'vue'
+window.Vue = Vue;
+
 import BootstrapVue from 'bootstrap-vue'
 Vue.use(BootstrapVue)
 
