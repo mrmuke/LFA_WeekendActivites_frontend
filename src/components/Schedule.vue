@@ -89,9 +89,10 @@
 </div></div><modal name="event-details">
     <div style="width:100%;height:95%;padding:10px; display:flex;flex-direction:column; overflow:auto;" v-if="currentEvent">
         <div style="width:100%; display:flex; flex-direction:column; align-items:center;">
-            <div style="width: 100%; background-color: #f7931e; color: white; font-weight:600; font-size: 1.25em; padding: 0.25em 0em; text-align:center; border-radius: 0.2em;">Users Signed Up</div>
-            <div style="width: 95%; margin-top: 1em;" >
-                <div   v-for="(user, index) in currentEvent.usersSignedUp" 
+            <div v-if="!history" style="width: 100%; background-color: #f7931e; color: white; font-weight:600; font-size: 1.25em; padding: 0.25em 0em; text-align:center; border-radius: 0.2em;">Users Signed Up</div>
+            <div v-if="history" style="width: 100%; background-color: #f7931e; color: white; font-weight:600; font-size: 1.25em; padding: 0.25em 0em; text-align:center; border-radius: 0.2em;">History</div>
+            <div style="width: 95%; margin-top: 1em;" v-if="!history">
+                <div v-for="(user, index) in currentEvent.usersSignedUp" 
                 @drop='onDrop($event, index,"list")' @dragover.prevent
       @dragenter.prevent
                 draggable
@@ -113,13 +114,23 @@
                     <div style="width: 93%; border-bottom: 1.5px solid black"></div>
                 </div></div>
 </div>
+      <div style="width: 95%; margin-top: 1em;" v-if="history">
+        <div v-for="(user, index) in currentEvent.unsignedUp" :key="index"> 
+        <strong>{{index+1}}.</strong> {{getFullName(user)}} - {{user.dateString}}
+        <div style="width:100%; display:flex; justify-content:center; padding-top: 0.5em;">
+            <div style="width: 93%; border-bottom: 1.5px solid black"></div>
+        </div></div>
+      </div>
         </div>
-        <div style="justify-content:space-between;display:flex;margin:5px">
+        <div style="justify-content:space-between;display:flex;margin:5px" v-if="!history">
             <textarea v-if="currentUser.admin" style="flex:1;margin-right:10px;padding:7px" placeholder="Optional Message.." v-model="message"></textarea>
-        <div class="wrap" style="width:50%" v-if="currentUser.admin">
-        <div class="button" @click= "sendEmail(currentEvent)">Notify Participants</div>
-        
-    </div></div>
+            <div class="wrap" style="width:50%" v-if="currentUser.admin">
+              <div class="button" @click= "sendEmail(currentEvent)">Notify Participants</div>
+            </div>
+        </div>
+
+        <div class="show-signup-history" v-if="currentUser.admin && !history" @click="changeHistory()">Unsign Up History</div>
+        <div style="margin-top:10px;" class="show-signup-history" v-if="currentUser.admin && history" @click="backHistory()">Back</div>
     
     </div>
     
@@ -153,6 +164,7 @@ export default {
       displayOnDuty: false,
       count: 0,
       strikes: 0,
+      history: false,
     };
   },
   computed: {},
@@ -244,56 +256,50 @@ export default {
       evt.dataTransfer.setData("list", list);
     },
     onDrop(evt, index, list) {
-      if(this.currentUser.admin){
-        
-      let receiveArr =
-        list == "waitlist"
-          ? this.currentEvent.waitlist
-          : this.currentEvent.usersSignedUp;
-      const sendList = evt.dataTransfer.getData("list");
-      const sendIndex = evt.dataTransfer.getData("index");
-      if(sendIndex<index||list!=sendList){
+      if (this.currentUser.admin) {
+        let receiveArr =
+          list == "waitlist"
+            ? this.currentEvent.waitlist
+            : this.currentEvent.usersSignedUp;
+        const sendList = evt.dataTransfer.getData("list");
+        const sendIndex = evt.dataTransfer.getData("index");
+        if (sendIndex < index || list != sendList) {
+          let sendArr =
+            sendList == "waitlist"
+              ? this.currentEvent.waitlist
+              : this.currentEvent.usersSignedUp;
+          let temp = receiveArr[index];
 
-      
-      let sendArr =
-        sendList == "waitlist"
-          ? this.currentEvent.waitlist
-          : this.currentEvent.usersSignedUp;
-      let temp = receiveArr[index];
+          receiveArr.splice(index, 1);
+          receiveArr.splice(index, 0, sendArr[sendIndex]);
 
-      receiveArr.splice(index, 1);
-      receiveArr.splice(index, 0, sendArr[sendIndex]);
+          sendArr.splice(sendIndex, 1);
+          sendArr.splice(sendIndex, 0, temp);
+          ScheduleDataService.get(this.currentSchedule.id).then((response) => {
+            let schedule = response.data;
 
-      sendArr.splice(sendIndex, 1);
-      sendArr.splice(sendIndex, 0, temp);
-      ScheduleDataService.get(this.currentSchedule.id).then((response) => {
-        let schedule = response.data;
+            let updatedSchedule = schedule.scheduleDays.find(
+              (e) => e.date == this.currentDate
+            );
+            let updatedEvent = updatedSchedule.events.find(
+              (e) => e.name === this.currentEvent.name
+            );
 
-        let updatedSchedule = schedule.scheduleDays.find(
-          (e) => e.date == this.currentDate
-        );
-        let updatedEvent = updatedSchedule.events.find(
-          (e) => e.name === this.currentEvent.name
-        );
-        
-        if(list=="waitlist"){
-          updatedEvent.waitlist=receiveArr
+            if (list == "waitlist") {
+              updatedEvent.waitlist = receiveArr;
+            } else {
+              updatedEvent.usersSignedUp = receiveArr;
+            }
+
+            if (sendList == "waitlist") {
+              updatedEvent.waitlist = sendArr;
+            } else {
+              updatedEvent.usersSignedUp = sendArr;
+            }
+
+            ScheduleDataService.update(schedule.id, schedule);
+          });
         }
-        else{
-          updatedEvent.usersSignedUp=receiveArr
-        }
-
-        if(sendList == "waitlist"){
-          updatedEvent.waitlist=sendArr
-        }
-        else{
-          updatedEvent.usersSignedUp=sendArr
-        }
-          
-
-        ScheduleDataService.update(schedule.id, schedule);
-      });}
-      
       }
     },
     sendEmail(event) {
@@ -342,21 +348,19 @@ export default {
           phoneNumber: "(847) 997-0463",
         });
 
-        for(let day of schedule.scheduleDays){
-          for(let event of day.events){
-
+        for (let day of schedule.scheduleDays) {
+          for (let event of day.events) {
             var i = event.usersSignedUp.indexOf(null);
-            while(i != -1) {
+            while (i != -1) {
               event.usersSignedUp.splice(i, 1);
               i = event.usersSignedUp.indexOf(null);
             }
 
             i = event.waitlist.indexOf(null);
-            while(i != -1) {
+            while (i != -1) {
               event.waitlist.splice(i, 1);
               i = event.waitlist.indexOf(null);
             }
-
           }
         }
 
@@ -438,6 +442,8 @@ export default {
       this.showModal(event, date);
     },
     deleteFromEvent(event, date) {
+      console.log("event");
+      console.log(event);
       if (confirm("Are you sure you want to be removed from the list?")) {
         var i = event.usersSignedUp.findIndex(
           (e) => e.id === this.currentUser.id
@@ -448,6 +454,18 @@ export default {
         } else {
           this.count--;
           event.usersSignedUp.splice(i, 1);
+          if(typeof event.unsignedUp === "undefined"){
+            event.unsignedUp = [{
+              userName:this.currentUser.userName,
+              dateString: (new Date()).toLocaleString()
+            }]
+          } else {
+            event.unsignedUp.push({
+              userName:this.currentUser.userName,
+              dateString: (new Date()).toLocaleString()
+            })
+
+          }
         }
         ScheduleDataService.get(this.currentSchedule.id).then((response) => {
           let schedule = response.data;
@@ -469,13 +487,11 @@ export default {
       }
     },
     signedUp(event) {
-      let signed = event.usersSignedUp.filter(e => e.id === this.currentUser.id
-          ).length > 0 ||
-        event.waitlist.filter(e => e.id === this.currentUser.id
-        ).length > 0
-      return (
-        signed
-      );
+      let signed =
+        event.usersSignedUp.filter((e) => e.id === this.currentUser.id).length >
+          0 ||
+        event.waitlist.filter((e) => e.id === this.currentUser.id).length > 0;
+      return signed;
     },
     showHideDuty() {
       this.displayOnDuty = !this.displayOnDuty;
@@ -509,6 +525,12 @@ export default {
       UserDataService.strike(id);
       this.$message.success("User has been striked!");
     },
+    changeHistory() {
+      this.history = true;
+    },
+    backHistory(){
+      this.history = false;
+    }
   },
   mounted() {
     if (this.currentUser == null) {
@@ -691,5 +713,23 @@ ul {
   width: 34%;
   border: 1px solid #eee;
   padding: 5px;
+}
+.show-signup-history {
+  background-color: #f7931e;
+  padding: 15px;
+  margin: 5px;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 5px;
+  min-height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.show-signup-history:hover {
+  background-color: #f37121;
 }
 </style>
