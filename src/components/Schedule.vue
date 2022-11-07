@@ -407,6 +407,7 @@ export default {
     },
     signUpEvent(event, date) {
       this.$message.success("Signed up for " + event.name);
+      this.$message.info("Refresh the site to verify your place on the list");
       //doesnt work when two people on at same time
       var waitlist = event.usersSignedUp.length >= event.personLimit;
 
