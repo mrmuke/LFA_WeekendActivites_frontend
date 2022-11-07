@@ -454,18 +454,13 @@ export default {
         } else {
           this.count--;
           event.usersSignedUp.splice(i, 1);
-          if(typeof event.unsignedUp === "undefined"){
-            event.unsignedUp = [{
-              userName:this.currentUser.userName,
-              dateString: (new Date()).toLocaleString()
-            }]
-          } else {
-            event.unsignedUp.push({
-              userName:this.currentUser.userName,
-              dateString: (new Date()).toLocaleString()
-            })
+            
+          event.unsignedUp.push({
+            userName:this.currentUser.userName,
+            dateString: (new Date()).toLocaleString()
+          })
 
-          }
+          
         }
         ScheduleDataService.get(this.currentSchedule.id).then((response) => {
           let schedule = response.data;
@@ -479,6 +474,10 @@ export default {
             updatedEvent.waitlist.splice(k, 1);
           } else {
             updatedEvent.usersSignedUp.splice(i, 1);
+            updatedEvent.unsignedUp.push({
+              userName:this.currentUser.userName,
+              dateString: (new Date()).toLocaleString()
+            })
           }
           ScheduleDataService.update(schedule.id, schedule);
         });
