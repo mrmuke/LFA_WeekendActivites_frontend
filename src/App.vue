@@ -56,7 +56,7 @@ export default{
       }
     },
     created() {
-        if (window.location.protocol !== 'https:') window.location.href = 'https://wa.lfaapps.com'
+        if (!window.location.includes("http://localhost:8081")&&window.location.protocol !== 'https:') window.location.href = 'https://wa.lfaapps.com'
         eventBus.$on('userSet', () => {this.user=JSON.parse(localStorage.getItem('user'))});
     },
     
