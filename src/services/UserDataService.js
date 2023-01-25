@@ -1,10 +1,11 @@
 import axios from "axios";
+import BASE_URL from "../../BASE_URL";
 import http from "../http-common";
 
 class UserDataService {
     create(data) {
         return axios.create({
-		baseURL: /* "http://localhost:8080/api" */ "https://lfawa-api.herokuapp.com/api",
+		baseURL: BASE_URL,
             headers: {
               "Content-type": "application/json",
               "id":data

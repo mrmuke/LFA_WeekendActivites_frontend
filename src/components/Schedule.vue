@@ -250,10 +250,13 @@ export default {
       return user.userName;
     },
     startDrag: (evt, index, list) => {
-      evt.dataTransfer.dropEffect = "move";
+      if(this.currentUser.admin){
+        evt.dataTransfer.dropEffect = "move";
       evt.dataTransfer.effectAllowed = "move";
       evt.dataTransfer.setData("index", index);
       evt.dataTransfer.setData("list", list);
+      }
+      
     },
     onDrop(evt, index, list) {
       if (this.currentUser.admin) {
@@ -410,7 +413,6 @@ export default {
       this.$message.info("Refresh the site to verify your place on the list");
       //doesnt work when two people on at same time
       var waitlist = event.usersSignedUp.length >= event.personLimit;
-
       if (waitlist) {
         this.$message.info("You're on the waitlist");
 

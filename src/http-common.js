@@ -1,7 +1,8 @@
 
 import axios from "axios";
+import BASE_URL from "../BASE_URL";
 export default axios.create({
-	baseURL: /* "http://localhost:8080/api"  */ "https://lfawa-api.herokuapp.com/api" ,
+	baseURL: BASE_URL,
   headers:{
     "Content-type":"application/json",
     "token":localStorage.getItem("token")
