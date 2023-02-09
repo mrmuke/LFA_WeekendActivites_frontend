@@ -95,7 +95,7 @@
                 <div v-for="(user, index) in currentEvent.usersSignedUp" 
                 @drop='onDrop($event, index,"list")' @dragover.prevent
       @dragenter.prevent
-                draggable
+                :draggable="currentUser.admin"
         @dragstart='startDrag($event, index,"list")' :key="index"> 
                 <strong>{{index+1}}.</strong> {{getFullName(user)}} <button v-if="currentUser.admin" @click="bumpToEnd(index)" style="border:0px">Bump to Waitlist</button><button v-if="currentUser.admin" @click="strike(user.id)" style="border:0px; margin-left: 10px; background-color:red; color:white">Strike!</button>
                 <div style="width:100%; display:flex; justify-content:center; padding-top: 0.5em;">
@@ -106,7 +106,7 @@
             
             @drop='onDrop($event, index,"waitlist")' @dragover.prevent
       @dragenter.prevent
-                draggable
+                :draggable="currentUser.admin"
         @dragstart='startDrag($event, index,"waitlist")' :key="index">
                 
                 <strong>{{index+1}}.</strong> {{getFullName(user)}} 
@@ -146,14 +146,9 @@ Vue.use(VModal);
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
 import UserDataService from "../services/UserDataService";
-/* import draggable from 'vuedraggable'
- */
 Vue.config.productionTip = false;
 Vue.use(Antd);
 export default {
-  /* components:{
-        draggable
-    }, */
   data() {
     return {
       currentSchedule: null,
@@ -238,24 +233,15 @@ export default {
       return [];
     },
     getFullName(user) {
-      /*  ScheduleDataService.get(this.currentSchedule.id)
-                    .then(response=>{
-                        let schedule= response.data
-                        let updatedSchedule = schedule.scheduleDays.find(e=>e.date==this.currentDate)
-                        let updatedEvent = updatedSchedule.events.find(e=>e.name===this.currentEvent.name)
-                        updatedEvent.waitlist.splice(updatedEvent.usersSignedUp.splice(2, 1)[0])
-                        ScheduleDataService.update(schedule.id, schedule)
-                    }) */
-      console.log(user);
+      
       return user.userName;
     },
     startDrag: (evt, index, list) => {
-      if(this.currentUser.admin){
         evt.dataTransfer.dropEffect = "move";
       evt.dataTransfer.effectAllowed = "move";
       evt.dataTransfer.setData("index", index);
       evt.dataTransfer.setData("list", list);
-      }
+      
       
     },
     onDrop(evt, index, list) {
@@ -383,21 +369,7 @@ export default {
             }
           });
         });
-        /* let updatedSchedule = schedule.scheduleDays.find(
-          (e) => e.date === "Saturday"
-        );
-        let updatedEvent = updatedSchedule.events.find(
-          (e) => e.name === "Old Orchard Mall (Pugliese)*"
-        );
-        updatedEvent.waitlist.splice(14,1)
-        updatedEvent.usersSignedUp.push({
-    "id": 17,
-    "emailAddress": "heewoong.kim@students.lfanet.org",
-    "userName": "Heewoong Kim '23",
-    "admin": false,
-    "picture": "https://lh3.googleusercontent.com/-FoSWADIqCZQ/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucmh1iIigSzXDZgPQRsKG1L6L_TPZQ/s96-c/photo.jpg"
-}); 
-        ScheduleDataService.update(schedule.id, schedule); */
+       
       });
       this.strikes = (
         await UserDataService.get(this.currentUser.id)
