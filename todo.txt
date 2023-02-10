@@ -7,5 +7,6 @@ Show message to conatct teacher when 3 strikes instead of removing button
 Delete seniors at end of year
 Unsignup people should bump people on waitlist to list automatically
 Don't display everyone on strikes
+Redefine bump to waitlist work better first and bump to list end?
 
 Clean code + documentation
