@@ -507,16 +507,13 @@ export default {
     }
   },
   mounted() {
-    if (this.currentUser == null) {
-      this.$message.error("Sign in to access this page");
-      window.location.href = "/";
-    } else {
+
       if (this.$route.params.id) {
         this.getSchedule(this.$route.params.id);
       } else {
         this.getCurrentSchedule();
       }
-    }
+    
   },
 };
 </script>

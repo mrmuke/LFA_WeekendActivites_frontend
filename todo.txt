@@ -8,5 +8,8 @@ Delete seniors at end of year
 Unsignup people should bump people on waitlist to list automatically
 Don't display everyone on strikes
 Redefine bump to waitlist work better first and bump to list end?
+Authentication for admins proper (disable change cookies) -- don't use localStorage.getItem('user')
+(https://www.bezkoder.com/spring-boot-vue-js-authentication-jwt-spring-security/)
+Carousel weird skipping
 
 Clean code + documentation

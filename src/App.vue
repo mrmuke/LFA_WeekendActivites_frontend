@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <b-navbar toggleable="xl" type="dark" variant="dark" style="padding:1%;">
-        <b-navbar-brand href="/"><img class = "image" src="../public/img/logo.png"></b-navbar-brand>
+        <b-navbar-brand href="/"><img class = "image" src="./assets/img/logo.png"></b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -58,6 +58,7 @@ export default{
     created() {
         if (window.location.protocol !== 'https:'&&window.location.href.includes("wa.lfaapps.com")) window.location.href = 'https://wa.lfaapps.com'
         eventBus.$on('userSet', () => {this.user=JSON.parse(localStorage.getItem('user'))});
+        
     },
     
 }

@@ -52,14 +52,9 @@ export default {
       }
     },
     mounted() {
-      if(!(JSON.parse(localStorage.getItem("user"))&&JSON.parse(localStorage.getItem("user")).admin))
-      {
-        this.$message.error("Sign in as an admin to access this page...")
-        this.$router.push('/')
-      }
-      else{
+      
         this.getUsers();
-      }
+      
     }
 }
 </script>

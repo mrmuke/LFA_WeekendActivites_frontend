@@ -355,11 +355,6 @@ export default {
     },
 
     mounted(){
-        if(JSON.parse(localStorage.getItem("user"))==null ||JSON.parse(localStorage.getItem("user")).admin==false)
-        {
-           this.$message.error("Sign in as an admin to access this page...")
-           window.location.href="/"
-        }
         if(this.$route.params.id){
           this.edit=true
           this.getSchedule(this.$route.params.id)

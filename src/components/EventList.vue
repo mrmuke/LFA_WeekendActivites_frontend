@@ -234,15 +234,10 @@ export default {
   },
 
   mounted() {
-    if(this.currentUser==null)
-    {
-       this.$message.error("Sign in to access this page")
-       this.$router.push('/')
-    }
-    else{ 
+
       this.getCurrentUser()
     this.retrieveEvents();
-    }
+    
   },
 };
 </script>

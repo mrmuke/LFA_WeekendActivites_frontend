@@ -191,4 +191,5 @@ export default {
 h2{
     color:white
 }
+
 </style>

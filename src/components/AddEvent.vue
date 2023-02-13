@@ -149,16 +149,8 @@ export default {
 
     },
   mounted(){
-    if(JSON.parse(localStorage.getItem("user"))==null)
-    {
-        this.$message.error("Sign in to access this page")
-        this.$router.push('/')
-    }
-    else{
-      this.getEvents()
-    }
-
-
+    
+    this.getEvents()
   }
 };
 </script>

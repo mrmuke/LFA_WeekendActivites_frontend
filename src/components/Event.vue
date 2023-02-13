@@ -86,13 +86,7 @@ export default {
     }
   },
   mounted() {
-    
-
-    if(!JSON.parse(localStorage.getItem("user"))||JSON.parse(localStorage.getItem("user")).admin==false){
-       this.$message.error("Admin permission denied...")
-       window.location.replace("/")
-    }
-    else{this.getEvent(this.$route.params.id);}
+    this.getEvent(this.$route.params.id);
     
   }
 };
