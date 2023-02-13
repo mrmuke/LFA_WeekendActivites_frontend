@@ -12,4 +12,4 @@ Authentication for admins proper (disable change cookies) -- don't use localStor
 (https://www.bezkoder.com/spring-boot-vue-js-authentication-jwt-spring-security/)
 Carousel weird skipping
 
-Clean code + documentation
+Clean code and documentation
