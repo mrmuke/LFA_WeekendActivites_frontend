@@ -8,6 +8,7 @@
       <i class="fa fa-search" style="background:#efefef; border-top-left-radius:10px; border-bottom-left-radius:10px;display:flex; align-items:center;width:5%;height:35px; justify-content:center;"></i>
         <input type="text" style="width:50%;height:35px;border-top-left-radius:0px; border-bottom-left-radius:0px;" class="form-control" placeholder="Search by name"
           v-model="name"/>
+          <!-- Sort events by popularity, date, and name -->
       <div style="color:white;display:flex;white-space: nowrap;" class="ml-3">
       <select class="form-control" v-model="orderBy" >
                 <option  value="1">Popularity</option>
@@ -16,7 +17,7 @@
               </select>
       </div>
     </div>
-    
+    <!-- Event timeslots and upvtoes -->
       <ul style="display:flex;flex-wrap:wrap;" class="event-list-ul">
         
         <li class="event-list-item"
@@ -43,6 +44,7 @@
           
           </div>
       <div class="p-l-6 p-r-6 pb-4 pt-4">
+        <!-- Upvote or downvote event -->
         <div class="wrap" v-if="!loading">
               <div class="button downvote" v-on:click="down(event)" v-if="upVoteExists(event)"><i class="fa fa-arrow-down"></i>DOWN VOTE</div>
               <div class="button" v-on:click="upvote(event)" v-else><i class="fa fa-arrow-up"></i>VOTE UP</div>
@@ -64,7 +66,7 @@
       </ul>
 
   </div></div>
-
+  <!-- Modal show event information -->
   <div id="modal" style="min-height:100vh;width:100%; position:fixed; top: 0px; left:0px; display: none; justify-content: center">
     <div style="height:100%; width:100%; background-color:black; position: absolute; top: 0px; opacity:0.5;" v-on:click="closeModal()">
     </div>
@@ -100,9 +102,7 @@ export default {
     return {
       events: [],
       currentUser:JSON.parse(localStorage.getItem("user")),
-      currentIndex: -1,
       name: "",
-      index:-1,
       orderBy:"1",
       currentEvent:null,
       loading:false
@@ -111,6 +111,7 @@ export default {
     };
   },
   computed: {
+    /* Option 1: Filter by upvotes, option 2: filter by time, option 3: filter alphabetically */
       filteredEvents() {
         if(this.orderBy==="1")
         {
@@ -124,11 +125,10 @@ export default {
         {
           return this.events.filter(event => {
           return event.name.toLowerCase().includes(this.name.toLowerCase())
-        }).sort(function(a,b) {
-  a = a.timeSlot.split('-').join('');
-  b = b.timeSlot.split('-').join('');
-  return a > b ? 1 : a < b ? -1 : 0;
-  // return a.localeCompare(b);         // <-- alternative 
+                }).sort(function(a,b) {
+          a = a.timeSlot.split('-').join('');
+          b = b.timeSlot.split('-').join('');
+          return a > b ? 1 : a < b ? -1 : 0;
 });
         }
         else{
@@ -149,6 +149,7 @@ export default {
   },
   methods: {
     showModal(event){
+      /* Select current event and show modal */
       this.currentEvent=event;
   
         document.getElementById('modal').style.display = "flex";
@@ -158,12 +159,14 @@ export default {
       document.getElementById('modal').style.display = "none";
     },
     upVoteExists(event){
+      /* If event is upvoted by user */
         if(event.upvotes.some(e=>e===this.currentUser.emailAddress)){
           return true
         }
         return false;
       },
-    getCurrentUser(){
+      //TEMPORARY (will be fixed by vuex): Update current user for latest upvotes
+      getCurrentUser(){
          UserDataService.get(this.currentUser.id)
                  .then(response => {
                    this.currentUser = response.data;
@@ -175,7 +178,7 @@ export default {
 
     },
     retrieveEvents() {
-
+      /* Get all events */
       EventDataService.getAll()
         .then(response => {
           this.events = response.data;
@@ -187,6 +190,7 @@ export default {
           console.log(e);
         });
     },
+    /* Upvote/downvote events */
     upvote(event){
       this.$message.success("Upvoted " + event.name)
         event.upvotes.push(this.currentUser.emailAddress);
@@ -234,7 +238,7 @@ export default {
   },
 
   mounted() {
-
+      /* Retrieve events on page load */
       this.getCurrentUser()
     this.retrieveEvents();
     

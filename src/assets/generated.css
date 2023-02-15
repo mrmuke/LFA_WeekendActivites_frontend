@@ -67,7 +67,7 @@
       rgba(0, 0, 0, 0.5),
       rgba(0, 0, 0, 0.5)
     ),
-    url(/img/background-wave.jpg);
+    url(./img/background-wave.jpg);
   background-size:cover
 }
 

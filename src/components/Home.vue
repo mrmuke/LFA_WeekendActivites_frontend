@@ -86,7 +86,6 @@
 
 
 </template>
-<!-- ADD SIGN OUT WHEN NOT LFA EMAIL -->
 <script>
 import { eventBus } from '../main.js';
 import Vue from 'vue'

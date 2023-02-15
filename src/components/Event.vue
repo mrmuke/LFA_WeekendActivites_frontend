@@ -1,5 +1,6 @@
 <template>
 <div class="event-body">
+  <!-- View event basic info -->
 <div style="max-width:900px;margin:auto;color:white;border-radius:10px;display:flex;justify-content:center;text-align:center;">
   <div v-if="currentEvent" class="edit-form" style="padding:10px;">
     <h1 style="color:white"><span class="orange-underline">{{currentEvent.name}}</span></h1>
@@ -20,7 +21,7 @@
            <label><strong>Requested By:</strong></label> {{ currentEvent.requested.emailAddress }}
       </div>
 
-    
+    <!-- Event actions: delete and udpate event -->
     <button class="default-yellow" 
       @click="deleteEvent"
     >
@@ -53,6 +54,7 @@ export default {
     };
   },
   methods: {
+    /* Get event by id */
     getEvent(id) {
       EventDataService.get(id)
         .then(response => {
@@ -62,7 +64,7 @@ export default {
           console.log(e);
         });
     },
-
+    /* Update event with info */
     updateEvent() {
       EventDataService.update(this.currentEvent.id, this.currentEvent)
         .then(() => {
@@ -72,7 +74,7 @@ export default {
           console.log(e);
         });
     },
-
+    /* Delete event */
     deleteEvent() {
       EventDataService.delete(this.currentEvent.id)
         .then(() => {
@@ -86,6 +88,7 @@ export default {
     }
   },
   mounted() {
+    /* Get current event from url id */
     this.getEvent(this.$route.params.id);
     
   }
