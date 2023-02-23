@@ -11,5 +11,6 @@ Redefine bump to waitlist work better first and bump to list end?
 Authentication for admins proper (disable change cookies) -- don't use localStorage.getItem('user')
 (https://www.bezkoder.com/spring-boot-vue-js-authentication-jwt-spring-security/) (update current user when load for multiple devices issue)
 Carousel weird skipping
+Socket realtime weekend sign ups
 
 Clean code and documentation

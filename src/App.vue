@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <b-navbar toggleable="xl" type="dark" variant="dark" style="padding:1%;">
-        <b-navbar-brand href="/"><img class = "image" src="./assets/img/logo.png"></b-navbar-brand>
+        <b-navbar-brand href="/"><img class = "image" src="/img/logo.png"></b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 

@@ -1,18 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import url('https://fonts.googleapis.com/css?family=Cardo:400,700|Oswald');
-@font-face {
-    font-family: Poppins;
-    src: url(/fonts/poppins.regular.ttf) format('truetype');
-    font-weight: bold;
-}
 
-* {
-    box-sizing: border-box
-}
-
-body {
-    font-family: Poppins !important;
-}
 .form-row{
     margin:0px !important;
 }
@@ -22,7 +10,7 @@ body {
       rgba(0, 0, 0, 0.1),
       rgba(0, 0, 0, 0.1)
     ),
-    url("./img/lfa_background_3.jpg");
+    url("/img/lfa_background_3.jpg");
     overflow: auto;
     background-size: cover;
     background-repeat: no-repeat;
