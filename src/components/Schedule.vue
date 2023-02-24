@@ -5,47 +5,19 @@
     <div style="text-align:center">
             <h1 style="color:white"><span class="orange-underline">{{currentSchedule.date}}</span></h1>
     </div>
+    <!-- Loop through phone numbers and display them -->
     <div class="phoneNumbers">
         <div class="phoneNumbers-header" v-on:click="showHideDuty()">On Duty This Weekend<i v-if="!displayOnDuty" style="margin-left:1em; position:relative; top:0.2em;" class="fa fa-caret-up"></i><i v-if="displayOnDuty" style="margin-left:1em; position:relative; top:0.2em;" class="fa fa-caret-down"></i></div>
         <div class="phoneNumbers-content">
-            <div class="phoneNumebrs-row">
-                <div class="phoneNumbers-item">
-                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[0].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[0].teacherName}}</span><span>{{currentSchedule.phoneNumbers[0].phoneNumber}}</span>
-                </div>
-                <div class="phoneNumbers-item">
-                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[1].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[1].teacherName}}</span><span>{{currentSchedule.phoneNumbers[1].phoneNumber}}</span>
-                </div>
-                <div class="phoneNumbers-item">
-                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[2].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[2].teacherName}}</span><span>{{currentSchedule.phoneNumbers[2].phoneNumber}}</span>
-                </div>
-                <div class="phoneNumbers-item">
-                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[9].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[9].teacherName}}</span><span>{{currentSchedule.phoneNumbers[9].phoneNumber}}</span>
-                </div>
+            <div class="phoneNumbers-row" v-for="index in 3" :key="index">
+            <div class="phoneNumbers-item" v-for="(phone,index2) in splitPhoneNumbers[index-1]" :key="index2">
+                <b style="margin-right:1em;">{{phone.dorm}}:</b><span style="margin-right:1em;">{{phone.teacherName}}</span><span>{{phone.phoneNumber}}</span></div>
+              
             </div>
-            <div class="phoneNumebrs-row">
-                <div class="phoneNumbers-item">
-                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[3].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[3].teacherName}}</span><span>{{currentSchedule.phoneNumbers[3].phoneNumber}}</span>
-                </div>
-                <div class="phoneNumbers-item">
-                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[4].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[4].teacherName}}</span><span>{{currentSchedule.phoneNumbers[4].phoneNumber}}</span>
-                </div>
-                <div class="phoneNumbers-item">
-                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[5].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[5].teacherName}}</span><span>{{currentSchedule.phoneNumbers[5].phoneNumber}}</span>
-                </div>
-            </div>
-            <div class="phoneNumebrs-row">
-                <div class="phoneNumbers-item">
-                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[6].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[6].teacherName}}</span><span>{{currentSchedule.phoneNumbers[6].phoneNumber}}</span>
-                </div>
-                <div class="phoneNumbers-item">
-                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[7].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[7].teacherName}}</span><span>{{currentSchedule.phoneNumbers[7].phoneNumber}}</span>
-                </div>
-                <div class="phoneNumbers-item">
-                    <b style="margin-right:1em;">{{currentSchedule.phoneNumbers[8].dorm}}:</b><span style="margin-right:1em;">{{currentSchedule.phoneNumbers[8].teacherName}}</span><span>{{currentSchedule.phoneNumbers[8].phoneNumber}}</span>
-                </div>
-            </div>
+           
         </div>
     </div>
+    <!-- Event details -->
     <div class="schedule-container">
         <div v-for="(day, i) in currentSchedule.scheduleDays" :key="i" class="schedule-day">
         <h2 style="padding: 20px 40px;text-align: center;background: #3a3737;color: #fff"><span>{{day.date}}</span></h2>
@@ -57,7 +29,7 @@
             </ul>
         </div>
     </div>
-
+    <!-- Sign up event details -->
     <div style="display:flex; flex-wrap:wrap;">
            <div v-for="(event, i) in filtered()" :key="i" class="event-signup-item">
                <div  class="flex shadow-sm border justify-content-center text-center align-items-center h-screen m-1 rounded p-3" style="background:white;" >
@@ -78,20 +50,24 @@
                     </div>
                     </div>
                     </div>
+                    <!-- If user has strikes don't let them sign up -->
                 <div class="p-l-6 p-r-6 pb-4" v-if="strikes < 3">
                     <div class="wrap">
                          <div class="button" v-if="!signedUp(event.info)" @click="signUpEvent(event.info, event.date)">Sign Up</div><div class ="button signedup" v-else @click="deleteFromEvent(event.info, event.date)">Signed Up</div>
-                        <!-- <div class="button" v-if="$cookies.get('user').admin" @click= "sendEmail(event)">Send Notification</div> -->
                     </div>
                 </div>
     </div></div>
     
-</div></div><modal name="event-details">
+</div></div>
+<!-- Modal event details -->
+<modal name="event-details">
     <div style="width:100%;height:95%;padding:10px; display:flex;flex-direction:column; overflow:auto;" v-if="currentEvent">
         <div style="width:100%; display:flex; flex-direction:column; align-items:center;">
+          <!-- If showing "unsign up" history -->
             <div v-if="!history" style="width: 100%; background-color: #f7931e; color: white; font-weight:600; font-size: 1.25em; padding: 0.25em 0em; text-align:center; border-radius: 0.2em;">Users Signed Up</div>
             <div v-if="history" style="width: 100%; background-color: #f7931e; color: white; font-weight:600; font-size: 1.25em; padding: 0.25em 0em; text-align:center; border-radius: 0.2em;">History</div>
             <div style="width: 95%; margin-top: 1em;" v-if="!history">
+              <!-- Allow people to move users on the sign up list and shoiw people on actual list -->
                 <div v-for="(user, index) in currentEvent.usersSignedUp" 
                 @drop='onDrop($event, index,"list")' @dragover.prevent
       @dragenter.prevent
@@ -100,8 +76,9 @@
                 <strong>{{index+1}}.</strong> {{getFullName(user)}} <button v-if="currentUser.admin" @click="bumpToEnd(index)" style="border:0px">Bump to Waitlist</button><button v-if="currentUser.admin" @click="strike(user.id)" style="border:0px; margin-left: 10px; background-color:red; color:white">Strike!</button>
                 <div style="width:100%; display:flex; justify-content:center; padding-top: 0.5em;">
                     <div style="width: 93%; border-bottom: 1.5px solid black"></div>
-                </div></div><!-- on duty mcintosh, fix create schedule,bootstrap, waitlist, people sign in, reset database spring boot, polling to keep website alive -->
+                </div></div>
             <u v-if="currentEvent.waitlist.length>0"><strong>Waitlist<br></strong></u>
+            <!-- Allow people to move users on the waitlist and show people on the waitlist -->
             <div v-for="(user, index) in currentEvent.waitlist"
             
             @drop='onDrop($event, index,"waitlist")' @dragover.prevent
@@ -114,6 +91,8 @@
                     <div style="width: 93%; border-bottom: 1.5px solid black"></div>
                 </div></div>
 </div>
+
+      <!-- Show user unsign up history -->
       <div style="width: 95%; margin-top: 1em;" v-if="history">
         <div v-for="(user, index) in currentEvent.unsignedUp" :key="index"> 
         <strong>{{index+1}}.</strong> {{getFullName(user)}} - {{user.dateString}}
@@ -122,6 +101,7 @@
         </div></div>
       </div>
         </div>
+        <!-- Notify participants of the event -->
         <div style="justify-content:space-between;display:flex;margin:5px" v-if="!history">
             <textarea v-if="currentUser.admin" style="flex:1;margin-right:10px;padding:7px" placeholder="Optional Message.." v-model="message"></textarea>
             <div class="wrap" style="width:50%" v-if="currentUser.admin">
@@ -159,12 +139,23 @@ export default {
       displayOnDuty: false,
       count: 0,
       strikes: 0,
-      history: false,
-    };
+      history: false    };
   },
-  computed: {},
+  computed: {
+    splitPhoneNumbers() {
+      
+      let phoneNumbers = this.currentSchedule.phoneNumbers.filter(phone=>phone.phoneNumber.length>0)
+    let result = [];
+    for (let i = 3; i > 0; i--) {
+        result.push(phoneNumbers.splice(0, Math.ceil(phoneNumbers.length / i)));
+    }
+    return result;
+  },
+  },
 
   methods: {
+     
+
     getBackground(index) {
       if (index % 2 == 0) {
         return "rgba(215, 211, 211, 0.3)";
@@ -328,57 +319,11 @@ export default {
         }, */
 
     async getCurrentSchedule() {
-      ScheduleDataService.getCurrent().then((result) => {
-        let schedule = result.data;
-        this.currentSchedule = schedule;
-        this.currentSchedule.phoneNumbers.push({
-          dorm: "McIntosh",
-          teacherName: "Ms. Woods",
-          phoneNumber: "(847) 997-0463",
-        });
-
-        for (let day of schedule.scheduleDays) {
-          for (let event of day.events) {
-            var i = event.usersSignedUp.indexOf(null);
-            while (i != -1) {
-              event.usersSignedUp.splice(i, 1);
-              i = event.usersSignedUp.indexOf(null);
-            }
-
-            i = event.waitlist.indexOf(null);
-            while (i != -1) {
-              event.waitlist.splice(i, 1);
-              i = event.waitlist.indexOf(null);
-            }
-          }
-        }
-
-        console.log(schedule);
-
-        schedule.scheduleDays.forEach((day) => {
-          day.events.forEach((e) => {
-            if (
-              e &&
-              e.usersSignedUp.find((user) => {
-                if (user) {
-                  user.id == this.currentUser.id;
-                }
-              })
-            ) {
-              this.count++;
-            }
-          });
-        });
-       
-      });
-      this.strikes = (
-        await UserDataService.get(this.currentUser.id)
-      ).data.strikes;
+      this.currentSchedule = (await ScheduleDataService.getCurrent()).data
+      
     },
-    getSchedule(id) {
-      ScheduleDataService.get(id).then((response) => {
-        this.currentSchedule = response.data;
-      });
+    async getSchedule(id) {
+      this.currentSchedule = (await ScheduleDataService.get(id)).data
     },
     signUpEvent(event, date) {
       this.$message.success("Signed up for " + event.name);
@@ -504,15 +449,55 @@ export default {
     },
     backHistory(){
       this.history = false;
+    },
+    removeNullUsers(){
+      /* Get rid of null users */
+      for (let day of this.currentSchedule.scheduleDays) {
+          for (let event of day.events) {
+            var i = event.usersSignedUp.indexOf(null);
+            while (i != -1) {
+              event.usersSignedUp.splice(i, 1);
+              i = event.usersSignedUp.indexOf(null);
+            }
+
+            i = event.waitlist.indexOf(null);
+            while (i != -1) {
+              event.waitlist.splice(i, 1);
+              i = event.waitlist.indexOf(null);
+            }
+          }
+        }
+
+
+        
+    },
+    countSignUps(){
+      this.currentSchedule.scheduleDays.forEach((day) => {
+          day.events.forEach((e) => {
+            if (
+              e && e.usersSignedUp.some(user=>user.id==this.currentUser.id)
+            ) {
+              this.count++;
+            }
+          });
+        });
+    },
+    async getStrikes(){
+      this.strikes = (
+        await UserDataService.get(this.currentUser.id)
+      ).data.strikes;
     }
   },
-  mounted() {
-
+  async mounted() {
+    /* TO FIX: Cannot sign up on other scheduled IDs */
       if (this.$route.params.id) {
-        this.getSchedule(this.$route.params.id);
+        await this.getSchedule(this.$route.params.id);
       } else {
-        this.getCurrentSchedule();
+        await this.getCurrentSchedule();
       }
+      this.getStrikes()
+      this.removeNullUsers()
+      this.countSignUps()
     
   },
 };
@@ -548,7 +533,7 @@ export default {
   display: none;
   transition: max-height 0.5s;
 }
-.phoneNumebrs-row {
+.phoneNumbers-row {
   width: 33.33%;
   display: flex;
   justify-content: center;
@@ -573,7 +558,7 @@ export default {
   .phoneNumbers-content {
     flex-direction: column;
   }
-  .phoneNumebrs-row {
+  .phoneNumbers-row {
     width: 100%;
   }
 }

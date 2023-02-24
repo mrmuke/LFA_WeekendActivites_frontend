@@ -1,5 +1,6 @@
 <template>
     <div class = "containerHome">
+      <!-- Home page containing all navigation buttons -->
         <small style="position:absolute;bottom:10px;right:10px;color:white;">@owencoxe2</small>
         <div>
 
@@ -31,7 +32,7 @@
                     <a :href="'/schedule/'" class="bigbutton">Weekend Schedule</a>
 
                 </div>
-                <a href="/schedules" class="bigbutton" v-if="admin">View All Schedules</a>
+                <a href="/schedules" class="bigbutton" v-if="currentUser&&currentUser.admin">View All Schedules</a>
 
 
         </div>
@@ -107,7 +108,7 @@ export default {
                     client_id: '978419002714-0ngcjc58363k85n3a6fpmrdl0tome13b.apps.googleusercontent.com'
             },
             currentUser:JSON.parse(localStorage.getItem("user")),
-            admin:JSON.parse(localStorage.getItem("user"))&&JSON.parse(localStorage.getItem("user")).admin,
+            
             
         };
     },
@@ -122,20 +123,21 @@ export default {
           this.$message.info("Logging in...")
             UserDataService.create(idToken)
                     .then(response => {
+                      /* If logged with non-LFA account */
                         this.$message.success("Logged In!")
                         localStorage.setItem("user", JSON.stringify(response.data.user))
                       localStorage.setItem("token", response.data.token)
                       eventBus.$emit('userSet', true);
-                      this.admin=response.data.user.admin
                       this.signedIn = true
                       if(response.status==201){
+                        /* If created new user */
                           this.$modal.show('tutorial-modal')
                       }
                       this.loading=false
 
                     })
                     .catch(() => {
-
+                      /* If logged in with non-LFA account */
                       this.$message.error("Please sign in with an LFA Email Account")
                       this.signedIn=false
                       localStorage.setItem("user",null)
