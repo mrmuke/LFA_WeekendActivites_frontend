@@ -31,7 +31,7 @@
     </div>
     <!-- Sign up event details -->
     <div style="display:flex; flex-wrap:wrap;">
-           <div v-for="(event, i) in filtered()" :key="i" class="event-signup-item">
+           <div v-for="(event, i) in getRequiredSignUpEvents()" :key="i" class="event-signup-item">
                <div  class="flex shadow-sm border justify-content-center text-center align-items-center h-screen m-1 rounded p-3" style="background:white;" >
                    <div class="go-to-details" @click="showModal(event.info,event.date)">
                 <div class="rounded overflow-hidden">
@@ -72,7 +72,7 @@
                 @drop='onDrop($event, index,"list")' @dragover.prevent
       @dragenter.prevent
                 :draggable="currentUser.admin"
-        @dragstart='startDrag($event, index,"list")' :key="index"> 
+        @dragstart='startDrag($event, index,"list")' :key="user.id"> 
                 <strong>{{index+1}}.</strong> {{getFullName(user)}} <button v-if="currentUser.admin" @click="bumpToEnd(index)" style="border:0px">Bump to Waitlist</button><button v-if="currentUser.admin" @click="strike(user.id)" style="border:0px; margin-left: 10px; background-color:red; color:white">Strike!</button>
                 <div style="width:100%; display:flex; justify-content:center; padding-top: 0.5em;">
                     <div style="width: 93%; border-bottom: 1.5px solid black"></div>
@@ -84,7 +84,7 @@
             @drop='onDrop($event, index,"waitlist")' @dragover.prevent
       @dragenter.prevent
                 :draggable="currentUser.admin"
-        @dragstart='startDrag($event, index,"waitlist")' :key="index">
+        @dragstart='startDrag($event, index,"waitlist")' :key="user.id">
                 
                 <strong>{{index+1}}.</strong> {{getFullName(user)}} 
                 <div style="width:100%; display:flex; justify-content:center; padding-top: 0.5em;">
@@ -108,7 +108,7 @@
               <div class="button" @click= "sendEmail(currentEvent)">Notify Participants</div>
             </div>
         </div>
-
+        <!-- Check people who have unsigned up from event -->
         <div class="show-signup-history" v-if="currentUser.admin && !history" @click="changeHistory()">Unsign Up History</div>
         <div style="margin-top:10px;" class="show-signup-history" v-if="currentUser.admin && history" @click="backHistory()">Back</div>
     
@@ -137,25 +137,27 @@ export default {
       currentUser: JSON.parse(localStorage.getItem("user")),
       message: "",
       displayOnDuty: false,
-      count: 0,
+      signUpCount: 0,
       strikes: 0,
-      history: false    };
+      history: false,
+    };
   },
   computed: {
     splitPhoneNumbers() {
-      
-      let phoneNumbers = this.currentSchedule.phoneNumbers.filter(phone=>phone.phoneNumber.length>0)
-    let result = [];
-    for (let i = 3; i > 0; i--) {
+      /* Split phone numbers into three equal columns */
+      let phoneNumbers = this.currentSchedule.phoneNumbers.filter(
+        (phone) => phone.phoneNumber.length > 0
+      );
+      let result = [];
+      for (let i = 3; i > 0; i--) {
         result.push(phoneNumbers.splice(0, Math.ceil(phoneNumbers.length / i)));
-    }
-    return result;
-  },
+      }
+      return result;
+    },
   },
 
   methods: {
-     
-
+    /* Altenrate background color for each event */
     getBackground(index) {
       if (index % 2 == 0) {
         return "rgba(215, 211, 211, 0.3)";
@@ -163,6 +165,7 @@ export default {
         return "rgba(215, 211, 211, 0.1)";
       }
     },
+    /* Bump people to end of waitlist and move waitlist event first person to list if they are first on it */
     bumpToEnd(index) {
       ScheduleDataService.get(this.currentSchedule.id).then((response) => {
         let schedule = response.data;
@@ -182,23 +185,18 @@ export default {
           updatedEvent.usersSignedUp.splice(index, 1)[0]
         );
         ScheduleDataService.update(schedule.id, schedule);
+        this.currentEvent = updatedEvent;
       });
-      if (this.currentEvent.waitlist.length > 0) {
-        this.currentEvent.usersSignedUp.push(
-          this.currentEvent.waitlist.splice(0, 1)[0]
-        );
-      }
-      this.currentEvent.waitlist.push(
-        this.currentEvent.usersSignedUp.splice(index, 1)[0]
-      );
     },
+    /* Display selected event details and users signed up */
     showModal(event, date) {
       this.currentEvent = event;
       this.currentDate = date;
       this.$modal.show("event-details");
       this.message = "";
     },
-    filtered() {
+    /* Get only events that require sign up */
+    getRequiredSignUpEvents() {
       if (this.currentSchedule) {
         var arr = [];
         for (let i = 0; i < this.currentSchedule.scheduleDays.length; i++) {
@@ -223,72 +221,66 @@ export default {
       }
       return [];
     },
+    /* Get full name of user */
     getFullName(user) {
-      
       return user.userName;
     },
+    /* Start dragging users on list to move them */
     startDrag: (evt, index, list) => {
-        evt.dataTransfer.dropEffect = "move";
+      evt.dataTransfer.dropEffect = "move";
       evt.dataTransfer.effectAllowed = "move";
       evt.dataTransfer.setData("index", index);
       evt.dataTransfer.setData("list", list);
-      
-      
     },
+    /* Swap users on dropping them */
     onDrop(evt, index, list) {
       if (this.currentUser.admin) {
+        /* Depending on where the user was dropped on */
         let receiveArr =
           list == "waitlist"
             ? this.currentEvent.waitlist
             : this.currentEvent.usersSignedUp;
+        /* Which list user was sent from */
         const sendList = evt.dataTransfer.getData("list");
         const sendIndex = evt.dataTransfer.getData("index");
+        let sendArr =
+          sendList == "waitlist"
+            ? this.currentEvent.waitlist
+            : this.currentEvent.usersSignedUp;
+        /* Only allows user to be dropped later in list */
         if (sendIndex < index || list != sendList) {
-          let sendArr =
-            sendList == "waitlist"
-              ? this.currentEvent.waitlist
-              : this.currentEvent.usersSignedUp;
-          let temp = receiveArr[index];
-
+          /* Swap two users */
+          let temp = receiveArr[index]
           receiveArr.splice(index, 1);
           receiveArr.splice(index, 0, sendArr[sendIndex]);
 
           sendArr.splice(sendIndex, 1);
           sendArr.splice(sendIndex, 0, temp);
+          /* Update schedule */
           ScheduleDataService.get(this.currentSchedule.id).then((response) => {
             let schedule = response.data;
-
             let updatedSchedule = schedule.scheduleDays.find(
               (e) => e.date == this.currentDate
             );
-            let updatedEvent = updatedSchedule.events.find(
+            let updatedEventIndex = updatedSchedule.events.findIndex(
               (e) => e.name === this.currentEvent.name
             );
-
-            if (list == "waitlist") {
-              updatedEvent.waitlist = receiveArr;
-            } else {
-              updatedEvent.usersSignedUp = receiveArr;
-            }
-
-            if (sendList == "waitlist") {
-              updatedEvent.waitlist = sendArr;
-            } else {
-              updatedEvent.usersSignedUp = sendArr;
-            }
-
+            updatedSchedule.events[updatedEventIndex]=this.currentEvent
             ScheduleDataService.update(schedule.id, schedule);
           });
         }
       }
     },
+    /* Send email to users */
     sendEmail(event) {
-      var total = event.usersSignedUp.concat(event.waitlist);
-      for (var i = 0; i < total.length; i++) {
+      var totalUsers = event.usersSignedUp.concat(event.waitlist);
+      totalUsers.push(this.currentUser);
+      /* Loop through all users */
+      for (var i = 0; i < totalUsers.length; i++) {
         this.$message.info("Sending email...");
         EmailDataService.sendEmail(
           { event: event, message: this.message },
-          total[i].id
+          totalUsers[i].id
         ).then(() => {
           this.$message.success("Emails Successfully Sent!");
         });
@@ -296,122 +288,114 @@ export default {
       this.message = "";
     },
 
-    /* gettext(pdfUrl){
+    /* getText(pdfUrl){
         var pdf = PDFJS.getDocument(pdfUrl);
-        return pdf.then(function(pdf) { // get all pages text
+        return pdf.then(function(pdf) { // Get all pages text
             var maxPages = pdf.pdfInfo.numPages;
-            var countPromises = []; // collecting all page promises
+            var countPromises = []; // Collecting all page promises
             for (var j = 1; j <= maxPages; j++) {
             var page = pdf.getPage(j);
 
-            countPromises.push(page.then(function(page) { // add page promise
+            countPromises.push(page.then(function(page) { // Add page promise
                 var textContent = page.getTextContent();
-                return textContent.then(function(text){ // return content promise
-                return text.items.map(function (s) { return s.str; }).join(''); // value page text 
+                return textContent.then(function(text){ // Return content promise
+                return text.items.map(function (s) { return s.str; }).join(''); // Add value to page text
                 });
             }));
             }
-            // Wait for all pages and join text
+            // Wait for all pages and join text together
             return Promise.all(countPromises).then(function (texts) {
             return texts.join('');
             });
         });
         }, */
 
+    // Get current schedule
     async getCurrentSchedule() {
-      this.currentSchedule = (await ScheduleDataService.getCurrent()).data
-      
+      this.currentSchedule = (await ScheduleDataService.getCurrent()).data;
     },
+    // Get schedule
     async getSchedule(id) {
-      this.currentSchedule = (await ScheduleDataService.get(id)).data
+      this.currentSchedule = (await ScheduleDataService.get(id)).data;
     },
+    // Sign up event
     signUpEvent(event, date) {
       this.$message.success("Signed up for " + event.name);
-      this.$message.info("Refresh the site to verify your place on the list");
-      //doesnt work when two people on at same time
-      var waitlist = event.usersSignedUp.length >= event.personLimit;
-      if (waitlist) {
+      this.$message.info("Refresh the site to verify your place on the list..");
+      // Check if user should be on the waitlist then push to waitlist
+      var onWaitlist = event.usersSignedUp.length >= event.personLimit;
+      if (onWaitlist) {
         this.$message.info("You're on the waitlist");
-
         event.waitlist.push(this.currentUser);
-      } else if (this.count >= 2) {
+      } 
+      // Make sure users haven't signed up for more than 2 events
+      else if (this.signUpCount >= 2) {
         this.$message.info(
-          "You have been pushed to the waitlist (3 event limit) "
+          "You have been pushed to the waitlist (2 event limit) "
         );
         event.waitlist.push(this.currentUser);
       } else {
-        this.count++;
+        this.signUpCount++;
         event.usersSignedUp.push(this.currentUser);
       }
+    /* Updated scheduloe */
       ScheduleDataService.get(this.currentSchedule.id).then((response) => {
         let schedule = response.data;
-        let updatedSchedule = schedule.scheduleDays.find(
+        let updatedScheduleDay = schedule.scheduleDays.find(
           (e) => e.date === date
         );
-        let updatedEvent = updatedSchedule.events.find(
+        let updatedEventIndex = updatedScheduleDay.events.findIndex(
           (e) => e.name === event.name
         );
-        waitlist = updatedEvent.usersSignedUp.length >= event.personLimit;
-        if (waitlist) {
-          updatedEvent.waitlist.push(this.currentUser);
-        } else {
-          updatedEvent.usersSignedUp.push(this.currentUser);
-        }
+        updatedScheduleDay.events[updatedEventIndex] = event;
         ScheduleDataService.update(schedule.id, schedule);
       });
       this.showModal(event, date);
     },
+    /* Remove user from event */
     deleteFromEvent(event, date) {
-      console.log("event");
-      console.log(event);
       if (confirm("Are you sure you want to be removed from the list?")) {
         var i = event.usersSignedUp.findIndex(
           (e) => e.id === this.currentUser.id
         );
         var k = event.waitlist.findIndex((e) => e.id === this.currentUser.id);
+        /* If on waitlist remove from waitlist otherwise remove from list */
         if (i == -1) {
           event.waitlist.splice(k, 1);
         } else {
-          this.count--;
+          this.signUpCount--;
           event.usersSignedUp.splice(i, 1);
-            
           event.unsignedUp.push({
-            userName:this.currentUser.userName,
-            dateString: (new Date()).toLocaleString()
-          })
-
-          
+            userName: this.currentUser.userName,
+            dateString: new Date().toLocaleString(),
+          });
         }
+        /* Update schedule with new list */
         ScheduleDataService.get(this.currentSchedule.id).then((response) => {
           let schedule = response.data;
           let updatedSchedule = schedule.scheduleDays.find(
             (e) => e.date === date
           );
-          let updatedEvent = updatedSchedule.events.find(
+          let updatedEventIndex = updatedSchedule.events.findIndex(
             (e) => e.name === event.name
           );
-          if (i == -1) {
-            updatedEvent.waitlist.splice(k, 1);
-          } else {
-            updatedEvent.usersSignedUp.splice(i, 1);
-            updatedEvent.unsignedUp.push({
-              userName:this.currentUser.userName,
-              dateString: (new Date()).toLocaleString()
-            })
-          }
+          updatedSchedule.events[updatedEventIndex]=event
           ScheduleDataService.update(schedule.id, schedule);
         });
         this.$message.error("Removed from " + event.name);
         this.showModal(event, date);
       }
     },
+    //Check if user is signed up for event
     signedUp(event) {
       let signed =
-        event.usersSignedUp.filter((e) => e.id === this.currentUser.id).length >
-          0 ||
-        event.waitlist.filter((e) => e.id === this.currentUser.id).length > 0;
+        event.usersSignedUp.some(
+          (e) => e != null && e.id === this.currentUser.id
+        ) ||
+        event.waitlist.some((a) => a != null && a.id === this.currentUser.id);
       return signed;
     },
+    /* Hide or show phone numbers that are on duty */
     showHideDuty() {
       this.displayOnDuty = !this.displayOnDuty;
       var amount = "0px";
@@ -440,65 +424,69 @@ export default {
         }, 300);
       }
     },
+    /* Strike user */
     strike(id) {
       UserDataService.strike(id);
       this.$message.success("User has been striked!");
     },
+    /* Turn on and off sign up history */
     changeHistory() {
       this.history = true;
     },
-    backHistory(){
+    backHistory() {
       this.history = false;
     },
-    removeNullUsers(){
+    removeNullUsers() {
       /* Get rid of null users */
       for (let day of this.currentSchedule.scheduleDays) {
-          for (let event of day.events) {
-            var i = event.usersSignedUp.indexOf(null);
-            while (i != -1) {
-              event.usersSignedUp.splice(i, 1);
-              i = event.usersSignedUp.indexOf(null);
-            }
+        for (let event of day.events) {
+          var i = event.usersSignedUp.indexOf(null);
+          while (i != -1) {
+            event.usersSignedUp.splice(i, 1);
+            i = event.usersSignedUp.indexOf(null);
+          }
 
+          i = event.waitlist.indexOf(null);
+          while (i != -1) {
+            event.waitlist.splice(i, 1);
             i = event.waitlist.indexOf(null);
-            while (i != -1) {
-              event.waitlist.splice(i, 1);
-              i = event.waitlist.indexOf(null);
-            }
           }
         }
-
-
-        
+      }
     },
-    countSignUps(){
-      this.currentSchedule.scheduleDays.forEach((day) => {
-          day.events.forEach((e) => {
-            if (
-              e && e.usersSignedUp.some(user=>user.id==this.currentUser.id)
-            ) {
-              this.count++;
-            }
-          });
-        });
+    countSignUps(userID) {
+      /* Loop through events and count how many users have signed up for */
+      let count = 0;
+      for (var i = 0; i < this.currentSchedule.scheduleDays.length; i++) {
+        let currentDayEvents = this.currentSchedule.scheduleDays[i].events;
+        for (var j = 0; j < currentDayEvents.length; j++) {
+          if (
+            currentDayEvents[j] &&
+            currentDayEvents[j].usersSignedUp.some((user) => user.id == userID)
+          ) {
+            count++;
+          }
+        }
+      }
+      return count;
     },
-    async getStrikes(){
+    async getStrikes() {
+      /* Get how many strikes current user has */
       this.strikes = (
         await UserDataService.get(this.currentUser.id)
       ).data.strikes;
-    }
+    },
   },
   async mounted() {
-    /* TO FIX: Cannot sign up on other scheduled IDs */
-      if (this.$route.params.id) {
-        await this.getSchedule(this.$route.params.id);
-      } else {
-        await this.getCurrentSchedule();
-      }
-      this.getStrikes()
-      this.removeNullUsers()
-      this.countSignUps()
-    
+    /* Call all initialization functions */
+    if (this.$route.params.id) {
+      await this.getSchedule(this.$route.params.id);
+    } else {
+      await this.getCurrentSchedule();
+    }
+    this.getStrikes();
+    this.removeNullUsers();
+    this.signUpCount = this.countSignUps(this.currentUser.id);
   },
 };
 </script>
