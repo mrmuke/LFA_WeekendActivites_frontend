@@ -1,15 +1,9 @@
-Sign up twice
-PDF function
+PDF function -- use docx?
 Notify doesn't work
-Priority to people who didn't sign up last weekend
 Show message to conatct teacher when 3 strikes instead of removing button
-Delete seniors at end of year
-Unsignup people should bump people on waitlist to list automatically
-Don't display everyone on strikes
-Redefine bump to waitlist work better first and bump to list end?
-Authentication for admins proper (disable change cookies) -- don't use localStorage.getItem('user')
-(https://www.bezkoder.com/spring-boot-vue-js-authentication-jwt-spring-security/) (update current user when load for multiple devices issue)
+Delete seniors at end of year / fully reset database -- remove all users, remove all users signed up on activities, keep schedules
 Carousel weird skipping
 Socket realtime weekend sign ups
+Dont allow localstorage 
 
 Clean code and documentation

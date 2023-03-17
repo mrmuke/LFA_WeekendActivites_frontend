@@ -15,25 +15,19 @@ class ScheduleDataService {
     }
 
     publish(id) {
-        return http.post(`/schedules/publish/${id}`);
+        return http.post(`/admin/schedules/publish/${id}`);
     }
 
     create(data) {
-        return http.post("/schedules", data);
+        return http.post("/admin/schedules", data);
     }
 
     update(id, data) {
         return http.put(`/schedules/${id}`, data);
     }
-    bumpToEnd(event){
-        return http.post("/schedules/bump", event)
-    }
-    deleteUser(scheduleId, eventName,user){
-        return http.delete(`/schedules/${scheduleId}/${eventName}`, user)
-    }
 
     delete(id) {
-        return http.delete(`/schedules/${id}`);
+        return http.delete(`/admin/schedules/${id}`);
     }
 }
 export default new ScheduleDataService();

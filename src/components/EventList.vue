@@ -94,6 +94,7 @@ import VModal from 'vue-js-modal'
 Vue.use(VModal)
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+import { decrypt } from '../utils/encrypt';
 Vue.config.productionTip = false;
 Vue.use(Antd);
 export default {
@@ -101,7 +102,7 @@ export default {
   data() {
     return {
       events: [],
-      currentUser:JSON.parse(localStorage.getItem("user")),
+      currentUser:decrypt(localStorage.getItem("user")),
       name: "",
       orderBy:"1",
       currentEvent:null,

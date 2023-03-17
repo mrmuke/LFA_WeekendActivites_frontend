@@ -126,6 +126,7 @@ Vue.use(VModal);
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
 import UserDataService from "../services/UserDataService";
+import { decrypt } from '../utils/encrypt';
 Vue.config.productionTip = false;
 Vue.use(Antd);
 export default {
@@ -134,7 +135,7 @@ export default {
       currentSchedule: null,
       currentEvent: null,
       currentDate: null,
-      currentUser: JSON.parse(localStorage.getItem("user")),
+      currentUser: decrypt(localStorage.getItem("user")),
       message: "",
       displayOnDuty: false,
       signUpCount: 0,
@@ -369,7 +370,12 @@ export default {
             userName: this.currentUser.userName,
             dateString: new Date().toLocaleString(),
           });
+
+          if(event.usersSignedUp.length<event.personLimit&&event.waitlist.length>0){
+          event.usersSignedUp.push(event.waitlist.splice(0, 1)[0])
         }
+        }
+        
         /* Update schedule with new list */
         ScheduleDataService.get(this.currentSchedule.id).then((response) => {
           let schedule = response.data;

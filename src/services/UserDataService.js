@@ -22,10 +22,10 @@ class UserDataService {
          return http.put(`/users/${id}`, data);
      }
      strike(id){
-         return http.post('/users/strike', id);
+         return http.post('/admin/users/strike', id);
      }
      resetStrike(id){
-         return http.post('/users/resetStrike', id);
+         return http.post('/admin/users/resetStrike', id);
      }
 
 }

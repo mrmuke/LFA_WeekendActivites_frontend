@@ -97,6 +97,7 @@ import VModal from 'vue-js-modal'
 Vue.use(VModal)
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+import { decrypt, encrypt } from '../utils/encrypt';
 Vue.config.productionTip = false;
 Vue.use(Antd)
 export default {
@@ -107,7 +108,7 @@ export default {
             googleSignInParams: {
                     client_id: '978419002714-0ngcjc58363k85n3a6fpmrdl0tome13b.apps.googleusercontent.com'
             },
-            currentUser:JSON.parse(localStorage.getItem("user")),
+            currentUser:decrypt(localStorage.getItem("user")),
             
             
         };
@@ -125,7 +126,7 @@ export default {
                     .then(response => {
                       /* If logged with non-LFA account */
                         this.$message.success("Logged In!")
-                        localStorage.setItem("user", JSON.stringify(response.data.user))
+                        localStorage.setItem("user", encrypt(response.data.user))
                       localStorage.setItem("token", response.data.token)
                       eventBus.$emit('userSet', true);
                       this.signedIn = true

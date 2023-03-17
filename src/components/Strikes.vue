@@ -1,4 +1,5 @@
 <template>
+<!-- List all strikes and reset strikes for individual users -->
     <div class = "containerStrikes">
       <div class="listContainer">
         <div class="listHead">
@@ -25,16 +26,18 @@ Vue.use(VModal)
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 import UserDataService from '../services/UserDataService'
+import { decrypt } from '../utils/encrypt'
 Vue.config.productionTip = false;
 Vue.use(Antd)
 export default {
     data(){
         return {
-          currentUser:JSON.parse(localStorage.getItem("user")),
+          currentUser:decrypt(localStorage.getItem("user")),
           users: [],
         };
     },
     methods:{
+       /* Get all users and sort by strikes */
       async getUsers(){
         this.users = (await UserDataService.getAll()).data.sort(this.compare);
         console.log(this.users);
@@ -46,6 +49,7 @@ export default {
           return 1;
         }
       },
+      /* Reset strikes for user */
       async resetStrike(id){
         await UserDataService.resetStrike(id);
         this.$router.go();
