@@ -56,6 +56,9 @@
                          <div class="button" v-if="!signedUp(event.info)" @click="signUpEvent(event.info, event.date)">Sign Up</div><div class ="button signedup" v-else @click="deleteFromEvent(event.info, event.date)">Signed Up</div>
                     </div>
                 </div>
+                <div class="p-l-6 p-r-6 pb-4" v-else>
+                  <div style="height:90px;display:flex;align-items:center">Please contact Mr.Freeman to have your strikes removed!</div>
+                </div>
     </div></div>
     
 </div></div>
@@ -218,6 +221,7 @@ export default {
             }
           }
         }
+        console.log(arr)
         return arr;
       }
       return [];

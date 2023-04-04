@@ -1,9 +1,4 @@
 PDF function -- use docx?
 Notify doesn't work
-Show message to conatct teacher when 3 strikes instead of removing button
 Delete seniors at end of year / fully reset database -- remove all users, remove all users signed up on activities, keep schedules
 Carousel weird skipping
-Socket realtime weekend sign ups
-Dont allow localstorage 
-
-Clean code and documentation
