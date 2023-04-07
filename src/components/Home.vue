@@ -43,7 +43,7 @@
       controls
       indicators
       v-model="slide"
-      background="#ababab"
+      background="#343a40"
       img-width="1024"
       img-height="480"
       style="text-shadow: 1px 1px 2px #333;"
@@ -134,9 +134,7 @@ export default {
                         /* If created new user */
                           this.$modal.show('tutorial-modal')
                       }
-                      else{
-                        this.$modal.show('tutorial-modal')
-                      }
+                      
                       this.loading=false
 
                     })

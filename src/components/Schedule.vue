@@ -284,7 +284,7 @@ export default {
       for (var i = 0; i < totalUsers.length; i++) {
         this.$message.info("Sending email...");
         EmailDataService.sendEmail(
-          { event: event, message: this.message },
+          { event: event, message: this.message, showPlace:totalUsers[i]!=this.currentUser },
           totalUsers[i].id
         ).then(() => {
           this.$message.success("Emails Successfully Sent!");

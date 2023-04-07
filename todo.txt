@@ -1,4 +1,2 @@
 PDF function -- use docx?
-Notify doesn't work+ send teacher
 Delete seniors at end of year / fully reset database -- remove all users, remove all users signed up on activities, keep schedules
-Carousel weird skipping bug
