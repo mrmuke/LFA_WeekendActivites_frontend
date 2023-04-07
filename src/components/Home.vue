@@ -40,9 +40,9 @@
         <modal name="tutorial-modal">
            <b-carousel
       id="carousel-1"
-      :interval="4000"
       controls
       indicators
+      v-model="slide"
       background="#ababab"
       img-width="1024"
       img-height="480"
@@ -133,6 +133,9 @@ export default {
                       if(response.status==201){
                         /* If created new user */
                           this.$modal.show('tutorial-modal')
+                      }
+                      else{
+                        this.$modal.show('tutorial-modal')
                       }
                       this.loading=false
 

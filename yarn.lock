@@ -877,14 +877,14 @@
   "resolved" "https://registry.npm.taobao.org/@nodelib/fs.stat/download/@nodelib/fs.stat-1.1.3.tgz"
   "version" "1.1.3"
 
-"@nuxt/opencollective@^0.3.0":
-  "integrity" "sha512-Vf09BxCdj1iT2IRqVwX5snaY2WCTkvM0O4cWWSO1ThCFuc4if0Q/nNwAgCxRU0FeYHJ7DdyMUNSdswCLKlVqeg=="
-  "resolved" "https://registry.npmjs.org/@nuxt/opencollective/-/opencollective-0.3.0.tgz"
-  "version" "0.3.0"
+"@nuxt/opencollective@^0.3.2":
+  "integrity" "sha512-6IKCd+gP0HliixqZT/p8nW3tucD6Sv/u/eR2A9X4rxT/6hXlMzA4GZQzq4d2qnBAwSwGpmKyzkyTjNjrhaA25A=="
+  "resolved" "https://registry.npmjs.org/@nuxt/opencollective/-/opencollective-0.3.3.tgz"
+  "version" "0.3.3"
   dependencies:
-    "chalk" "^2.4.2"
-    "consola" "^2.10.1"
-    "node-fetch" "^2.6.0"
+    "chalk" "^4.1.0"
+    "consola" "^2.15.0"
+    "node-fetch" "^2.6.7"
 
 "@rkusa/linebreak@^1.0.0":
   "integrity" "sha512-yCSm87XA1aYMgfcABSxcIkk3JtCw3AihNceHY+DnZGLvVP/g2z3UWZbi0xIoYpZWAJEVPr5Zt3QE37Q80wF1pA=="
@@ -1478,11 +1478,10 @@
     "color-convert" "^2.0.1"
 
 "ansi-styles@^4.1.0":
-  "integrity" "sha1-kK51xCTQCNJiTFvynq0xd+v881k="
-  "resolved" "https://registry.npm.taobao.org/ansi-styles/download/ansi-styles-4.2.1.tgz"
-  "version" "4.2.1"
+  "integrity" "sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg=="
+  "resolved" "https://registry.npmjs.org/ansi-styles/-/ansi-styles-4.3.0.tgz"
+  "version" "4.3.0"
   dependencies:
-    "@types/color-name" "^1.1.1"
     "color-convert" "^2.0.1"
 
 "ant-design-vue@^1.6.5":
@@ -1857,21 +1856,21 @@
   "resolved" "https://registry.npm.taobao.org/boolbase/download/boolbase-1.0.0.tgz"
   "version" "1.0.0"
 
-"bootstrap-vue@^2.12.0":
-  "integrity" "sha512-upX5LktvsecbBsLnjwaSQoDCsYfneToOweOaERt+Cc/cT6P44zODzpxZa54HZEAbE5gSE5mJmDacUrs02qAR8g=="
-  "resolved" "https://registry.npmjs.org/bootstrap-vue/-/bootstrap-vue-2.17.3.tgz"
-  "version" "2.17.3"
+"bootstrap-vue@^2.23.1":
+  "integrity" "sha512-SEWkG4LzmMuWjQdSYmAQk1G/oOKm37dtNfjB5kxq0YafnL2W6qUAmeDTcIZVbPiQd2OQlIkWOMPBRGySk/zGsg=="
+  "resolved" "https://registry.npmjs.org/bootstrap-vue/-/bootstrap-vue-2.23.1.tgz"
+  "version" "2.23.1"
   dependencies:
-    "@nuxt/opencollective" "^0.3.0"
-    "bootstrap" ">=4.5.2 <5.0.0"
+    "@nuxt/opencollective" "^0.3.2"
+    "bootstrap" "^4.6.1"
     "popper.js" "^1.16.1"
     "portal-vue" "^2.1.7"
     "vue-functional-data-merge" "^3.1.0"
 
-"bootstrap@^4.4.1", "bootstrap@>=4.5.2 <5.0.0":
-  "integrity" "sha512-vlGn0bcySYl/iV+BGA544JkkZP5LB3jsmkeKLFQakCOwCM3AOk7VkldBz4jrzSe+Z0Ezn99NVXa1o45cQY4R6A=="
-  "resolved" "https://registry.npmjs.org/bootstrap/-/bootstrap-4.5.2.tgz"
-  "version" "4.5.2"
+"bootstrap@^4.5.3", "bootstrap@^4.6.1":
+  "integrity" "sha512-51Bbp/Uxr9aTuy6ca/8FbFloBUJZLHwnhTcnjIeRn2suQWsWzcuJhGjKDB5eppVte/8oCdOL3VuwxvZDUggwGQ=="
+  "resolved" "https://registry.npmjs.org/bootstrap/-/bootstrap-4.6.2.tgz"
+  "version" "4.6.2"
 
 "brace-expansion@^1.1.7":
   "integrity" "sha1-PH/L9SnYcibz0vUrlm/1Jx60Qd0="
@@ -2212,6 +2211,14 @@
     "ansi-styles" "^4.1.0"
     "supports-color" "^7.1.0"
 
+"chalk@^4.1.0":
+  "integrity" "sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA=="
+  "resolved" "https://registry.npmjs.org/chalk/-/chalk-4.1.2.tgz"
+  "version" "4.1.2"
+  dependencies:
+    "ansi-styles" "^4.1.0"
+    "supports-color" "^7.1.0"
+
 "chardet@^0.7.0":
   "integrity" "sha1-kAlISfCTfy7twkJdDSip5fDLrZ4="
   "resolved" "https://registry.npm.taobao.org/chardet/download/chardet-0.7.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fchardet%2Fdownload%2Fchardet-0.7.0.tgz"
@@ -2398,8 +2405,8 @@
     "color-name" "1.1.3"
 
 "color-convert@^2.0.1":
-  "integrity" "sha1-ctOmjVmMm9s68q0ehPIdiWq9TeM="
-  "resolved" "https://registry.npm.taobao.org/color-convert/download/color-convert-2.0.1.tgz"
+  "integrity" "sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ=="
+  "resolved" "https://registry.npmjs.org/color-convert/-/color-convert-2.0.1.tgz"
   "version" "2.0.1"
   dependencies:
     "color-name" "~1.1.4"
@@ -2410,8 +2417,8 @@
   "version" "1.1.3"
 
 "color-name@~1.1.4":
-  "integrity" "sha1-wqCah6y95pVD3m9j+jmVyCbFNqI="
-  "resolved" "https://registry.npm.taobao.org/color-name/download/color-name-1.1.4.tgz"
+  "integrity" "sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA=="
+  "resolved" "https://registry.npmjs.org/color-name/-/color-name-1.1.4.tgz"
   "version" "1.1.4"
 
 "color-string@^1.5.2":
@@ -2519,10 +2526,10 @@
   "resolved" "https://registry.npm.taobao.org/connect-history-api-fallback/download/connect-history-api-fallback-1.6.0.tgz"
   "version" "1.6.0"
 
-"consola@^2.10.1":
-  "integrity" "sha512-vlcSGgdYS26mPf7qNi+dCisbhiyDnrN1zaRbw3CSuc2wGOMEGGPsp46PdRG5gqXwgtJfjxDkxRNAgRPr1B77vQ=="
-  "resolved" "https://registry.npmjs.org/consola/-/consola-2.15.0.tgz"
-  "version" "2.15.0"
+"consola@^2.15.0":
+  "integrity" "sha512-9vAdYbHj6x2fLKC4+oPH0kFzY/orMZyG2Aj+kNylHxKGJ/Ed4dpNyAQYwJOdqO4zdM7XpVHmyejQDcQHrnuXbw=="
+  "resolved" "https://registry.npmjs.org/consola/-/consola-2.15.3.tgz"
+  "version" "2.15.3"
 
 "console-browserify@^1.1.0":
   "integrity" "sha1-ZwY871fOts9Jk6KrOlWECujEkzY="
@@ -4224,8 +4231,8 @@
   "version" "3.0.0"
 
 "has-flag@^4.0.0":
-  "integrity" "sha1-lEdx/ZyByBJlxNaUGGDaBrtZR5s="
-  "resolved" "https://registry.npm.taobao.org/has-flag/download/has-flag-4.0.0.tgz"
+  "integrity" "sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ=="
+  "resolved" "https://registry.npmjs.org/has-flag/-/has-flag-4.0.0.tgz"
   "version" "4.0.0"
 
 "has-symbol-support-x@^1.4.1":
@@ -5821,10 +5828,12 @@
   dependencies:
     "lodash.toarray" "^4.4.0"
 
-"node-fetch@^2.6.0":
-  "integrity" "sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw=="
-  "resolved" "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.1.tgz"
-  "version" "2.6.1"
+"node-fetch@^2.6.7":
+  "integrity" "sha512-DJm/CJkZkRjKKj4Zi4BsKVZh3ValV5IR5s7LVZnW+6YMh0W1BfNA8XSs6DLMGYlId5F3KnA70uu2qepcR08Qqg=="
+  "resolved" "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.9.tgz"
+  "version" "2.6.9"
+  dependencies:
+    "whatwg-url" "^5.0.0"
 
 "node-forge@0.9.0":
   "integrity" "sha1-1iQFDtu0SHStyhK7mlLsY8t4JXk="
@@ -8106,9 +8115,9 @@
     "has-flag" "^4.0.0"
 
 "supports-color@^7.1.0":
-  "integrity" "sha1-aOMlkd9z4lrRxLSRCKLsUHliv9E="
-  "resolved" "https://registry.npm.taobao.org/supports-color/download/supports-color-7.1.0.tgz?cache=0&sync_timestamp=1569557363805&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fsupports-color%2Fdownload%2Fsupports-color-7.1.0.tgz"
-  "version" "7.1.0"
+  "integrity" "sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw=="
+  "resolved" "https://registry.npmjs.org/supports-color/-/supports-color-7.2.0.tgz"
+  "version" "7.2.0"
   dependencies:
     "has-flag" "^4.0.0"
 
@@ -8327,6 +8336,11 @@
   dependencies:
     "psl" "^1.1.28"
     "punycode" "^2.1.1"
+
+"tr46@~0.0.3":
+  "integrity" "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw=="
+  "resolved" "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz"
+  "version" "0.0.3"
 
 "tryer@^1.0.1":
   "integrity" "sha1-8shUBoALmw90yfdGW4HqrSQSUvg="
@@ -8786,6 +8800,11 @@
   dependencies:
     "defaults" "^1.0.3"
 
+"webidl-conversions@^3.0.0":
+  "integrity" "sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ=="
+  "resolved" "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz"
+  "version" "3.0.1"
+
 "webpack-bundle-analyzer@^3.6.0":
   "integrity" "sha1-vbY3wjBEJPL7/5qVDHvkKoOa5zs="
   "resolved" "https://registry.npm.taobao.org/webpack-bundle-analyzer/download/webpack-bundle-analyzer-3.6.1.tgz"
@@ -8928,6 +8947,14 @@
   "integrity" "sha1-XS/yKXcAPsaHpLhwc9+7rBRszyk="
   "resolved" "https://registry.npm.taobao.org/websocket-extensions/download/websocket-extensions-0.1.3.tgz"
   "version" "0.1.3"
+
+"whatwg-url@^5.0.0":
+  "integrity" "sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw=="
+  "resolved" "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz"
+  "version" "5.0.0"
+  dependencies:
+    "tr46" "~0.0.3"
+    "webidl-conversions" "^3.0.0"
 
 "which-module@^2.0.0":
   "integrity" "sha1-2e8H3Od7mQK4o6j6SzHD4/fm6Ho="
