@@ -10,7 +10,6 @@
         url(/img/background-wave.jpg);
     background-size: cover;
     background-repeat: no-repeat;
-    justify-content: center;
     align-items:center;
     display: flex;
     min-height: 100vh;
@@ -20,9 +19,19 @@
 .background-text{
     color:white;
     font-size:30px;
-    position:absolute;
-    top:55%;
+    position:relative;
     left:50%;
-    transform:translate(-50%, -50%);
+    transform:translateX(-50%);
+}
+@media (max-width: 650px){
+    .background-text{
+        font-size:20px;
+    }
+}
+
+@media(max-width: 385px){
+    .background-text{
+        font-size:14px;
+    }
 }
 </style>
