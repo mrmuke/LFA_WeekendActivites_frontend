@@ -115,8 +115,6 @@ export default {
      methods:{
         onSignIn(user){
                 this.createUser(user.getAuthResponse().id_token)
-
-
         },
         createUser(idToken){
           this.loading=true
@@ -134,7 +132,6 @@ export default {
                           this.$modal.show('tutorial-modal')
                       }
                       this.loading=false
-
                     })
                     .catch(() => {
                       /* If logged in with non-LFA account */

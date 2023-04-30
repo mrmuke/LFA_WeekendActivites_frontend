@@ -101,6 +101,15 @@ let router = new Router({
             component: () =>
                 import ("./components/Strikes.vue"),
         },
+        {
+            path: "/noschedule",
+            name: "noschedule",
+            meta:{
+              requiresAuth: true,
+              requiresAdmin:true,
+            },
+            component: ()=> import("./components/NoSchedule.vue")
+        }
     ]
 });
 router.beforeEach((to, from, next) => {

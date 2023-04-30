@@ -22,13 +22,15 @@
     "path": "^0.12.7",
     "pdfjs": "^2.4.2",
     "serve-static": "^1.14.1",
+    "sockjs-client": "^1.6.1",
     "vue": "^2.6.11",
     "vue-google-signin-button": "^1.0.4",
     "vue-js-modal": "^2.0.0-rc.6",
     "vue-resource": "^1.5.1",
     "vue-router": "3.1.6",
     "vuedraggable": "^2.24.3",
-    "vuejs-datepicker": "^1.6.2"
+    "vuejs-datepicker": "^1.6.2",
+    "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.2.0",
@@ -51,7 +53,9 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "no-unused-vars": "off"
+    }
   },
   "browserslist": [
     "> 1%",

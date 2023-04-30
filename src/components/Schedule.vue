@@ -114,7 +114,8 @@
     
     </div>
     
-    </modal></div>
+    </modal>
+    </div>
 </template>
 
 <script>
@@ -125,6 +126,8 @@ import VModal from "vue-js-modal";
 Vue.use(VModal);
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client"
 import UserDataService from "../services/UserDataService";
 Vue.config.productionTip = false;
 Vue.use(Antd);
@@ -140,6 +143,8 @@ export default {
       signUpCount: 0,
       strikes: 0,
       history: false,
+      websocket_connected: false,
+      stompClient: null
     };
   },
   computed: {
@@ -157,6 +162,12 @@ export default {
   },
 
   methods: {
+    sendSocket(){
+      console.log("Sending message to server...");
+      if(this.connected){
+        this.stompClient.send("/ws/send", JSON.stringify(this.currentSchedule));
+      }
+    },
     /* Altenrate background color for each event */
     getBackground(index) {
       if (index % 2 == 0) {
@@ -165,28 +176,35 @@ export default {
         return "rgba(215, 211, 211, 0.1)";
       }
     },
-    /* Bump people to end of waitlist and move waitlist event first person to list if they are first on it */
-    bumpToEnd(index) {
-      ScheduleDataService.get(this.currentSchedule.id).then((response) => {
-        let schedule = response.data;
+    getDataIndex(event, date){
+      var day_index = -1;
+      var event_index = -1;
 
-        let updatedSchedule = schedule.scheduleDays.find(
-          (e) => e.date == this.currentDate
-        );
-        let updatedEvent = updatedSchedule.events.find(
-          (e) => e.name === this.currentEvent.name
-        );
-        if (updatedEvent.waitlist.length > 0) {
-          updatedEvent.usersSignedUp.push(
-            updatedEvent.waitlist.splice(0, 1)[0]
-          );
+      this.currentSchedule.scheduleDays.find(function(day, index){
+        if(day.date == date){
+          day_index = index;
+          return true;
         }
-        updatedEvent.waitlist.push(
-          updatedEvent.usersSignedUp.splice(index, 1)[0]
-        );
-        ScheduleDataService.update(schedule.id, schedule);
-        this.currentEvent = updatedEvent;
       });
+
+      this.currentSchedule.scheduleDays[day_index].events.find(function(find_event, index){
+        if(find_event.name == event.name){
+          event_index = index;
+          return true;
+        }
+      });
+      return [day_index, event_index];
+    },
+    /* Bump people to end of waitlist and move waitlist event first person to list if they are first on it */
+    async bumpToEnd(index) {
+      var data_index = this.getDataIndex(this.currentEvent, this.currentDate);
+      this.currentSchedule = (await ScheduleDataService.bumpUser(this.currentSchedule.id, {
+        "action": "all",
+        "day": data_index[0],
+        "event": data_index[1],
+        "user": this.currentEvent.usersSignedUp[index]
+      })).data;
+      this.sendSocket();
     },
     /* Display selected event details and users signed up */
     showModal(event, date) {
@@ -233,7 +251,7 @@ export default {
       evt.dataTransfer.setData("list", list);
     },
     /* Swap users on dropping them */
-    onDrop(evt, index, list) {
+    async onDrop(evt, index, list) {
       if (this.currentUser.admin) {
         /* Depending on where the user was dropped on */
         let receiveArr =
@@ -257,7 +275,7 @@ export default {
           sendArr.splice(sendIndex, 1);
           sendArr.splice(sendIndex, 0, temp);
           /* Update schedule */
-          ScheduleDataService.get(this.currentSchedule.id).then((response) => {
+          await ScheduleDataService.get(this.currentSchedule.id).then((response) => {
             let schedule = response.data;
             let updatedSchedule = schedule.scheduleDays.find(
               (e) => e.date == this.currentDate
@@ -267,8 +285,10 @@ export default {
             );
             updatedSchedule.events[updatedEventIndex]=this.currentEvent
             ScheduleDataService.update(schedule.id, schedule);
+            this.currentSchedule = schedule;
           });
         }
+        this.sendSocket();
       }
     },
     /* Send email to users */
@@ -319,41 +339,56 @@ export default {
       this.currentSchedule = (await ScheduleDataService.get(id)).data;
     },
     // Sign up event
-    signUpEvent(event, date) {
+    async signUpEvent(event, date) {
       this.$message.success("Signed up for " + event.name);
       this.$message.info("Refresh the site to verify your place on the list..");
+      var data_index = this.getDataIndex(event, date);
+
       // Check if user should be on the waitlist then push to waitlist
       var onWaitlist = event.usersSignedUp.length >= event.personLimit;
       if (onWaitlist) {
         this.$message.info("You're on the waitlist");
         event.waitlist.push(this.currentUser);
-      } 
+
+        ScheduleDataService.addUser(this.currentSchedule.id, {
+          "action": "waitlist",
+          "day": data_index[0],
+          "event": data_index[1],
+          "user": this.currentUser
+        })
+      }
       // Make sure users haven't signed up for more than 2 events
       else if (this.signUpCount >= 2) {
         this.$message.info(
           "You have been pushed to the waitlist (2 event limit) "
         );
         event.waitlist.push(this.currentUser);
+
+        ScheduleDataService.addUser(this.currentSchedule.id, {
+          "action": "waitlist",
+          "day": data_index[0],
+          "event": data_index[1],
+          "user": this.currentUser
+        })
+      //sign up into the main list
       } else {
         this.signUpCount++;
         event.usersSignedUp.push(this.currentUser);
+
+        this.currentSchedule = (await ScheduleDataService.addUser(this.currentSchedule.id, {
+          "action": "usersSignedUp",
+          "day": data_index[0],
+          "event": data_index[1],
+          "user": this.currentUser
+        })).data;
       }
-    /* Updated scheduloe */
-      ScheduleDataService.get(this.currentSchedule.id).then((response) => {
-        let schedule = response.data;
-        let updatedScheduleDay = schedule.scheduleDays.find(
-          (e) => e.date === date
-        );
-        let updatedEventIndex = updatedScheduleDay.events.findIndex(
-          (e) => e.name === event.name
-        );
-        updatedScheduleDay.events[updatedEventIndex] = event;
-        ScheduleDataService.update(schedule.id, schedule);
-      });
       this.showModal(event, date);
+      this.sendSocket();
     },
     /* Remove user from event */
-    deleteFromEvent(event, date) {
+    async deleteFromEvent(event, date) {
+      var data_index = this.getDataIndex(event, date);
+
       if (confirm("Are you sure you want to be removed from the list?")) {
         var i = event.usersSignedUp.findIndex(
           (e) => e.id === this.currentUser.id
@@ -370,20 +405,16 @@ export default {
             dateString: new Date().toLocaleString(),
           });
         }
+        this.currentSchedule = (await ScheduleDataService.removeUser(this.currentSchedule.id, {
+            "action": "all",
+            "day": data_index[0],
+            "event": data_index[1],
+            "user": this.currentUser
+        })).data;
         /* Update schedule with new list */
-        ScheduleDataService.get(this.currentSchedule.id).then((response) => {
-          let schedule = response.data;
-          let updatedSchedule = schedule.scheduleDays.find(
-            (e) => e.date === date
-          );
-          let updatedEventIndex = updatedSchedule.events.findIndex(
-            (e) => e.name === event.name
-          );
-          updatedSchedule.events[updatedEventIndex]=event
-          ScheduleDataService.update(schedule.id, schedule);
-        });
         this.$message.error("Removed from " + event.name);
         this.showModal(event, date);
+        this.sendSocket();
       }
     },
     //Check if user is signed up for event
@@ -476,6 +507,37 @@ export default {
         await UserDataService.get(this.currentUser.id)
       ).data.strikes;
     },
+    websocketFindCurrentEvent(){
+      for(let days of this.currentSchedule.scheduleDays){
+        for(let events of days.events){
+          if(  events.name == this.currentEvent.name  &&  events.timeSlot == this.currentEvent.timeSlot &&  events.personLimit == this.currentEvent.personLimit){
+            this.currentEvent = events;
+          }
+        }
+      }
+    }
+  },
+  created: function(){
+    console.log("Starting connection to WebSocket server...");
+    this.socket = new SockJS("http://localhost:8080/connect");
+    this.stompClient = Stomp.over(this.socket);
+    this.stompClient.debug = function(){};
+    this.stompClient.connect({
+        "Content-type":"application/json",
+        "token":localStorage.getItem("token")
+      },
+      frame => {
+        this.connected = true;
+        this.stompClient.subscribe("/topic/messages", tick => {
+          this.currentSchedule = JSON.parse(tick.body).body;
+          this.websocketFindCurrentEvent();
+        });
+      },
+      error => {
+        console.log(error);
+        this.connected = false;
+      }
+    );
   },
   async mounted() {
     /* Call all initialization functions */
