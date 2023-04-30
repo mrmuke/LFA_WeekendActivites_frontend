@@ -39,13 +39,14 @@ import Vue from 'vue'
 window.Vue = Vue;
 
 import BootstrapVue from 'bootstrap-vue'
+import { decrypt } from './utils/encrypt.js';
 Vue.use(BootstrapVue)
 
 
 export default{
     data(){
         return {
-            user:JSON.parse(localStorage.getItem('user'))
+            user:decrypt(localStorage.getItem('user'))
         }
     },
     methods:{
@@ -57,9 +58,9 @@ export default{
     },
     created() {
         if (window.location.protocol !== 'https:'&&window.location.href.includes("wa.lfaapps.com")) window.location.href = 'https://wa.lfaapps.com'
-        eventBus.$on('userSet', () => {this.user=JSON.parse(localStorage.getItem('user'))});
+        eventBus.$on('userSet', () => {this.user=decrypt(localStorage.getItem('user'))});
         
-    },
+    }
     
 }
 </script>

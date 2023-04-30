@@ -29,11 +29,11 @@ class ScheduleDataService {
     bumpUser(id, data){
         return http.post(`/admin/schedules/${id}/bump`, data);
     }
-    deleteUser(scheduleId, eventName,user){
-        return http.delete(`/schedules/${scheduleId}/${eventName}`, user)
+    swapUser(id, data){
+        return http.post(`/admin/schedules/${id}/swap`, data);
     }
     delete(id) {
-        return http.delete(`/schedules/${id}`);
+        return http.delete(`/admin/schedules/${id}`);
     }
 }
 export default new ScheduleDataService();

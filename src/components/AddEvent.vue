@@ -62,6 +62,7 @@ import Datepicker from 'vuejs-datepicker';
 import Vue from 'vue'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+import { decrypt } from '../utils/encrypt';
 Vue.config.productionTip = false;
 
 Vue.use(Antd);
@@ -109,7 +110,7 @@ export default {
         name: this.event.name,
         timeSlot: this.event.timeSlot,
         upVotes:this.event.upVotes,
-        requested:JSON.parse(localStorage.getItem('user')),
+        requested:decrypt(localStorage.getItem('user')),
         description:this.event.description
       };
 

@@ -56,6 +56,9 @@
                          <div class="button" v-if="!signedUp(event.info)" @click="signUpEvent(event.info, event.date)">Sign Up</div><div class ="button signedup" v-else @click="deleteFromEvent(event.info, event.date)">Signed Up</div>
                     </div>
                 </div>
+                <div class="p-l-6 p-r-6 pb-4" v-else>
+                  <div style="height:90px;display:flex;align-items:center">Please contact Mr.Freeman to have your strikes removed!</div>
+                </div>
     </div></div>
     
 </div></div>
@@ -129,6 +132,7 @@ import "ant-design-vue/dist/antd.css";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client"
 import UserDataService from "../services/UserDataService";
+import { decrypt } from '../utils/encrypt';
 Vue.config.productionTip = false;
 Vue.use(Antd);
 export default {
@@ -137,7 +141,7 @@ export default {
       currentSchedule: null,
       currentEvent: null,
       currentDate: null,
-      currentUser: JSON.parse(localStorage.getItem("user")),
+      currentUser: decrypt(localStorage.getItem("user")),
       message: "",
       displayOnDuty: false,
       signUpCount: 0,
@@ -235,6 +239,7 @@ export default {
             }
           }
         }
+        console.log(arr)
         return arr;
       }
       return [];
@@ -253,6 +258,7 @@ export default {
     /* Swap users on dropping them */
     async onDrop(evt, index, list) {
       if (this.currentUser.admin) {
+        let data_index = this.getDataIndex(this.currentEvent, this.currentDate);
         /* Depending on where the user was dropped on */
         let receiveArr =
           list == "waitlist"
@@ -265,29 +271,17 @@ export default {
           sendList == "waitlist"
             ? this.currentEvent.waitlist
             : this.currentEvent.usersSignedUp;
+        //(sendIndex < index || list != sendList)
         /* Only allows user to be dropped later in list */
-        if (sendIndex < index || list != sendList) {
-          /* Swap two users */
-          let temp = receiveArr[index]
-          receiveArr.splice(index, 1);
-          receiveArr.splice(index, 0, sendArr[sendIndex]);
+        this.currentSchedule = (await ScheduleDataService.swapUser(this.currentSchedule.id, {
+          "sendArr": sendList == "list" ? "usersSignedUp" : "waitlist",
+          "receivedArr": list == "list" ? "usersSignedUp" : "waitlist",
+          "day": data_index[0],
+          "event": data_index[1],
+          "firstUser": sendArr[sendIndex],
+          "secondUser": receiveArr[index]
+        })).data;
 
-          sendArr.splice(sendIndex, 1);
-          sendArr.splice(sendIndex, 0, temp);
-          /* Update schedule */
-          await ScheduleDataService.get(this.currentSchedule.id).then((response) => {
-            let schedule = response.data;
-            let updatedSchedule = schedule.scheduleDays.find(
-              (e) => e.date == this.currentDate
-            );
-            let updatedEventIndex = updatedSchedule.events.findIndex(
-              (e) => e.name === this.currentEvent.name
-            );
-            updatedSchedule.events[updatedEventIndex]=this.currentEvent
-            ScheduleDataService.update(schedule.id, schedule);
-            this.currentSchedule = schedule;
-          });
-        }
         this.sendSocket();
       }
     },
@@ -299,7 +293,7 @@ export default {
       for (var i = 0; i < totalUsers.length; i++) {
         this.$message.info("Sending email...");
         EmailDataService.sendEmail(
-          { event: event, message: this.message },
+          { event: event, message: this.message, showPlace:totalUsers[i]!=this.currentUser },
           totalUsers[i].id
         ).then(() => {
           this.$message.success("Emails Successfully Sent!");
@@ -307,28 +301,6 @@ export default {
       }
       this.message = "";
     },
-
-    /* getText(pdfUrl){
-        var pdf = PDFJS.getDocument(pdfUrl);
-        return pdf.then(function(pdf) { // Get all pages text
-            var maxPages = pdf.pdfInfo.numPages;
-            var countPromises = []; // Collecting all page promises
-            for (var j = 1; j <= maxPages; j++) {
-            var page = pdf.getPage(j);
-
-            countPromises.push(page.then(function(page) { // Add page promise
-                var textContent = page.getTextContent();
-                return textContent.then(function(text){ // Return content promise
-                return text.items.map(function (s) { return s.str; }).join(''); // Add value to page text
-                });
-            }));
-            }
-            // Wait for all pages and join text together
-            return Promise.all(countPromises).then(function (texts) {
-            return texts.join('');
-            });
-        });
-        }, */
 
     // Get current schedule
     async getCurrentSchedule() {
@@ -350,12 +322,12 @@ export default {
         this.$message.info("You're on the waitlist");
         event.waitlist.push(this.currentUser);
 
-        ScheduleDataService.addUser(this.currentSchedule.id, {
+        this.currentSchedule = (await ScheduleDataService.addUser(this.currentSchedule.id, {
           "action": "waitlist",
           "day": data_index[0],
           "event": data_index[1],
           "user": this.currentUser
-        })
+        })).data;
       }
       // Make sure users haven't signed up for more than 2 events
       else if (this.signUpCount >= 2) {
@@ -364,12 +336,12 @@ export default {
         );
         event.waitlist.push(this.currentUser);
 
-        ScheduleDataService.addUser(this.currentSchedule.id, {
+        this.currentSchedule = (await ScheduleDataService.addUser(this.currentSchedule.id, {
           "action": "waitlist",
           "day": data_index[0],
           "event": data_index[1],
           "user": this.currentUser
-        })
+        })).data;
       //sign up into the main list
       } else {
         this.signUpCount++;
@@ -404,6 +376,10 @@ export default {
             userName: this.currentUser.userName,
             dateString: new Date().toLocaleString(),
           });
+
+          if(event.usersSignedUp.length<event.personLimit&&event.waitlist.length>0){
+          event.usersSignedUp.push(event.waitlist.splice(0, 1)[0])
+        }
         }
         this.currentSchedule = (await ScheduleDataService.removeUser(this.currentSchedule.id, {
             "action": "all",
